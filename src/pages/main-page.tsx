@@ -1,23 +1,17 @@
 import { useEffect } from 'react';
-import { useCookies } from 'react-cookie';
-import { FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
-import BoardContainer from '../components/main-route/boardContainer';
-import Spinner from '../components/Spinner';
+import { useCookies } from 'react-cookie';
+import { AppState, useAppDispatch, useAppSelector } from '../store/store';
 import { getBoards } from '../store/boards/boardsSlice';
-import {
-  AppState,
-  useAppDispatch,
-  useAppSelector,
-} from '../store/store';
+import BoardContainer from '../components/main-route/board-container';
+import Spinner from '../components/spinner';
+import { FormattedMessage } from 'react-intl';
 
 const MainPage = () => {
-  const { loading } = useAppSelector(
-    (state: AppState) => state.boards
-  );
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const [cookie] = useCookies(['user']);
+  const dispatch = useAppDispatch();
+  const { loading } = useAppSelector((state: AppState) => state.boards);
+  const navigate = useNavigate();
 
   useEffect(() => {
     cookie.user === undefined && navigate('/');

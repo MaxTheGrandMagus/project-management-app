@@ -1,7 +1,6 @@
 import axios from 'axios';
+import { API_URL } from '../../constants/api';
 import { getCookie } from '../../helpers/cookie';
-
-const API_URL = 'https://frozen-depths-66382.herokuapp.com';
 
 // Get user by id
 const getUserById = async (id: string) => {

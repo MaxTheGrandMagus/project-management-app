@@ -1,25 +1,19 @@
 import { NavLink } from 'react-router-dom';
-import BoardButton, { themes } from './boardButton';
-import {
-  openboard,
-  chooseBoardId,
-} from '../../store/boards/boardsSlice';
 import { useAppDispatch } from '../../store/store';
+import { openboard, chooseBoardId } from '../../store/boards/boardsSlice';
 import { BoardProps } from '../interfaces';
+import BoardButton, { themes } from './board-button';
 
-const Board: React.FC<BoardProps> = ({
-  id,
-  title,
-  description,
-  toggleWindow,
-}) => {
+const Board: React.FC<BoardProps> = ({ id, title, description, toggleWindow }) => {
   const dispatch = useAppDispatch();
+
   const onOpen = () => {
     dispatch(chooseBoardId(id));
     if (toggleWindow) {
       toggleWindow();
     }
   };
+  
   const openAndSave = () => {
     if (id) {
       localStorage.setItem('boardId', id);

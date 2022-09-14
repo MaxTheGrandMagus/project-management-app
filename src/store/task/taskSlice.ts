@@ -11,8 +11,8 @@ import {
   UserProps,
 } from '../../components/interfaces';
 import { getCookie } from '../../helpers/cookie';
-import { API_URL } from '../auth/authService';
 import { addColumn, deleteColumn, updateColumn } from '../columns/colSlice';
+import { API_URL } from '../../constants/api';
 import { IError } from '../config';
 
 export const getAllAboutBoard = createAsyncThunk<

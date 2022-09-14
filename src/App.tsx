@@ -1,22 +1,23 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import './styles/App.css';
 import Layout from './components/layout';
 import WelcomePage from './pages/welcome-page';
-import 'react-toastify/dist/ReactToastify.css';
-import SigninPage from './pages/SigninPage';
-import SignupPage from './pages/SignupPage';
-import './styles/App.css';
+import SigninPage from './pages/signin-page';
+import SignupPage from './pages/signup-page';
 import MainPage from './pages/main-page';
 import BoardPage from './pages/board-page';
-import EditProfile from './pages/editProfile';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import EditProfile from './pages/edit-profile';
+import { useCookies } from 'react-cookie';
+import { getCookie } from './helpers/cookie';
+import 'react-toastify/dist/ReactToastify.css';
 import { IntlProvider } from 'react-intl';
 import { LOCALES } from './i18n/locales';
 import { messages } from './i18n/messages';
-import { getCookie } from './helpers/cookie';
-import { useCookies } from 'react-cookie';
 
 const App = () => {
-  const locale = getCookie('lang') || LOCALES.ENGLISH;
   const [cookie, setCookie] = useCookies(['lang']);
+  const locale = getCookie('lang') || LOCALES.ENGLISH;
+  
   const handleChange = (e: { target: { value: string } }) => {
     setCookie('lang', e.target.value);
     console.log(cookie);

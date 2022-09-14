@@ -1,44 +1,27 @@
 import { useEffect, useState } from 'react';
-import { useCookies } from 'react-cookie';
 import { Link, useNavigate } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
-import BoardIcon from '../assets/icons/board.icon';
+import { useCookies } from 'react-cookie';
+import { AppState, useAppDispatch, useAppSelector } from '../store/store';
+import { getAllAboutBoard } from '../store/task/taskSlice';
+import { getColumnById, updateColumn } from '../store/columns/colSlice';
 import AddColumnForm from '../components/board-route/add-column-form';
 import Column from '../components/column';
-import TaskWindow from '../components/task/taskWindow';
-import {
-  AppState,
-  useAppDispatch,
-  useAppSelector,
-} from '../store/store';
-import { getAllAboutBoard } from '../store/task/taskSlice';
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-} from 'react-beautiful-dnd';
-import {
-  getColumnById,
-  updateColumn,
-} from '../store/columns/colSlice';
+import TaskWindow from '../components/task/task-window';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { FormattedMessage } from 'react-intl';
+import BoardIcon from '../assets/icons/board.icon';
 
 const BoardPage = () => {
   const [cookie] = useCookies(['user']);
-
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const [isPopupDisplay, setIsPopupDisplay] = useState(false);
   const [isOpenTask, setIsOpenTask] = useState(false);
 
-  const { boards } = useAppSelector(
-    (state: AppState) => state.boards
-  );
-  const { colTasks } = useAppSelector(
-    (state: AppState) => state.tasks
-  );
-  const { columnById, isSuccess: isSuccessUpdate } = useAppSelector(
-    (state: AppState) => state.columns
-  );
+  const dispatch = useAppDispatch();
+  const { boards } = useAppSelector((state: AppState) => state.boards);
+  const { colTasks } = useAppSelector((state: AppState) => state.tasks);
+  const { columnById, isSuccess: isSuccessUpdate } = useAppSelector((state: AppState) => state.columns);
+  
+  const navigate = useNavigate();
 
   const boardId = localStorage.getItem('boardId');
   const board = boards.find((el) => el.id === boardId);

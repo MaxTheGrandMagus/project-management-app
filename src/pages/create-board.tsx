@@ -1,23 +1,24 @@
 import { useState } from 'react';
-import BoardArrowBack from '../assets/icons/board-arrow-back.icon';
-import { BoardCreationProps } from '../components/interfaces';
-import BoardButton, {
-  themes,
-} from '../components/main-route/boardButton';
-import { createBoard, resetBoard } from '../store/boards/boardsSlice';
 import { useAppDispatch } from '../store/store';
+import { createBoard, resetBoard } from '../store/boards/boardsSlice';
+import { BoardCreationProps } from '../components/interfaces';
+import BoardButton, { themes } from '../components/main-route/board-button';
 import { FormattedMessage } from 'react-intl'
+import BoardArrowBack from '../assets/icons/board-arrow-back.icon';
 
 const BoardCreation = ({ toggleWindow }: BoardCreationProps) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
   });
-
   const { title, description } = formData;
+  const boardData = {
+    title,
+    description,
+  };
+
   const dispatch = useAppDispatch();
 
- 
   // const placeholderTitle = intl.formatMessage({id: 'placeholderTitleBoard'});
   // const placeholderDecsription = intl.formatMessage({id: 'placeholderDecsriptionBoard'});
 
@@ -27,10 +28,7 @@ const BoardCreation = ({ toggleWindow }: BoardCreationProps) => {
       [event.target.name]: event.target.value,
     }));
   };
-  const boardData = {
-    title,
-    description,
-  };
+  
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch(createBoard(boardData));

@@ -7,7 +7,6 @@ type Props = {
 }
 
 const ConfirmationModal = (props: Props) => {
-  console.log(props);
   return (
     <>
       <div

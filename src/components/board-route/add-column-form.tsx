@@ -1,18 +1,15 @@
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { addColumn } from '../../store/columns/colSlice';
-import {
-  useAppDispatch,
-} from '../../store/store';
-import BoardButton, { themes } from '../main-route/boardButton';
+import { useAppDispatch } from '../../store/store';
+import BoardButton, { themes } from '../main-route/board-button';
 import { FormattedMessage, useIntl } from 'react-intl'
 
 interface IFormValues {
   columnTitle: string;
 }
-const AddColumnForm: React.FC<{ setIsPopupDisplay: Function }> = ({
-  setIsPopupDisplay,
-}) => {
+
+const AddColumnForm: React.FC<{ setIsPopupDisplay: Function }> = ({ setIsPopupDisplay }) => {
   const {
     register,
     handleSubmit,
@@ -20,23 +17,25 @@ const AddColumnForm: React.FC<{ setIsPopupDisplay: Function }> = ({
   } = useForm<IFormValues>();
 
   const dispatch = useAppDispatch();
+
   const boardId = localStorage.getItem('boardId');
-  const onSubmit: SubmitHandler<IFormValues> = (data: {
-    columnTitle: string;
-  }) => { if (boardId) {
-    console.log('data', data);
-    dispatch(
-      addColumn({
-        title: data.columnTitle,
-        boardId: boardId,
-      })
-    );
-    setIsPopupDisplay(false);
-  }
+
+  const onSubmit: SubmitHandler<IFormValues> = (data: { columnTitle: string; }) => { 
+    if (boardId) {
+      console.log('data', data);
+      dispatch(
+        addColumn({
+          title: data.columnTitle,
+          boardId: boardId,
+        })
+      );
+      setIsPopupDisplay(false);
+    }
   };
 
-const intl = useIntl();
+  const intl = useIntl();
   const newColumn = intl.formatMessage({id: 'newColumn'});
+
   return (
     <aside className="absolute top-0 left-0 z-10 bg-slate-700 h-28 ">
       <form onSubmit={handleSubmit(onSubmit)}>

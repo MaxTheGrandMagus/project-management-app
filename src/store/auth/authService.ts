@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-export const API_URL = 'https://frozen-depths-66382.herokuapp.com';
+import { API_URL } from '../../constants/api';
 
 // Register user
 const signup = async (userData: {

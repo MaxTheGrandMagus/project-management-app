@@ -4,10 +4,7 @@ type Props = {};
 
 const DEVS = [
   { link: 'https://github.com/natakers', githubName: '@natakers' },
-  {
-    link: 'https://github.com/MaxTheGrandMagus',
-    githubName: '@MaxTheGrandMagus',
-  },
+  { link: 'https://github.com/MaxTheGrandMagus', githubName: '@MaxTheGrandMagus' },
   { link: 'https://github.com/gonzjv', githubName: '@gonzjv' },
 ];
 
