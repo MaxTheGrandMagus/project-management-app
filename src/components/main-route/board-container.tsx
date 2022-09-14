@@ -1,18 +1,14 @@
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import { AppState, useAppSelector } from '../../store/store';
-import { BoardProps } from '../interfaces';
 import Board from './board';
-import ModalWindow from './modalWindow';
+import ModalWindow from './modal-window';
+import { toast } from 'react-toastify';
+import { BoardProps } from '../interfaces';
 
 const BoardContainer: React.FC = () => {
-  const { boards, currentId, error, message } = useAppSelector(
-    (state: AppState) => state.boards
-  );
+  const { boards, currentId, error, message } = useAppSelector((state: AppState) => state.boards);
   const [isOpen, setIsOpen] = useState(false);
-  const toggleWindow = () => {
-    setIsOpen(!isOpen);
-  };
+  const toggleWindow = () => setIsOpen(!isOpen);
 
   useEffect(() => {
     if (error) toast.error(message);

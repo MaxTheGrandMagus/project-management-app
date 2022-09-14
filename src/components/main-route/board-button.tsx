@@ -1,5 +1,5 @@
-import { ButtonProps } from '../interfaces';
 import { FormattedMessage } from 'react-intl';
+import { ButtonProps } from '../interfaces';
 
 export const themes = {
   light:

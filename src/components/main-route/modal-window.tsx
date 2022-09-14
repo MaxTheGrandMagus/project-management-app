@@ -1,16 +1,18 @@
 
-import { deleteBoard } from "../../store/boards/boardsSlice";
-import { FormattedMessage } from "react-intl";
 import { useAppDispatch } from "../../store/store";
+import { deleteBoard } from "../../store/boards/boardsSlice";
+import BoardButton, { themes } from "./board-button";
 import { ModalProps } from "../interfaces";
-import BoardButton, { themes } from "./boardButton";
+import { FormattedMessage } from "react-intl";
 
 const ModalWindow = (props: ModalProps) => {
   const dispatch = useAppDispatch();
+
   const onCloseHandler = () => {
     dispatch(deleteBoard(props.boardId))
     props.toggleWindow()
   }
+
   const onCancelHandler = () => {
     props.toggleWindow()
   }

@@ -1,8 +1,8 @@
 
 import { useEffect } from "react";
-import ArrowBack from "../../assets/icons/arrowBack";
 import { AppState, useAppDispatch, useAppSelector } from "../../store/store";
 import { getUsers, updateTask } from "../../store/task/taskSlice";
+import ArrowBack from "../../assets/icons/arrowBack";
 import Textarea, { textareaThemes } from "./textarea";
 
 const TaskWindow = ({taskClick, isOpenTask }: TaskWindowProps) => {
@@ -10,6 +10,7 @@ const TaskWindow = ({taskClick, isOpenTask }: TaskWindowProps) => {
   const { currentTask, colId, users }  = useAppSelector((state: AppState) => state.tasks);
   
   const boardId = localStorage.getItem('boardId');
+
   const taskData = {
     body: {
       title: currentTask.title,
@@ -21,19 +22,21 @@ const TaskWindow = ({taskClick, isOpenTask }: TaskWindowProps) => {
     },
     id: currentTask.id
   };
+  
   const handlerChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     if ((event.target.name === 'title' || event.target.name === 'description') ) {
       taskData.body[event.target.name] = event.target.value;
     }
-    
   }
+  
   const h = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     handlerChange(event);
     dispatch(updateTask(taskData));
   }
+
   useEffect(() => {
-      dispatch(getUsers());
-    }, [dispatch]);
+    dispatch(getUsers());
+  }, [dispatch]);
    
   return (
     <div className={`flex flex-col w-full  p-3 taskWindow absolute top-0 h-full bg-slate-500 z-50 ${isOpenTask? 'activeTaskWidow' : ''} sm:w-2/5`}  >

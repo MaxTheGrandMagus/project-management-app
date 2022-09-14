@@ -4,8 +4,8 @@ import {
   AnyAction,
 } from '@reduxjs/toolkit';
 import { getCookie } from '../../helpers/cookie';
-import { API_URL } from '../auth/authService';
 import colService from './colService';
+import { API_URL } from './../../constants/api';
 
 interface IError {
   message?: string;

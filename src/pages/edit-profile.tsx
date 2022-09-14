@@ -4,12 +4,12 @@ import { useSelector } from 'react-redux';
 import { AppState, useAppDispatch } from '../store/store';
 import { getUserById, resetUser, updateUserProfile, deleteUser } from '../store/user/userSlice';
 import { reset } from '../store/auth/authSlice';
-import Spinner from '../components/Spinner';
+import Spinner from '../components/spinner';
+import ConfirmationModal from '../components/edit-profile/confirmation-modal';
+import { TokenProps } from '../components/interfaces';
 import { toast } from 'react-toastify';
 import { useCookies } from 'react-cookie';
 import jwt_decode from "jwt-decode";
-import { TokenProps } from '../components/interfaces';
-import ConfirmationModal from '../components/EditProfile/ConfirmationModal';
 import { FormattedMessage, useIntl } from 'react-intl'
 
 type Props = {};
@@ -43,9 +43,7 @@ const EditProfile = (props: Props) => {
     }
   }, [isError, message, dispatch, decodedUser.userId, userDetails.name, userDetails.login]);
 
-  const onSubmit = async (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (password !== confirmPassword) {
       toast.error('Passwords do not match');
@@ -64,6 +62,7 @@ const EditProfile = (props: Props) => {
     dispatch(resetUser());
     navigate('/');
   }
+
   const intl = useIntl();
   const placeholderLog = intl.formatMessage({id: 'placeholderSignInLog'});
   const placeholderPas = intl.formatMessage({id: 'placeholderSignInPas'});
@@ -77,7 +76,7 @@ const EditProfile = (props: Props) => {
   return (
     <section className="edit-profile-page w-full h-screen px-6 py-6 flex flex-col justify-center items-center gap-16 bg-slate-800 text-white">
       <p className="title text-center font-bold text-3xl text-white">
-      <FormattedMessage id='editTitle' />
+        <FormattedMessage id='editTitle' />
       </p>
       <form onSubmit={onSubmit} className="w-1/2 form flex flex-col justify-center items-center gap-4 text-black">
         <div className="w-full form__first-group flex flex-row gap-6">
@@ -136,7 +135,6 @@ const EditProfile = (props: Props) => {
             />
           </div>
         </div>
-        
         <div className="form__buttons w-full flex justify-center gap-4 mt-4">
           <button 
             onClick={() => setShowModal(true)}

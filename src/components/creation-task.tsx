@@ -1,50 +1,42 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-  TaskCreationProps,
-  TokenProps,
-} from '../components/interfaces';
+import { useAppDispatch } from '../store/store';
 import { createTask } from '../store/task/taskSlice';
-import {
-  useAppDispatch,
-} from '../store/store';
 import { useCookies } from 'react-cookie';
 import jwt_decode from 'jwt-decode';
+import { TaskCreationProps, TokenProps } from './interfaces';
 import CloseIcon from '../assets/icons/close.icon';
 
-const TaskCreation = ({
-  toggleWindow,
-  colId,
-  order,
-}: TaskCreationProps) => {
+const TaskCreation = ({ toggleWindow, colId, order }: TaskCreationProps) => {
+  const dispatch = useAppDispatch();
+
   const [cookie] = useCookies(['user']);
   const decodedUser: TokenProps = jwt_decode(cookie.user);
   const userId = decodedUser.userId;
-  const boardId = localStorage.getItem('boardId')
+  const boardId = localStorage.getItem('boardId');
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
   });
-
   const titleInput = useRef<HTMLInputElement>(null);
+  const { title, description } = formData;
+  const taskData = {
+    task: { title, description, userId },
+    colId,
+    boardId,
+  };
+
   useEffect(() => {
     if (titleInput && titleInput.current) {
       titleInput.current.focus();
     }
   }, []);
 
-  const { title, description } = formData;
-  const dispatch = useAppDispatch();
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
     }));
-  };
-
-  const taskData = {
-    task: { title, description, userId },
-    colId,
-    boardId,
   };
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -54,8 +46,8 @@ const TaskCreation = ({
     }
     toggleWindow();
   };
-  return (
 
+  return (
     <section className="flex w-52 flex-col absolute rounded z-20 bg-sky-900 border border-sky-500 h-20 p-2 top-0 items-center">
       <form
         onSubmit={onSubmit}

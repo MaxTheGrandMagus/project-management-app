@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { getCookie } from '../../helpers/cookie';
 import { IColumnToUpdate, IColumnToGetById } from './colSlice';
-
-const API_URL = 'https://frozen-depths-66382.herokuapp.com';
+import { API_URL } from '../../constants/api';
 
 // Get column by id
 const getColumnById = async (column: IColumnToGetById) => {
