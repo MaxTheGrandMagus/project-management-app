@@ -7,6 +7,7 @@ import { getColumnById, updateColumn } from '../store/columns/colSlice';
 import AddColumnForm from '../components/board-route/add-column-form';
 import Column from '../components/column';
 import TaskWindow from '../components/task/task-window';
+import Spinner from '../components/spinner';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { FormattedMessage } from 'react-intl';
 import BoardIcon from '../assets/icons/board.icon';
@@ -72,8 +73,14 @@ const BoardPage = () => {
     console.log(result);
   };
 
+  // if (isLoading) {
+  //   return <div className='h-full my-auto flex justify-center items-center'>
+  //     <Spinner />;
+  //   </div>
+  // }
+
   return (
-    <main className=" overflow-hidden bg-slate-800 min-h-[65vh] text-gray-300 items-start px-5 flex flex-col gap-5 relative">
+    <main className="relative overflow-hidden h-full mb-auto bg-white flex flex-col items-start gap-5 px-5 text-gray-300">
       {!boardId ? (
         <Link
           to="/main"
@@ -83,11 +90,11 @@ const BoardPage = () => {
         </Link>
       ) : (
         <>
-          <section className="flex gap-3 justify-center items-center">
+          <section className="flex justify-center items-center gap-3 py-3">
             <BoardIcon />
-            <h1 className="text-3xl">{board?.title}</h1>
+            <h1 className="text-3xl text-black font-bold">{board?.title}</h1>
           </section>
-          <section className="flex gap-5 w-full h-full items-start">
+          <section className="flex gap-5 w-full h-full mb-10 items-start">
             <DragDropContext
               onDragStart={(result) => handleDragStart(result)}
               onDragEnd={(result) => handleDragEnd(result)}
@@ -141,11 +148,11 @@ const BoardPage = () => {
                 }}
               </Droppable>
             </DragDropContext>
-            <div className="relative">
+            <div className="relative flex justify-center items-center w-56 h-full">
               <>
                 <button
                   onClick={() => setIsPopupDisplay(true)}
-                  className="text-gray-400 relative"
+                  className="relative w-full p-2 bg-slate-blue border-2 border-slate-blue rounded text-white text-lg font-bold hover:text-black hover:bg-transparent transition-all duration-300 ease-in-out"
                 >
                   <FormattedMessage id="addColumn" />
                 </button>

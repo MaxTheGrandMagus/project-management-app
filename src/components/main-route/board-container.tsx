@@ -15,7 +15,7 @@ const BoardContainer: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-row justify-around w-full flex-wrap">
+    <div className="w-full flex flex-row justify-start items-center flex-wrap px-10 py-5">
       {!error ? (
         boards.map((board: BoardProps) => (
           <Board

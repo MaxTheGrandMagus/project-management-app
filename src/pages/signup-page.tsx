@@ -71,18 +71,18 @@ const SignupPage = (props: Props) => {
   }
 
   return (
-    <section className="signup-page w-full min-h-[80vh] px-6 py-6 flex flex-col justify-center items-center gap-16">
-      <div className="logo__container w-full flex flex-col justify-center items-center gap-3">
+    <section className="w-full h-full my-auto px-6 py-6 flex flex-col justify-center items-center gap-16">
+      <div className="w-full flex flex-col justify-center items-center gap-3">
         <Logo />
-        <p className="title text-center font-bold text-2xl text-gray-400">
+        <p className="text-center font-bold text-2xl text-gray-400">
           <FormattedMessage id="enterSignUp" />
         </p>
       </div>
       <form
         onSubmit={onSubmit}
-        className="form w-1/4 flex flex-col justify-center items-center gap-6"
+        className="w-1/4 flex flex-col justify-center items-center gap-6"
       >
-        <div className="form__item w-full">
+        <div className="w-full">
           <input
             type="text"
             id="name"
@@ -91,10 +91,10 @@ const SignupPage = (props: Props) => {
             placeholder={placeholderName}
             onChange={onChange}
             required
-            className="form__control bg-gray-600 inline-flex w-full items-center px-4 py-3 border border-solid border-slate-400 rounded-lg"
+            className="bg-transparent inline-flex w-full items-center px-4 py-3 border border-solid border-slate-400 rounded-lg"
           />
         </div>
-        <div className="form__item w-full">
+        <div className="w-full">
           <input
             type="text"
             id="login"
@@ -103,10 +103,10 @@ const SignupPage = (props: Props) => {
             placeholder={placeholderLog}
             onChange={onChange}
             required
-            className="form__control inline-flex bg-gray-600 w-full items-center px-4 py-3 border border-solid border-slate-400 rounded-lg"
+            className="inline-flex bg-transparent w-full items-center px-4 py-3 border border-solid border-slate-400 rounded-lg"
           />
         </div>
-        <div className="form__item w-full">
+        <div className="w-full">
           <input
             type="password"
             id="password"
@@ -115,13 +115,13 @@ const SignupPage = (props: Props) => {
             placeholder={placeholderPas}
             onChange={onChange}
             required
-            className="form__control inline-flex w-full bg-gray-600 items-center px-4 py-3 border border-solid border-slate-400 rounded-lg"
+            className="inline-flex w-full bg-transparent items-center px-4 py-3 border border-solid border-slate-400 rounded-lg"
           />
         </div>
-        <div className="form__item w-full flex justify-center">
+        <div className="w-full flex justify-center">
           <button
             type="submit"
-            className={`${themes.light} border-2 w-full rounded-md flex items-center justify-center border-sky-400`}
+            className={`w-full bg-slate-blue border-2 border-slate-blue rounded-md flex items-center justify-center text-white text-lg px-2 py-1 transition-all active:bg-transparent active:text-black`}
           >
             <FormattedMessage id="signUp" />
           </button>

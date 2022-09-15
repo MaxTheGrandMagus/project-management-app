@@ -5,6 +5,7 @@ import { BoardCreationProps } from '../components/interfaces';
 import BoardButton, { themes } from '../components/main-route/board-button';
 import { FormattedMessage } from 'react-intl'
 import BoardArrowBack from '../assets/icons/board-arrow-back.icon';
+import { MdOutlineDashboardCustomize } from 'react-icons/md'
 
 const BoardCreation = ({ toggleWindow }: BoardCreationProps) => {
   const [formData, setFormData] = useState({
@@ -49,7 +50,8 @@ const BoardCreation = ({ toggleWindow }: BoardCreationProps) => {
       <div className="flex flex-col p-4 items-center">
         <div className="logo__container w-full flex flex-col justify-center items-center gap-3">
           <p className="title text-center font-bold text-3xl text-gray-300 mb-6">
-          <FormattedMessage id='titleBoardCreation' />
+            <MdOutlineDashboardCustomize />
+            <FormattedMessage id='titleBoardCreation' />
           </p>
         </div>
         <form

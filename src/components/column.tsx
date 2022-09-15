@@ -14,7 +14,7 @@ export interface ColumnProps {
   boardId: string;
 }
 
-const Column = ({ title, id, order, tasks, taskClick }: ColumnTaskProps) => {
+const Column = ({ id, title, order, tasks, taskClick }: ColumnTaskProps) => {
   const dispatch = useAppDispatch();
 
   const [isOpenTaskWin, setIsOpenTaskWin] = useState(false);
@@ -38,12 +38,12 @@ const Column = ({ title, id, order, tasks, taskClick }: ColumnTaskProps) => {
   return (
     <article
       key={id}
-      className="overflow-y-auto h-full bg-slate-800 border border-slate-800 hover:border hover:border-slate-600 rounded-md relative overflow-visible w-56"
+      className="relative overflow-visible overflow-y-auto w-56 h-full bg-slate-blue border rounded-md border-slate-blue shadow-lg"
     >
       <div className="flex justify-between align-baseline">
-        <h4 className="m-3">{title}</h4>
+        <h4 className="text-lg text-white font-bold m-3">{title}</h4>
         <div
-          className=" relative flex m-3 items-center cursor-pointer hover:bg-slate-500 "
+          className="relative flex items-center m-3 text-white cursor-pointer rounded-sm hover:bg-gray-400 transition-all"
           onClick={toggleAddTask}
         >
           {visibleAddTask && (
@@ -59,7 +59,7 @@ const Column = ({ title, id, order, tasks, taskClick }: ColumnTaskProps) => {
           <DotsIcon />
         </div>
       </div>
-      <div className="flex flex-col relative ">
+      <div className="relative flex flex-col">
         {tasks && tasks.map((task) => (
           <Task
             taskClick={taskClick}
@@ -68,10 +68,10 @@ const Column = ({ title, id, order, tasks, taskClick }: ColumnTaskProps) => {
             columnId={id}
           />
         ))}
-        <aside className="relative flex flex-col items-center">
+        <aside className="relative flex flex-col items-center m-2">
           <button
             onClick={toggeTaskWindow}
-            className="text-gray-400 relative"
+            className="relative w-full text-white text-lg font-bold rounded-sm hover:bg-white hover:text-black transition-all"
           >
             <FormattedMessage id="addTask" />
           </button>

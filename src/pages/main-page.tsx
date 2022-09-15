@@ -21,8 +21,8 @@ const MainPage = () => {
   }, [cookie.user, navigate, dispatch]);
 
   return (
-    <main className="min-h-[65vh] items-center text-gray-300 justify-start flex flex-col gap-5 relative">
-      <h1 className="text-3xl  ">
+    <main className="h-full mb-auto relative flex flex-col gap-5 justify-start items-center text-gray-300">
+      <h1 className="text-3xl font-bold text-black mt-6">
         <FormattedMessage id="titleBoardPage" />
       </h1>
       {loading ? <Spinner /> : <BoardContainer />}

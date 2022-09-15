@@ -70,18 +70,20 @@ const EditProfile = (props: Props) => {
   const placeholderConfirm = intl.formatMessage({id: 'placeholderConfirm'});
 
   if (isLoading) {
-    return <Spinner />;
+    return <div className='h-full my-auto flex justify-center items-center'>
+      <Spinner />;
+    </div>
   }
 
   return (
-    <section className="edit-profile-page w-full h-screen px-6 py-6 flex flex-col justify-center items-center gap-16 bg-slate-800 text-white">
-      <p className="title text-center font-bold text-3xl text-white">
+    <section className="edit-profile-page w-full h-full my-auto bg-white flex flex-col justify-center items-center gap-16 px-6 py-6 text-white">
+      <p className="text-center font-bold text-3xl text-black">
         <FormattedMessage id='editTitle' />
       </p>
       <form onSubmit={onSubmit} className="w-1/2 form flex flex-col justify-center items-center gap-4 text-black">
-        <div className="w-full form__first-group flex flex-row gap-6">
-          <div className="form__item w-full flex flex-col gap-2">
-            <label htmlFor="name" className="text-white"><FormattedMessage id='name' /></label>
+        <div className="w-full flex flex-row gap-6">
+          <div className="w-full flex flex-col gap-2">
+            <label htmlFor="name" className="text-gray-400"><FormattedMessage id='name' /></label>
             <input
               type="text"
               id="name"
@@ -90,11 +92,11 @@ const EditProfile = (props: Props) => {
               placeholder={placeholderName}
               onChange={event => setName(event.target.value)}
               required
-              className="form__control inline-flex w-full items-center px-4 py-3 border border-solid border-slate-400 rounded-lg"
+              className="inline-flex w-full items-center px-4 py-3 border border-solid border-slate-400 rounded-lg"
             />
           </div>
-          <div className="form__item w-full flex flex-col gap-2">
-            <label htmlFor="login" className="text-white"><FormattedMessage id='login' /></label>
+          <div className="w-full flex flex-col gap-2">
+            <label htmlFor="login" className="text-gray-400"><FormattedMessage id='login' /></label>
             <input
               type="text"
               id="login"
@@ -103,13 +105,13 @@ const EditProfile = (props: Props) => {
               placeholder={placeholderLog}
               onChange={event => setLogin(event.target.value)}
               required
-              className="form__control inline-flex w-full items-center px-4 py-3 border border-solid border-slate-400 rounded-lg"
+              className="inline-flex w-full items-center px-4 py-3 border border-solid border-slate-400 rounded-lg"
             />
           </div>
         </div>
-        <div className="w-full form__second-group flex flex-row gap-6">
-          <div className="form__item w-full flex flex-col gap-2">
-            <label htmlFor="password" className="text-white"><FormattedMessage id='password' /></label>
+        <div className="w-full flex flex-row gap-6">
+          <div className="w-full flex flex-col gap-2">
+            <label htmlFor="password" className="text-gray-400"><FormattedMessage id='password' /></label>
             <input
               type="password"
               id="password"
@@ -118,11 +120,11 @@ const EditProfile = (props: Props) => {
               placeholder={placeholderPas}
               onChange={event => setPassword(event.target.value)}
               required
-              className="form__control inline-flex w-full items-center px-4 py-3 border border-solid border-slate-400 rounded-lg"
+              className="inline-flex w-full items-center px-4 py-3 border border-solid border-slate-400 rounded-lg"
             />
           </div>
-          <div className="form__item w-full flex flex-col gap-2">
-            <label htmlFor="confirmPassword" className="text-white"><FormattedMessage id='confirm' /></label>
+          <div className="w-full flex flex-col gap-2">
+            <label htmlFor="confirmPassword" className="text-gray-400"><FormattedMessage id='confirm' /></label>
             <input
               type="password"
               id="confirmPassword"
@@ -131,7 +133,7 @@ const EditProfile = (props: Props) => {
               placeholder={placeholderConfirm}
               onChange={event => setConfirmPassword(event.target.value)}
               required
-              className="form__control inline-flex w-full items-center px-4 py-3 border border-solid border-slate-400 rounded-lg"
+              className="inline-flex w-full items-center px-4 py-3 border border-solid border-slate-400 rounded-lg"
             />
           </div>
         </div>

@@ -22,11 +22,11 @@ const Board: React.FC<BoardProps> = ({ id, title, description, toggleWindow }) =
   };
 
   return (
-    <div className="flex flex-row m-2 items-center border-slate-600 border rounded p-2 cursor-pointer hover:bg-sky-900">
+    <div className="flex flex-row items-center border rounded m-2 p-2 shadow-md text-black cursor-pointer hover:shadow-xl transition-all duration-200">
       <NavLink
-        to="/board"
+        to={`/board/${id}`}
         onClick={openAndSave}
-        className="flex flex-col m-2  "
+        className="flex flex-col m-2"
       >
         <div className="text-xl font-bold">{title}</div>
         <div>{description}</div>

@@ -41,13 +41,13 @@ const Task = ({ task, taskClick, columnId }: TaskProps) => {
 
   return (
     <div
-      className="bg-slate-700 border border-slate-600 rounded-md m-2 p-2 hover:border hover:border-slate-500"
+      className="bg-white rounded-md m-2 p-2 hover:bg-gray-100 transition-all"
       onClick={openTask}
     >
-      <div className="flex justify-between text-orange-300">
-        <h2>{task.title}</h2>
+      <div className="flex justify-between">
+        <h2 className='text-orange-500 font-bold'>{task.title}</h2>
         <div
-          className=" relative flex items-center cursor-pointer hover:bg-slate-500 "
+          className="text-black relative flex items-center cursor-pointer rounded-sm hover:bg-gray-300 transition-all"
           onClick={toggleDelTask}
         >
           {visibleAddTask && task.id !== undefined && (
@@ -63,7 +63,7 @@ const Task = ({ task, taskClick, columnId }: TaskProps) => {
           <DotsIcon />
         </div>
       </div>
-      <div>{task.description}</div>
+      <p className='text-gray-500'>{task.description}</p>
     </div>
   );
 };

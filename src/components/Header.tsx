@@ -13,7 +13,9 @@ import userImg from '../assets/images/sample-avatar.jpg';
 import Logo from './logo';
 import Menu from '../assets/icons/menu';
 import { LOCALES } from '../i18n/locales';
-// import { FormattedMessage } from 'react-intl'
+import { FormattedMessage } from 'react-intl';
+import { MdOutlineDashboardCustomize } from 'react-icons/md';
+import { FiLogOut } from 'react-icons/fi';
 
 export type HeaderProps = {
   currentLocale: string,
@@ -77,43 +79,58 @@ const Header = ({currentLocale, handleChange }: HeaderProps) => {
   }
 
   return (
-    <header className={`${sticky ? 'header--sticky' : 'h-24'} relative bg-slate-800 w-full flex justify-between items-center px-6 py-6 border-b border-b-slate-600 text-gray-300`}>
+    <header className={`
+      ${sticky ? 'header--sticky' : 'h-24'} 
+      relative bg-lavender-blue w-full flex justify-between items-center px-6 py-6 shadow-md text-black
+    `}>
       <div ref={inputEl} className="logo">
         <Link to="/main">
           <Logo />
         </Link>
       </div>
+
       <div className='flex justify-between'>
-        {
-          <div className={`${(burger && isNavOpen)? "hidden" : 'visible'} nav__list z-20  absolute bg-slate-700 p-2 top-12 right-10 flex flex-col justify-between items-center gap-4 sm:bg-slate-800 sm:flex-row sm:static `}>
-            <BoardButton themes={themes.light} text="boardCreationBtn" onClick={toggleWindow} />
-            <Link to="/edit-profile">
-              <BoardButton themes={themes.light} text="edit" />
-            </Link>
-            <BoardButton
-              themes={themes.light}
-              text="signOut"
-              onClick={onLogout}
-            />
-            <div className="switch">
-              <select className='text-white bg-sky-600 mr-4' onChange={handleChange}  value={currentLocale}>
-                {
-                  languages.map(({ name, code }) => (
-                    <option className='text-white bg-slate-800' key={code}  value={code}>
-                      {name}
-                    </option>
-                  ))
-                }
-              </select>
-            </div>
-          </div> 
-        }
-        <div className="nav__user w-full flex flex-row justify-center items-center gap-2">
-          <img src={userImg} alt="user avatar" className="w-full h-6 rounded-full" />
-          <span>{userDetails.login}</span>
+        <div className={`
+          ${(sticky ? 'bg-slate-blue sm:bg-slate-blue' : 'bg-lavender-blue sm:bg-lavender-blue')})} 
+          ${(burger && isNavOpen)? "hidden" : 'visible'}
+          nav__list z-20  absolute p-2 top-12 right-10 flex flex-col justify-between items-center gap-6 sm:flex-row sm:static
+        `}>
+          <button 
+            className='flex justify-center items-center gap-2 p-1 z-10 whitespace-nowrap font-bold text-lg hover:bg-slate-blue hover:border-2 hover:border-slate-blue hover:rounded hover:text-white transition-all' 
+            onClick={toggleWindow
+          }>
+            <MdOutlineDashboardCustomize size={20} />
+            <FormattedMessage id="boardCreationBtn" />
+          </button>
+          <Link to="/edit-profile" 
+            className='flex flex-row justify-center items-center gap-2 p-1 hover:bg-slate-blue hover:border-2 hover:border-slate-blue hover:rounded hover:text-white transition-all'
+          >
+            <img src={userImg} alt="user avatar" className="w-full h-8 rounded-full" />
+            <span className='text-lg font-bold'>{userDetails.login}</span>
+          </Link>
+          <button 
+            className='flex justify-center items-center gap-2 p-1 z-10 whitespace-nowrap font-bold text-lg hover:bg-slate-blue hover:border-2 hover:border-slate-blue hover:rounded hover:text-white transition-all' 
+            onClick={onLogout}
+          >
+            <FormattedMessage id="signOut" />
+            <FiLogOut size={20} />
+          </button>
+          <div className="switch">
+            <select className='text-slate-blue text-lg font-bold rounded mr-4 p-1' onChange={handleChange}  value={currentLocale}>
+              {
+                languages.map(({ name, code }) => (
+                  <option className='bg-white text-black transition-all' key={code}  value={code}>
+                    {name}
+                  </option>
+                ))
+              }
+            </select>
+          </div>
         </div>
       </div>
+
       { burger && <div onClick={openMenu}><Menu /></div> } 
+      
       { isOpen && <BoardCreation toggleWindow={toggleWindow} />}
     </header>
   );

@@ -2,7 +2,7 @@ import { LOCALES } from './locales'
 
 export const messages = {
   [LOCALES.ENGLISH]: {
-    boardCreationBtn: 'Create new board',
+    boardCreationBtn: 'Create board',
     edit: 'Edit profile',
     signOut: 'Sign out',
     signIn: 'Sign in',
@@ -30,7 +30,7 @@ export const messages = {
     addTask: '+ Add task',
     login: 'Login',
     name: 'Name',
-    password: 'password',
+    password: 'Password',
     confirm: 'Confirm password',
     editTitle: 'Edit your profile information',
     cancel: 'Cancel',

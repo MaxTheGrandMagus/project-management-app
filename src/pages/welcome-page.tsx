@@ -2,33 +2,37 @@ import { Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import Logo from '../components/logo';
 import { FormattedMessage } from 'react-intl';
+import { SiAuth0 } from 'react-icons/si'
+import { FiLogIn } from 'react-icons/fi'
 
 const WelcomePage = () => {
   const [cookie] = useCookies(['user']);
 
   return (
-    <main className="relative bg-slate-800 min-h-[80vh] items-center text-gray-300 justify-center flex flex-col gap-5 ">
-      <nav className=" flex gap-5 absolute top-20 right-20 ">
+    <main className="relative bg-white min-h-[75vh] my-auto items-center text-black justify-center flex flex-col gap-5 ">
+      <nav className=" flex gap-5 absolute top-10 right-20 ">
         {cookie.user === undefined && (
           <>
             <Link
               to="/signin"
-              className="border-2 border-sky-400 rounded p-1 bg-gradient-to-r from-sky-500 to-sky-700 "
+              className="flex flex-row justify-center items-center gap-2 bg-slate-blue border-2 border-slate-blue rounded p-2 text-white text-lg active:bg-white active:text-slate-blue transition-all"
             >
               <FormattedMessage id="signIn" />
+              <FiLogIn size={20} />
             </Link>
             <Link
               to="/signup"
-              className="border-2 border-sky-400 rounded p-1 bg-gradient-to-r from-sky-500 to-sky-700 "
+              className="flex flex-row justify-center items-center gap-2 bg-slate-blue border-2 border-slate-blue rounded p-2 text-white text-lg active:bg-white active:text-slate-blue transition-all"
             >
               <FormattedMessage id="signUp" />
+              <SiAuth0 size={20} />
             </Link>
           </>
         )}
         {cookie.user && (
           <Link
             to="/main"
-            className="border-2 border-sky-400 rounded p-1 bg-gradient-to-r from-sky-500 to-indigo-500 "
+            className="bg-slate-blue border-2 border-slate-blue rounded p-2 text-white text-lg"
           >
             Go to Main Page
           </Link>
