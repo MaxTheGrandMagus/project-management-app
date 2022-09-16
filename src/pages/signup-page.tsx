@@ -6,7 +6,7 @@ import { useAppDispatch } from '../store/store';
 import { signup, reset } from '../store/auth/authSlice';
 import Spinner from '../components/spinner';
 import Logo from '../components/logo';
-import { themes } from '../components/main-route/board-button';
+import { themes } from '../components/main/board-button';
 import { getCookie } from '../helpers/cookie';
 import { toast } from 'react-toastify';
 import { FormattedMessage, useIntl } from 'react-intl';

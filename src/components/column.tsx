@@ -6,7 +6,7 @@ import Task from './task/task';
 import DotsIcon from '../assets/icons/dotsIcon';
 import TaskCreation from './creation-task';
 import TrashIcon from '../assets/icons/trash.icon';
-import { themes } from './main-route/board-button';
+import { themes } from './main/board-button';
 import { FormattedMessage } from 'react-intl';
 
 export interface ColumnProps {

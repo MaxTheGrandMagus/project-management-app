@@ -2,7 +2,7 @@ import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { addColumn } from '../../store/columns/colSlice';
 import { useAppDispatch } from '../../store/store';
-import BoardButton, { themes } from '../main-route/board-button';
+import BoardButton, { themes } from '../main/board-button';
 import { FormattedMessage, useIntl } from 'react-intl'
 
 interface IFormValues {

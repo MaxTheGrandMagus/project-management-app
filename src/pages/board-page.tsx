@@ -4,7 +4,7 @@ import { useCookies } from 'react-cookie';
 import { AppState, useAppDispatch, useAppSelector } from '../store/store';
 import { getAllAboutBoard } from '../store/task/taskSlice';
 import { getColumnById, updateColumn } from '../store/columns/colSlice';
-import AddColumnForm from '../components/board-route/add-column-form';
+import AddColumnForm from '../components/board/add-column-form';
 import Column from '../components/column';
 import TaskWindow from '../components/task/task-window';
 import Spinner from '../components/spinner';

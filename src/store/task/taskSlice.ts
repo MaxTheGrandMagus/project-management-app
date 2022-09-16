@@ -9,7 +9,7 @@ import {
   TaskShowProps,
   TaskUpdateProps,
   UserProps,
-} from '../../components/interfaces';
+} from '../../interfaces/interfaces';
 import { getCookie } from '../../helpers/cookie';
 import { addColumn, deleteColumn, updateColumn } from '../columns/colSlice';
 import { API_URL } from '../../constants/api';

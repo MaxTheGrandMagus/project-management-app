@@ -1,10 +1,12 @@
 import { NavLink } from 'react-router-dom';
 import { useAppDispatch } from '../../store/store';
 import { openboard, chooseBoardId } from '../../store/boards/boardsSlice';
-import { BoardProps } from '../interfaces';
+import { BoardProps } from '../../interfaces/interfaces';
 import BoardButton, { themes } from './board-button';
+import { FormattedMessage } from 'react-intl';
+import { HiOutlineTrash } from 'react-icons/hi'
 
-const Board: React.FC<BoardProps> = ({ id, title, description, toggleWindow }) => {
+const BoardItem: React.FC<BoardProps> = ({ id, title, description, toggleWindow }) => {
   const dispatch = useAppDispatch();
 
   const onOpen = () => {
@@ -22,22 +24,23 @@ const Board: React.FC<BoardProps> = ({ id, title, description, toggleWindow }) =
   };
 
   return (
-    <div className="flex flex-row items-center border rounded m-2 p-2 shadow-md text-black cursor-pointer hover:shadow-xl transition-all duration-200">
+    <div className="relative w-80 h-40 flex flex-col items-center bg-alice-blue border rounded shadow-md text-black cursor-pointer hover:shadow-xl transition-all duration-200">
       <NavLink
         to={`/board/${id}`}
         onClick={openAndSave}
-        className="flex flex-col m-2"
+        className="w-full h-full flex flex-col p-4"
       >
         <div className="text-xl font-bold">{title}</div>
         <div>{description}</div>
       </NavLink>
-      <BoardButton
-        themes={themes.light}
-        text="delete"
+      <button
+        className="absolute top-4 right-3 hover:text-slate-blue transition-all duration-200"
         onClick={onOpen}
-      />
+      >
+        <HiOutlineTrash size={25} />
+      </button>
     </div>
   );
 };
 
-export default Board;
+export default BoardItem;

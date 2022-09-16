@@ -1,4 +1,4 @@
-import { InputProps } from "./interfaces";
+import { InputProps } from "../interfaces/interfaces";
 
 const Input = (props: InputProps) => {
   return (

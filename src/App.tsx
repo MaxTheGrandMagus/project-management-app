@@ -6,7 +6,7 @@ import SigninPage from './pages/signin-page';
 import SignupPage from './pages/signup-page';
 import MainPage from './pages/main-page';
 import BoardPage from './pages/board-page';
-import EditProfile from './pages/edit-profile';
+import EditProfile from './pages/profile-edit';
 import { useCookies } from 'react-cookie';
 import { getCookie } from './helpers/cookie';
 import 'react-toastify/dist/ReactToastify.css';
@@ -45,7 +45,7 @@ const App = () => {
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/main" element={<MainPage />} />
             <Route path="/board/:id" element={<BoardPage />} />
-            <Route path="/edit-profile" element={<EditProfile />} />
+            <Route path="/profile/edit" element={<EditProfile />} />
           </Route>
         </Routes>
       </BrowserRouter>

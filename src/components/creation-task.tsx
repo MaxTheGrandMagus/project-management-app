@@ -3,7 +3,7 @@ import { useAppDispatch } from '../store/store';
 import { createTask } from '../store/task/taskSlice';
 import { useCookies } from 'react-cookie';
 import jwt_decode from 'jwt-decode';
-import { TaskCreationProps, TokenProps } from './interfaces';
+import { TaskCreationProps, TokenProps } from '../interfaces/interfaces';
 import CloseIcon from '../assets/icons/close.icon';
 
 const TaskCreation = ({ toggleWindow, colId, order }: TaskCreationProps) => {

@@ -1,28 +1,29 @@
 import React, { useState, useEffect, FormEventHandler, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { AppState, useAppDispatch } from '../store/store';
-import { reset } from '../store/auth/authSlice';
-import { getUserById, resetUser } from '../store/user/userSlice';
-import BoardButton, { themes } from './main-route/board-button';
-import BoardCreation from '../pages/create-board';
+import { AppState, useAppDispatch } from '../../store/store';
+import { reset } from '../../store/auth/authSlice';
+import { getUserById, resetUser } from '../../store/user/userSlice';
+import BoardButton, { themes } from '../main/board-button';
+import ReactPortal from '../modal/portal';
+import BoardCreation from '../main/board-create';
 import jwt_decode from 'jwt-decode'
 import { useCookies } from 'react-cookie';
-import { TokenProps } from './interfaces';
-import userImg from '../assets/images/sample-avatar.jpg';
-import Logo from './logo';
-import Menu from '../assets/icons/menu';
-import { LOCALES } from '../i18n/locales';
+import { TokenProps } from '../../interfaces/interfaces';
+import { FaUserCircle } from 'react-icons/fa'
+import Logo from '../logo';
+import Menu from '../../assets/icons/menu';
+import { LOCALES } from '../../i18n/locales';
 import { FormattedMessage } from 'react-intl';
 import { MdOutlineDashboardCustomize } from 'react-icons/md';
 import { FiLogOut } from 'react-icons/fi';
 
 export type HeaderProps = {
   currentLocale: string,
-  handleChange: ({ target: { value } }: {target: {value: string }}) => void,
+  handleChange: ({target: { value }}: {target: { value: string }}) => void,
 };
 
-const Header = ({currentLocale, handleChange }: HeaderProps) => {
+const Header = ({ currentLocale, handleChange }: HeaderProps) => {
   const [sticky, setSticky] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [burger, setBurger] = useState(false);
@@ -37,7 +38,6 @@ const Header = ({currentLocale, handleChange }: HeaderProps) => {
   const [cookie, setCookie, removeCookie] = useCookies(['user']);
   const decodedUser: TokenProps = jwt_decode(cookie.user)
 
-  // const ref = React.useRef();
   const inputEl = useRef(null);
 
   const onLogout = () => {
@@ -83,7 +83,7 @@ const Header = ({currentLocale, handleChange }: HeaderProps) => {
       ${sticky ? 'header--sticky' : 'h-24'} 
       relative bg-lavender-blue w-full flex justify-between items-center px-6 py-6 shadow-md text-black
     `}>
-      <div ref={inputEl} className="logo">
+      <div ref={inputEl} className={`${sticky ? 'text-white' : 'text-black'} logo`}>
         <Link to="/main">
           <Logo />
         </Link>
@@ -96,20 +96,38 @@ const Header = ({currentLocale, handleChange }: HeaderProps) => {
           nav__list z-20  absolute p-2 top-12 right-10 flex flex-col justify-between items-center gap-6 sm:flex-row sm:static
         `}>
           <button 
-            className='flex justify-center items-center gap-2 p-1 z-10 whitespace-nowrap font-bold text-lg hover:bg-slate-blue hover:border-2 hover:border-slate-blue hover:rounded hover:text-white transition-all' 
-            onClick={toggleWindow
-          }>
+            className={`
+              flex justify-center items-center gap-2 p-1 z-10 whitespace-nowrap font-bold text-lg border-2 rounded transition-all
+              ${(sticky 
+                ? 'text-white border-slate-blue hover:bg-lavender-blue hover:border-lavender-blue hover:text-black' 
+                : 'text-black border-lavender-blue hover:bg-slate-blue hover:border-slate-blue hover:text-white'
+              )}
+            `}
+            onClick={toggleWindow}
+          >
             <MdOutlineDashboardCustomize size={20} />
             <FormattedMessage id="boardCreationBtn" />
           </button>
-          <Link to="/edit-profile" 
-            className='flex flex-row justify-center items-center gap-2 p-1 hover:bg-slate-blue hover:border-2 hover:border-slate-blue hover:rounded hover:text-white transition-all'
+          <Link to="/profile/edit" 
+            className={`
+              flex flex-row justify-center items-center gap-2 p-1 border-2 rounded transition-all
+              ${(sticky 
+                ? 'text-white border-slate-blue hover:bg-lavender-blue hover:border-lavender-blue hover:text-black' 
+                : 'text-black border-lavender-blue hover:bg-slate-blue hover:border-slate-blue hover:text-white'
+              )}
+            `}
           >
-            <img src={userImg} alt="user avatar" className="w-full h-8 rounded-full" />
+            <FaUserCircle size={25} />
             <span className='text-lg font-bold'>{userDetails.login}</span>
           </Link>
           <button 
-            className='flex justify-center items-center gap-2 p-1 z-10 whitespace-nowrap font-bold text-lg hover:bg-slate-blue hover:border-2 hover:border-slate-blue hover:rounded hover:text-white transition-all' 
+            className={`
+              flex justify-center items-center gap-2 p-1 z-10 whitespace-nowrap font-bold text-lg border-2 rounded transition-all
+              ${(sticky 
+                ? 'text-white border-slate-blue hover:bg-lavender-blue hover:border-lavender-blue hover:text-black' 
+                : 'text-black border-lavender-blue hover:bg-slate-blue hover:border-slate-blue hover:text-white'
+              )}
+            `}
             onClick={onLogout}
           >
             <FormattedMessage id="signOut" />
@@ -131,7 +149,11 @@ const Header = ({currentLocale, handleChange }: HeaderProps) => {
 
       { burger && <div onClick={openMenu}><Menu /></div> } 
       
-      { isOpen && <BoardCreation toggleWindow={toggleWindow} />}
+      { isOpen && (
+        <ReactPortal showModal={isOpen}>
+          <BoardCreation toggleWindow={toggleWindow} />
+        </ReactPortal>
+      )}
     </header>
   );
 };

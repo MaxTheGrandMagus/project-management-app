@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useAppDispatch } from '../../store/store';
 import { chooseColId, chooseTaskId, deleteTask } from '../../store/task/taskSlice';
-import { TaskDelProps, TaskProps } from '../interfaces';
+import { TaskDelProps, TaskProps } from '../../interfaces/interfaces';
 import DotsIcon from '../../assets/icons/dotsIcon';
 import TrashIcon from '../../assets/icons/trash.icon';
-import { themes } from '../main-route/board-button';
+import { themes } from '../main/board-button';
 
 const Task = ({ task, taskClick, columnId }: TaskProps) => {
   const dispatch = useAppDispatch();

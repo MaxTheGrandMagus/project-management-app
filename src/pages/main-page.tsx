@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { AppState, useAppDispatch, useAppSelector } from '../store/store';
 import { getBoards } from '../store/boards/boardsSlice';
-import BoardContainer from '../components/main-route/board-container';
+import BoardContainer from '../components/main/board-container';
 import Spinner from '../components/spinner';
 import { FormattedMessage } from 'react-intl';
 

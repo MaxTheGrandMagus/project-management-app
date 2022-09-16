@@ -1,6 +1,6 @@
 const Logo = () => {
   return (
-    <h1 className="text-4xl font-bold text-black">
+    <h1 className="text-4xl font-bold">
       effetto
     </h1>
   );

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { BoardProps } from '../../components/interfaces';
+import { BoardProps } from '../../interfaces/interfaces';
 import { getCookie } from '../../helpers/cookie';
 import { API_URL } from '../../constants/api';
 import { IError } from '../config';
