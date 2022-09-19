@@ -1,20 +1,21 @@
 
 import { useAppDispatch } from "../../store/store";
-import { deleteBoard } from "../../store/boards/boardsSlice";
-import BoardButton, { themes } from "./board-button";
-import { ModalProps } from "../../interfaces/interfaces";
+import { deleteBoard } from "../../store/boards/boards.slice";
 import { FormattedMessage } from "react-intl";
 
-const BoardModal = (props: ModalProps) => {
+const BoardDeleteModal: React.FC<{
+  boardId: string; 
+  toggleWindow: () => void; 
+}> = ({ boardId, toggleWindow }) => {
   const dispatch = useAppDispatch();
 
   const onDeleteBoard = () => {
-    dispatch(deleteBoard(props.boardId))
-    props.toggleWindow()
+    dispatch(deleteBoard(boardId));
+    toggleWindow();
   }
 
   const onCancelHandler = () => {
-    props.toggleWindow()
+    toggleWindow();
   }
   
   return (
@@ -49,5 +50,5 @@ const BoardModal = (props: ModalProps) => {
   )
 }
 
-export default BoardModal;
+export default BoardDeleteModal;
 

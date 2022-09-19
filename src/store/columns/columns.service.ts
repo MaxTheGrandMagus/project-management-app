@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getCookie } from '../../helpers/cookie';
-import { IColumnToUpdate, IColumnToGetById } from './colSlice';
+import { IColumnToUpdate, IColumnToGetById } from './columns.slice';
 import { API_URL } from '../../constants/api';
 
 // Get column by id
@@ -34,9 +34,9 @@ const updateColumn = async (column: IColumnToUpdate) => {
   return response.data;
 };
 
-const colService = {
+const columnsService = {
   updateColumn,
   getColumnById,
 };
 
-export default colService;
+export default columnsService;

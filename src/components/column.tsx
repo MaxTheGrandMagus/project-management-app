@@ -1,28 +1,30 @@
 import { useState } from 'react';
 import { AppState, useAppDispatch, useAppSelector } from '../store/store';
-import { ColumnTaskProps } from '../store/task/taskSlice';
-import { deleteColumn } from '../store/columns/colSlice';
+import { deleteColumn } from '../store/columns/columns.slice';
 import Task from './task/task';
-import DotsIcon from '../assets/icons/dotsIcon';
-import TaskCreation from './creation-task';
+import ReactPortal from './modal/portal';
+import TaskCreation from './task-create';
 import TrashIcon from '../assets/icons/trash.icon';
+import DotsIcon from '../assets/icons/dotsIcon';
 import { themes } from './main/board-button';
 import { FormattedMessage } from 'react-intl';
+import { UserProps } from '../interfaces/interfaces';
+import { TaskProps } from '../store/boards/boards.slice';
 
 export interface ColumnProps {
   colId: string;
   boardId: string;
 }
 
-const Column = ({ id, title, order, tasks, taskClick }: ColumnTaskProps) => {
+const Column = ({ id, title, order, tasks, taskClick, users }: ColumnTaskProps) => {
   const dispatch = useAppDispatch();
 
-  const [isOpenTaskWin, setIsOpenTaskWin] = useState(false);
+  const [isOpenCreateTaskModal, setIsOpenCreateTaskModal] = useState(false);
   const [visibleAddTask, setVisibleAddTask] = useState(false);
   const boardId = localStorage.getItem('boardId');
 
   const toggeTaskWindow = () => {
-    setIsOpenTaskWin(!isOpenTaskWin);
+    setIsOpenCreateTaskModal(!isOpenCreateTaskModal);
   };
 
   const toggleAddTask = () => {
@@ -43,11 +45,11 @@ const Column = ({ id, title, order, tasks, taskClick }: ColumnTaskProps) => {
       <div className="flex justify-between align-baseline">
         <h4 className="text-lg text-white font-bold m-3">{title}</h4>
         <div
-          className="relative flex items-center m-3 text-white cursor-pointer rounded-sm hover:bg-gray-400 transition-all"
+          className="relative flex items-center m-3 text-white cursor-pointer rounded-sm hover:bg-gray-300 transition-all"
           onClick={toggleAddTask}
         >
           {visibleAddTask && (
-            <div className="flex flex-col absolute top-full right-0 bg-sky-800">
+            <div className="absolute z-10 top-full left-0 flex flex-col bg-sky-800">
               <button
                 className={themes.grey}
                 onClick={() => handleColumnDelete(id)}
@@ -66,6 +68,7 @@ const Column = ({ id, title, order, tasks, taskClick }: ColumnTaskProps) => {
             key={task.id}
             task={task}
             columnId={id}
+            users={users}
           />
         ))}
         <aside className="relative flex flex-col items-center m-2">
@@ -75,12 +78,14 @@ const Column = ({ id, title, order, tasks, taskClick }: ColumnTaskProps) => {
           >
             <FormattedMessage id="addTask" />
           </button>
-          {isOpenTaskWin && (
-            <TaskCreation
-              order={order}
-              colId={id}
-              toggleWindow={toggeTaskWindow}
-            />
+          {isOpenCreateTaskModal && (
+            <ReactPortal showModal={isOpenCreateTaskModal}>
+              <TaskCreation
+                colId={id}
+                order={order}
+                toggleWindow={toggeTaskWindow}
+              />
+            </ReactPortal>
           )}
         </aside>
       </div>
@@ -89,3 +94,12 @@ const Column = ({ id, title, order, tasks, taskClick }: ColumnTaskProps) => {
 };
 
 export default Column;
+
+interface ColumnTaskProps {
+  id: string;
+  title: string;
+  order: number;
+  tasks: Array<TaskProps>;
+  taskClick?: () => void;
+  users: Array<UserProps>;
+}

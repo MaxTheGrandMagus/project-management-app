@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { AppState, useAppDispatch } from '../store/store';
-import { getUserById, resetUser, updateUserProfile, deleteUser } from '../store/user/userSlice';
-import { reset } from '../store/auth/authSlice';
+import { getUserById, resetUser, updateUserProfile, deleteUser } from '../store/users/users.slice';
+import { reset } from '../store/auth/auth.slice';
 import Spinner from '../components/spinner';
 import ReactPortal from '../components/modal/portal';
-import ConfirmationModal from '../components/profile-edit/confirmation-modal';
+import ProfileEditModal from '../components/profile-edit/profile-edit-modal';
 import { TokenProps } from '../interfaces/interfaces';
 import { toast } from 'react-toastify';
 import { useCookies } from 'react-cookie';
@@ -163,7 +163,11 @@ const EditProfile = (props: Props) => {
       </form>
       {showModal && (
         <ReactPortal showModal={showModal}>
-          <ConfirmationModal showModal={showModal} setShowModal={setShowModal} onDeleteUser={onDeleteUser} />
+          <ProfileEditModal 
+            showModal={showModal} 
+            setShowModal={setShowModal} 
+            onDeleteUser={onDeleteUser} 
+          />
         </ReactPortal>
       )}
     </section>

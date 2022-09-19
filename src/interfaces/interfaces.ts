@@ -1,4 +1,4 @@
-import { IColumn } from "../store/columns/colSlice"
+import { IColumn } from "../store/columns/columns.slice"
 
 export interface BoardProps {
   id?: string,

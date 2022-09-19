@@ -4,8 +4,8 @@ import {
   AnyAction,
 } from '@reduxjs/toolkit';
 import { getCookie } from '../../helpers/cookie';
-import colService from './colService';
-import { API_URL } from './../../constants/api';
+import columnsService from './columns.service';
+import { API_URL } from '../../constants/api';
 
 interface IError {
   message?: string;
@@ -99,7 +99,7 @@ export const getColumnById = createAsyncThunk(
   'columns/getColumnByIdStatus',
   async (column: IColumnToGetById, { rejectWithValue }) => {
     try {
-      return await colService.getColumnById(column);
+      return await columnsService.getColumnById(column);
     } catch (error) {
       const errorMessage = (error as IError).message;
       return rejectWithValue(errorMessage);
@@ -171,7 +171,7 @@ export const updateColumn = createAsyncThunk(
   'columns/updateColumnStatus',
   async (column: IColumnToUpdate, { rejectWithValue }) => {
     try {
-      return await colService.updateColumn(column);
+      return await columnsService.updateColumn(column);
     } catch (error) {
       const errorMessage = (error as IError).message;
       return rejectWithValue(errorMessage);

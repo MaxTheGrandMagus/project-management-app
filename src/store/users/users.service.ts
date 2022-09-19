@@ -1,6 +1,18 @@
 import axios from 'axios';
 import { API_URL } from '../../constants/api';
 import { getCookie } from '../../helpers/cookie';
+import { UserProps } from '../../interfaces/interfaces';
+
+// Get all users
+const getUsers = async (): Promise<Array<UserProps>> => {
+  const token = getCookie('user') || null;
+  const response = await axios.get(`${API_URL}/users`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
 
 // Get user by id
 const getUserById = async (id: string) => {
@@ -49,6 +61,7 @@ const deleteUser = async (id: string) => {
 };
 
 const userService = {
+  getUsers,
   getUserById,
   updateUserProfile,
   deleteUser,

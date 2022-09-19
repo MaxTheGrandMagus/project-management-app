@@ -1,5 +1,6 @@
+import { UserProps } from '../../interfaces/interfaces';
 import { createSlice, createAsyncThunk, AnyAction } from "@reduxjs/toolkit";
-import userService from './userService';
+import userService from './users.service';
 
 interface IError {
   message?: string;
@@ -10,7 +11,20 @@ interface IError {
   };
 }
 
-const initialState = {
+const initialState: {
+  users: Array<UserProps>,
+  userDetails: {
+    name: string,
+    login: string,
+    password: string,
+  },
+  isLoading: boolean,
+  isSuccess: boolean,
+  isError: boolean,
+  message: string,
+  deleteStatusCode: null | number,
+} = {
+  users: [],
   userDetails: {
     name: '',
     login: '',
@@ -23,6 +37,19 @@ const initialState = {
   deleteStatusCode: null,
 };
 
+//Get all users
+export const getUsers = createAsyncThunk<Array<UserProps>>(
+  'user/getUsers',
+  async (_, thunkAPI) => {
+    try {
+      return await userService.getUsers();
+    } catch (error) {
+      const errorMassage = (error as IError).message;
+      return thunkAPI.rejectWithValue(errorMassage);
+    }
+  }
+);
+
 //Get user by ID
 export const getUserById = createAsyncThunk(
   'user/getUserById',
@@ -30,14 +57,8 @@ export const getUserById = createAsyncThunk(
     try {
       return await userService.getUserById(id);
     } catch (error) {
-      const message =
-        ((error as IError).response &&
-          (error as IError).response.data &&
-          (error as IError).response.data.message) ||
-        (error as IError).message ||
-        (error as IError) ||
-        (error as IError).toString();
-      return thunkAPI.rejectWithValue(message);
+      const errorMassage = (error as IError).message;
+      return thunkAPI.rejectWithValue(errorMassage);
     }
   }
 );
@@ -49,14 +70,8 @@ export const updateUserProfile = createAsyncThunk(
     try {
       return await userService.updateUserProfile(updateUserData);
     } catch (error) {
-      const message =
-        ((error as IError).response &&
-          (error as IError).response.data &&
-          (error as IError).response.data.message) ||
-        (error as IError).message ||
-        (error as IError) ||
-        (error as IError).toString();
-      return thunkAPI.rejectWithValue(message);
+      const errorMassage = (error as IError).message;
+      return thunkAPI.rejectWithValue(errorMassage);
     }
   }
 );
@@ -68,14 +83,8 @@ export const deleteUser = createAsyncThunk(
     try {
       return await userService.deleteUser(id);
     } catch (error) {
-      const message =
-        ((error as IError).response &&
-          (error as IError).response.data &&
-          (error as IError).response.data.message) ||
-        (error as IError).message ||
-        (error as IError) ||
-        (error as IError).toString();
-      return thunkAPI.rejectWithValue(message);
+      const errorMassage = (error as IError).message;
+      return thunkAPI.rejectWithValue(errorMassage);
     }
   }
 );
@@ -99,6 +108,18 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getUsers.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(getUsers.fulfilled, (state, action) => {
+        state.users = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(getUsers.rejected, (state, action: AnyAction) => {
+        state.isError = true;
+        state.message = action.payload;
+      })
       .addCase(getUserById.pending, (state) => {
         state.isLoading = true;
       })

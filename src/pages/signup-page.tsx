@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
 import { useAppDispatch } from '../store/store';
-import { signup, reset } from '../store/auth/authSlice';
+import { signup, reset } from '../store/auth/auth.slice';
 import Spinner from '../components/spinner';
 import Logo from '../components/logo';
 import { themes } from '../components/main/board-button';

@@ -1,41 +1,40 @@
 import { useState } from 'react';
 import { useAppDispatch } from '../../store/store';
-import { createBoard, resetBoard } from '../../store/boards/boardsSlice';
-import { BoardCreationProps } from '../../interfaces/interfaces';
-import BoardButton, { themes } from './board-button';
+import { BoardColumnTaskProps, updateBoard } from '../../store/boards/boards.slice';
 import { FormattedMessage } from 'react-intl'
-import BoardArrowBack from '../../assets/icons/board-arrow-back.icon';
-import { MdOutlineDashboardCustomize } from 'react-icons/md'
+import { HiPencilAlt } from 'react-icons/hi'
 
-const BoardCreation = ({ toggleWindow }: BoardCreationProps) => {
+const BoardUpdateModal = ({ board, toggleWindow }: { 
+  board: Pick<BoardColumnTaskProps, 'id' | 'title' | 'description'>;
+  toggleWindow: () => void;
+}) => {
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
+    title: board.title,
+    description: board.description,
   });
   const { title, description } = formData;
-  const boardData = {
-    title,
-    description,
-  };
 
-  const dispatch = useAppDispatch();
-
-  // const placeholderTitle = intl.formatMessage({id: 'placeholderTitleBoard'});
-  // const placeholderDecsription = intl.formatMessage({id: 'placeholderDecsriptionBoard'});
-
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const dispatch = useAppDispatch();  
+  
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
     }));
   };
   
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    dispatch(createBoard(boardData));
-    dispatch(resetBoard(boardData));
+    dispatch(updateBoard({
+      id: board.id,
+      title: title,
+      description: description,
+    }));
     toggleWindow();
   };
+
+  // const placeholderTitle = intl.formatMessage({id: 'placeholderTitleBoard'});
+  // const placeholderDecsription = intl.formatMessage({id: 'placeholderDecsriptionBoard'});
 
   return (
     <>
@@ -43,11 +42,11 @@ const BoardCreation = ({ toggleWindow }: BoardCreationProps) => {
         <div className="w-auto max-w-3xl mx-auto my-6">
           <section className="w-full flex flex-col bg-white border-0 rounded-lg outline-none shadow-lg focus:outline-none">
             <p className="flex flex-row justify-center items-center gap-2 p-4 text-xl font-semibold leading-relaxed text-slate-500">
-              <MdOutlineDashboardCustomize />
-              <FormattedMessage id='titleBoardCreation' />
+              <HiPencilAlt />
+              <FormattedMessage id='titleBoardUpdate' />
             </p>
             <form
-              onSubmit={onSubmit}
+              onSubmit={handleSubmit}
               className="flex flex-col justify-center items-center gap-6 p-4"
             >
               <div className='w-full flex flex-col gap-2'>
@@ -55,7 +54,7 @@ const BoardCreation = ({ toggleWindow }: BoardCreationProps) => {
                 <input
                   value={title}
                   name="title"
-                  onChange={onChange}
+                  onChange={handleChange}
                   className="inline-flex bg-transparent w-full items-center px-4 py-2 border border-solid border-slate-400 rounded-lg"
                   type="text"
                   required
@@ -66,7 +65,7 @@ const BoardCreation = ({ toggleWindow }: BoardCreationProps) => {
                 <input
                   value={description}
                   name="description"
-                  onChange={onChange}
+                  onChange={handleChange}
                   className="inline-flex bg-transparent w-full items-center px-4 py-2 border border-solid border-slate-400 rounded-lg"
                   type="text"
                   required
@@ -84,7 +83,7 @@ const BoardCreation = ({ toggleWindow }: BoardCreationProps) => {
                   className="bg-emerald-500 px-6 py-3 text-white font-bold uppercase text-sm rounded outline-none active:bg-emerald-600 focus:outline-none ease-linear transition-all"
                   type="submit"
                 >
-                  <FormattedMessage id='create' />
+                  <FormattedMessage id='update' />
                 </button>
               </div>
             </form>
@@ -96,4 +95,4 @@ const BoardCreation = ({ toggleWindow }: BoardCreationProps) => {
   );
 };
 
-export default BoardCreation;
+export default BoardUpdateModal;

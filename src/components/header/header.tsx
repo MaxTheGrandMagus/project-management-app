@@ -1,12 +1,11 @@
-import React, { useState, useEffect, FormEventHandler, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { AppState, useAppDispatch } from '../../store/store';
-import { reset } from '../../store/auth/authSlice';
-import { getUserById, resetUser } from '../../store/user/userSlice';
-import BoardButton, { themes } from '../main/board-button';
+import { reset } from '../../store/auth/auth.slice';
+import { getUserById, resetUser } from '../../store/users/users.slice';
 import ReactPortal from '../modal/portal';
-import BoardCreation from '../main/board-create';
+import BoardCreateModal from '../main/board-create-modal';
 import jwt_decode from 'jwt-decode'
 import { useCookies } from 'react-cookie';
 import { TokenProps } from '../../interfaces/interfaces';
@@ -151,7 +150,7 @@ const Header = ({ currentLocale, handleChange }: HeaderProps) => {
       
       { isOpen && (
         <ReactPortal showModal={isOpen}>
-          <BoardCreation toggleWindow={toggleWindow} />
+          <BoardCreateModal toggleWindow={toggleWindow} />
         </ReactPortal>
       )}
     </header>

@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { AppState, useAppDispatch, useAppSelector } from '../store/store';
-import { getAllAboutBoard } from '../store/task/taskSlice';
-import { getColumnById, updateColumn } from '../store/columns/colSlice';
-import AddColumnForm from '../components/board/add-column-form';
+import { getUsers } from '../store/users/users.slice';
+import { getBoardById } from '../store/boards/boards.slice';
+import { getColumnById, updateColumn } from '../store/columns/columns.slice';
+import ReactPortal from '../components/modal/portal';
+import BoardAddColumnModal from '../components/board/board-add-column-modal';
 import Column from '../components/column';
 import TaskWindow from '../components/task/task-window';
 import Spinner from '../components/spinner';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { FormattedMessage } from 'react-intl';
-import BoardIcon from '../assets/icons/board.icon';
+import { MdSpaceDashboard } from 'react-icons/md'
 
 const BoardPage = () => {
   const [cookie] = useCookies(['user']);
@@ -18,14 +20,14 @@ const BoardPage = () => {
   const [isOpenTask, setIsOpenTask] = useState(false);
 
   const dispatch = useAppDispatch();
-  const { boards } = useAppSelector((state: AppState) => state.boards);
-  const { colTasks } = useAppSelector((state: AppState) => state.tasks);
+  const { users } = useAppSelector((state: AppState) => state.user);
+  const { boardColumnsTasks, isLoading } = useAppSelector((state: AppState) => state.boards);
   const { columnById, isSuccess: isSuccessUpdate } = useAppSelector((state: AppState) => state.columns);
+  // const { loading: isLoading } = useAppSelector((state: AppState) => state.tasks);
   
   const navigate = useNavigate();
 
-  const boardId = localStorage.getItem('boardId');
-  const board = boards.find((el) => el.id === boardId);
+  const boardId = useParams().id;
 
   const handlerClick = () => {
     setIsOpenTask(!isOpenTask);
@@ -34,7 +36,8 @@ const BoardPage = () => {
   useEffect(() => {
     cookie.user === undefined && navigate('/');
     if (cookie.user && boardId) {
-      dispatch(getAllAboutBoard(boardId));
+      dispatch(getBoardById(boardId));
+      dispatch(getUsers());
     }
   }, [cookie.user, navigate, dispatch, boardId, isSuccessUpdate]);
 
@@ -69,15 +72,15 @@ const BoardPage = () => {
         })
       );
     }
-    dispatch(getAllAboutBoard(source.droppableId));
+    dispatch(getBoardById(source.droppableId));
     console.log(result);
   };
 
-  // if (isLoading) {
-  //   return <div className='h-full my-auto flex justify-center items-center'>
-  //     <Spinner />;
-  //   </div>
-  // }
+  if (isLoading) {
+    return <div className='h-full my-auto flex justify-center items-center'>
+      <Spinner />
+    </div>
+  }
 
   return (
     <main className="relative overflow-hidden h-full mb-auto bg-white flex flex-col items-start gap-5 px-5 text-gray-300">
@@ -90,9 +93,9 @@ const BoardPage = () => {
         </Link>
       ) : (
         <>
-          <section className="flex justify-center items-center gap-3 py-3">
-            <BoardIcon />
-            <h1 className="text-3xl text-black font-bold">{board?.title}</h1>
+          <section className="flex justify-center items-center text-center gap-3 py-3">
+            <MdSpaceDashboard className='text-slate-blue' size={35} />
+            <h1 className="text-3xl text-black font-bold">{boardColumnsTasks?.title}</h1>
           </section>
           <section className="flex gap-5 w-full h-full mb-10 items-start">
             <DragDropContext
@@ -112,8 +115,8 @@ const BoardPage = () => {
                       ref={provided.innerRef}
                       className="flex gap-5 h-full flex-wrap"
                     >
-                      {colTasks.columns.length > 0 &&
-                        colTasks.columns.map((col, index) => (
+                      {boardColumnsTasks.columns.length > 0 &&
+                        boardColumnsTasks.columns.map((col, index) => (
                           <Draggable
                             key={col.id}
                             draggableId={col.id}
@@ -136,6 +139,7 @@ const BoardPage = () => {
                                     title={col.title}
                                     tasks={col.tasks}
                                     taskClick={handlerClick}
+                                    users={users}
                                   />
                                 </div>
                               );
@@ -157,17 +161,24 @@ const BoardPage = () => {
                   <FormattedMessage id="addColumn" />
                 </button>
                 {isPopupDisplay && (
-                  <AddColumnForm
-                    setIsPopupDisplay={setIsPopupDisplay}
-                  />
+                  <ReactPortal showModal={isPopupDisplay}>
+                    <BoardAddColumnModal
+                      setIsPopupDisplay={setIsPopupDisplay}
+                    />
+                  </ReactPortal>
                 )}
               </>
             </div>
           </section>
-          <TaskWindow
-            isOpenTask={isOpenTask}
-            taskClick={handlerClick}
-          />
+          {isOpenTask && (
+            <ReactPortal showModal={isOpenTask}>
+              <TaskWindow
+                isOpenTask={isOpenTask}
+                taskClick={handlerClick}
+                users={users}
+              />
+            </ReactPortal>
+          )}
         </>
       )}
     </main>

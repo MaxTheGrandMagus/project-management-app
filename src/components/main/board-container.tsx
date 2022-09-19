@@ -1,19 +1,22 @@
 import { useEffect, useState } from 'react';
 import { AppState, useAppSelector } from '../../store/store';
+import { BoardColumnTaskProps } from '../../store/boards/boards.slice';
 import BoardItem from './board-item';
 import ReactPortal from '../modal/portal';
-import BoardModal from './board-modal';
+import BoardDeleteModal from './board-delete-modal';
+import BoardUpdateModal from './board-update-modal';
 import Spinner from '../spinner';
 import { toast } from 'react-toastify';
-import { BoardProps } from '../../interfaces/interfaces';
 
 const BoardContainer: React.FC = () => {
-  const { boards, currentId, error, message, loading: isLoading } = useAppSelector((state: AppState) => state.boards);
-  const [isOpen, setIsOpen] = useState(false);
-  const toggleWindow = () => setIsOpen(!isOpen);
+  const { boards, currentBoard, isLoading, isError, message } = useAppSelector((state: AppState) => state.boards);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const toggleDeleteWindow = () => setIsDeleteModalOpen(!isDeleteModalOpen);
+  const toggleUpdateWindow = () => setIsUpdateModalOpen(!isUpdateModalOpen);
 
   useEffect(() => {
-    if (error) toast.error(message);
+    if (isError) toast.error(message);
   });
 
   if (isLoading) {
@@ -24,26 +27,33 @@ const BoardContainer: React.FC = () => {
 
   return (
     <div className="w-full flex flex-row justify-start items-center flex-wrap gap-6 px-10 py-5">
-      {!error ? (
-        boards.map((board: BoardProps) => (
+      {!isError ? (
+        boards.map((board: Pick<BoardColumnTaskProps, 'id' | 'title' | 'description'>) => (
           <BoardItem
-            toggleWindow={toggleWindow}
-            id={board.id}
             key={board.id}
-            title={board.title}
-            description={board.description}
+            board={board}
+            toggleDeleteWindow={toggleDeleteWindow}
+            toggleUpdateWindow={toggleUpdateWindow}
           />
         ))
       ) : (
         <div className="text-red-300">
-          Oops! Something does wrong!
+          Oops! Something went wrong!
         </div>
       )}
-      {isOpen && (
-        <ReactPortal showModal={isOpen}>
-          <BoardModal
-            boardId={currentId}
-            toggleWindow={toggleWindow}
+      {isDeleteModalOpen && (
+        <ReactPortal showModal={isDeleteModalOpen}>
+          <BoardDeleteModal
+            boardId={currentBoard.id}
+            toggleWindow={toggleDeleteWindow}
+          />
+        </ReactPortal>
+      )}
+      {isUpdateModalOpen && (
+        <ReactPortal showModal={isDeleteModalOpen}>
+          <BoardUpdateModal
+            board={currentBoard}
+            toggleWindow={toggleUpdateWindow}
           />
         </ReactPortal>
       )}

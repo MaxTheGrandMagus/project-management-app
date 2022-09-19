@@ -6,7 +6,7 @@ type Props = {
   onDeleteUser: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-const ConfirmationModal = (props: Props) => {
+const ProfileEditModal = (props: Props) => {
   return (
     <>
       <div
@@ -46,4 +46,4 @@ const ConfirmationModal = (props: Props) => {
   )
 }
 
-export default ConfirmationModal;
+export default ProfileEditModal;
