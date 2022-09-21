@@ -1,5 +1,6 @@
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { AppState, useAppDispatch, useAppSelector } from "../../store/store";
 import { updateTask } from "../../store/tasks/tasks.slice";
 import Textarea, { textareaThemes } from "./textarea";
@@ -7,20 +8,26 @@ import { FormattedMessage } from "react-intl";
 import { TbEdit } from "react-icons/tb";
 import { UserProps } from "../../interfaces/interfaces";
 
-const TaskWindow = ({ taskClick, isOpenTask, users }: TaskWindowProps) => {
+const TaskWindow = ({ taskClick, isOpenTask, users }: {
+  taskClick: () => void;
+  isOpenTask: boolean;
+  users: Array<UserProps>;
+}) => {
   const dispatch = useAppDispatch();
-  const { currentTask, colId }  = useAppSelector((state: AppState) => state.tasks);
+  const { currentTask, columnId }  = useAppSelector((state: AppState) => state.tasks);
   
-  const boardId = localStorage.getItem('boardId');
+  const boardId = useParams().id as string;
   const [taskData, setTaskData] = useState({
+    boardId: boardId,
+    columnId: columnId,
     id: currentTask.id,
-    body: {
+    task: {
       title: currentTask.title,
       order: currentTask.order,
       description: currentTask.description,
       userId: currentTask.userId,
       boardId: boardId,
-      columnId: colId
+      columnId: columnId,
     }
   })
   
@@ -28,8 +35,8 @@ const TaskWindow = ({ taskClick, isOpenTask, users }: TaskWindowProps) => {
     if (event.target.name === 'title') {
       setTaskData((prev) => ({
         ...prev,
-        body: {
-          ...prev.body,
+        task: {
+          ...prev.task,
           title: event.target.value,
         }
       }));
@@ -37,8 +44,8 @@ const TaskWindow = ({ taskClick, isOpenTask, users }: TaskWindowProps) => {
     if (event.target.name === 'description') {
       setTaskData((prev) => ({
         ...prev,
-        body: {
-          ...prev.body,
+        task: {
+          ...prev.task,
           description: event.target.value
         }
       }));
@@ -47,8 +54,8 @@ const TaskWindow = ({ taskClick, isOpenTask, users }: TaskWindowProps) => {
       console.log(event.target.value);
       setTaskData((prev) => ({
         ...prev,
-        body: {
-          ...prev.body,
+        task: {
+          ...prev.task,
           userId: event.target.value
         }
       }));
@@ -67,7 +74,6 @@ const TaskWindow = ({ taskClick, isOpenTask, users }: TaskWindowProps) => {
         <div className="w-auto max-w-3xl mx-auto my-6">
           <form 
             className={`
-              ${isOpenTask ? 'activeTaskWidow' : ''}
               w-full flex flex-col bg-white border-0 rounded-lg outline-none shadow-lg focus:outline-none
             `}
             onSubmit={handleSubmit}
@@ -84,7 +90,7 @@ const TaskWindow = ({ taskClick, isOpenTask, users }: TaskWindowProps) => {
                 onChange={handleChange} 
                 name="title" 
                 id='title' 
-                value={taskData.body.title}
+                value={taskData.task.title}
               />
             </div>
             <div className="w-full flex flex-col gap-2 px-4 py-2">
@@ -97,12 +103,12 @@ const TaskWindow = ({ taskClick, isOpenTask, users }: TaskWindowProps) => {
               >
                 <option 
                   className="bg-transparent" 
-                  value={taskData.body.userId}
+                  value={taskData.task.userId}
                 >
-                  { users && users.find((user) => user.id === taskData.body.userId)?.name }
+                  { users && users.find((user) => user.id === taskData.task.userId)?.name }
                 </option>
                 {users && users.map((user) => 
-                  <option key={user.id} value={user.id} defaultValue={taskData.body.userId}>{user.name}</option>
+                  <option key={user.id} value={user.id} defaultValue={taskData.task.userId}>{user.name}</option>
                 )}
               </select>
             </div>
@@ -117,7 +123,7 @@ const TaskWindow = ({ taskClick, isOpenTask, users }: TaskWindowProps) => {
             </div> */}
             <div className="w-full flex flex-col gap-2 px-4 py-2">
               <label className="text-sm text-gray-400" htmlFor="description"><FormattedMessage id='taskDescription' /></label>
-              <Textarea onChange={handleChange} className={textareaThemes.full} name="description" id='description' value={taskData.body.description} />
+              <Textarea onChange={handleChange} className={textareaThemes.full} name="description" id='description' value={taskData.task.description} />
             </div>
             <div className="w-full flex justify-between items-center p-4 rounded-b">
               <button
@@ -143,10 +149,3 @@ const TaskWindow = ({ taskClick, isOpenTask, users }: TaskWindowProps) => {
 };
 
 export default TaskWindow;
-
-interface TaskWindowProps {
-  taskClick: () => void;
-  isOpenTask: boolean;
-  users: Array<UserProps>;
-}
-

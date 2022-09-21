@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { getCookie } from '../../helpers/cookie';
 import { API_URL } from '../../constants/api';
-import { BoardColumnTaskProps } from './boards.slice';
+import { IBoardColumnsTasks } from './boards.slice';
 
 // Get all boards
-const getBoards = async (): Promise<Array<Pick<BoardColumnTaskProps, "id" | "title" | "description">>> => {
+const getBoards = async (): Promise<Array<Pick<IBoardColumnsTasks, "id" | "title" | "description">>> => {
   const token = getCookie('user') || null;
   const response = await axios.get(`${API_URL}/boards`, {
     headers: {
@@ -15,7 +15,7 @@ const getBoards = async (): Promise<Array<Pick<BoardColumnTaskProps, "id" | "tit
 };
 
 // Create board
-const createBoard = async (board: Pick<BoardColumnTaskProps, "title" | "description">) => {
+const createBoard = async (board: Pick<IBoardColumnsTasks, "title" | "description">) => {
   const token = getCookie('user') || null;
   const response = await axios.post(`${API_URL}/boards`, board, {
     headers: {
@@ -48,7 +48,7 @@ const deleteBoard = async (boardId: string) => {
 };
 
 // Update board
-const updateBoard = async (board: Pick<BoardColumnTaskProps, 'id' | 'title' | 'description'>) => {
+const updateBoard = async (board: Pick<IBoardColumnsTasks, 'id' | 'title' | 'description'>) => {
   const token = getCookie('user') || null;
   const response = await axios.put(`${API_URL}/boards/${board.id}`, 
     { title: board.title, description: board.description }, 

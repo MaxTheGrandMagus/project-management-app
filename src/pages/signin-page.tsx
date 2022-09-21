@@ -6,7 +6,6 @@ import { AppState, useAppDispatch } from '../store/store';
 import { signin, reset } from '../store/auth/auth.slice';
 import Logo from '../components/logo';
 import Spinner from '../components/spinner';
-import { themes } from '../components/main/board-button';
 import { toast } from 'react-toastify';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -34,7 +33,7 @@ const SigninPage = (props: Props) => {
       // console.log('sign in cookie', cookie.user);
       navigate('/main');
     }
-    dispatch(reset());
+    // dispatch(reset());
   }, [cookie.user, isLoading, isSuccess, isError, message, navigate, dispatch]);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {

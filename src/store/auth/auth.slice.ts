@@ -1,21 +1,6 @@
-import { createSlice, createAsyncThunk, AnyAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from './auth.service';
-
-interface IError {
-  message?: string;
-  response: {
-    data: {
-      message?: string;
-    };
-  };
-}
-
-const initialState = {
-  isLoading: false,
-  isSuccess: false,
-  isError: false,
-  message: '',
-};
+import { IError } from '../config';
 
 //Register user
 export const signup = createAsyncThunk(
@@ -43,10 +28,19 @@ export const signin = createAsyncThunk(
   }
 );
 
-// Logout user
-export const logout = createAsyncThunk('auth/logout', async () => {
-  await authService.logout();
-});
+const initialState: {
+  isLoading: boolean,
+  isSuccess: boolean,
+  isError: boolean,
+  message: string | undefined,
+  token: string | null,
+} = {
+  isLoading: false,
+  isSuccess: false,
+  isError: false,
+  message: '',
+  token: null,
+};
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -57,6 +51,7 @@ export const authSlice = createSlice({
       state.isSuccess = false;
       state.isError = false;
       state.message = '';
+      state.token = null;
     },
   },
   extraReducers: (builder) => {
@@ -64,28 +59,29 @@ export const authSlice = createSlice({
       .addCase(signup.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(signup.fulfilled, (state, action: AnyAction) => {
+      .addCase(signup.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.token = action.payload.token;
       })
-      .addCase(signup.rejected, (state, action: AnyAction) => {
+      .addCase(signup.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
+        state.message = action.payload as string;
       })
       .addCase(signin.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(signin.fulfilled, (state, action: AnyAction) => {
+      .addCase(signin.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.token = action.payload.token;
       })
-      .addCase(signin.rejected, (state, action: AnyAction) => {
+      .addCase(signin.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
+        state.message = action.payload as string;
       })
-      .addCase(logout.fulfilled, (state) => {});
   },
 });
 

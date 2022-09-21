@@ -23,15 +23,9 @@ const signin = async (userData: {
   return response.data;
 };
 
-// Logout user
-const logout = () => {
-  //TODO: add all reset dispatches in future
-};
-
 const authService = {
   signup,
   signin,
-  logout,
 };
 
 export default authService;

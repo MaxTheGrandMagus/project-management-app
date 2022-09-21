@@ -20,12 +20,18 @@ const MainPage = () => {
     }
   }, [cookie.user, navigate, dispatch]);
 
+  if (isLoading) {
+    return <div className='h-full my-auto flex justify-center items-center'>
+      <Spinner />
+    </div>
+  }
+
   return (
     <main className="h-full mb-auto relative flex flex-col gap-5 justify-start items-center text-gray-300">
       <h1 className="text-3xl font-bold text-black mt-6">
         <FormattedMessage id="titleBoardPage" />
       </h1>
-      {isLoading ? <Spinner /> : <BoardContainer />}
+      <BoardContainer />
     </main>
   );
 };

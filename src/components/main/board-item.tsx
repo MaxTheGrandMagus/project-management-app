@@ -1,11 +1,11 @@
 import { NavLink } from 'react-router-dom';
 import { useAppDispatch } from '../../store/store';
-import { openBoard, chooseBoard, BoardColumnTaskProps } from '../../store/boards/boards.slice';
+import { openBoard, chooseBoard, IBoardColumnsTasks } from '../../store/boards/boards.slice';
 import { HiOutlineTrash } from 'react-icons/hi';
 import { HiPencilAlt } from 'react-icons/hi';
 
 const BoardItem: React.FC<{ 
-  board: Pick<BoardColumnTaskProps, 'id' | 'title' | 'description'>; 
+  board: Pick<IBoardColumnsTasks, 'id' | 'title' | 'description'>; 
   toggleDeleteWindow: () => void; 
   toggleUpdateWindow: () => void; 
 }> = ({ board, toggleDeleteWindow, toggleUpdateWindow }) => {
@@ -26,9 +26,6 @@ const BoardItem: React.FC<{
   };
   
   const openAndSave = () => {
-    if (board.id) {
-      localStorage.setItem('boardId', board.id);
-    }
     dispatch(openBoard(board));
   };
 

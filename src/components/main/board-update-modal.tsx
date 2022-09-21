@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useAppDispatch } from '../../store/store';
-import { BoardColumnTaskProps, updateBoard } from '../../store/boards/boards.slice';
+import { IBoardColumnsTasks, updateBoard } from '../../store/boards/boards.slice';
 import { FormattedMessage } from 'react-intl'
 import { HiPencilAlt } from 'react-icons/hi'
 
 const BoardUpdateModal = ({ board, toggleWindow }: { 
-  board: Pick<BoardColumnTaskProps, 'id' | 'title' | 'description'>;
+  board: Pick<IBoardColumnsTasks, 'id' | 'title' | 'description'>;
   toggleWindow: () => void;
 }) => {
   const [formData, setFormData] = useState({

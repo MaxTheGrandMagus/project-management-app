@@ -1,25 +1,24 @@
-import { AnyAction } from '@reduxjs/toolkit';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import boardsService from './boards.service';
 import { IError } from '../config';
 
-export interface BoardColumnTaskProps {
+export interface IBoardColumnsTasks {
   id?: string;
   title: string;
   description: string;
-  columns: Array<ColumnTaskProps>;
+  columns: Array<IColumnTasks>;
   toggleDeleteWindow?: () => void;
   toggleUpdateWindow?: () => void;
 }
 
-export interface ColumnTaskProps {
+export interface IColumnTasks {
   id: string;
   title: string;
   order: number;
-  tasks: Array<TaskProps>;
+  tasks: Array<ITask>;
 }
 
-export interface TaskProps {
+export interface ITask {
   id: string,
   title: string,
   order: number | null,
@@ -34,10 +33,10 @@ export interface FileProps {
 }
 
 export const getBoards = createAsyncThunk<
-    Array<Pick<BoardColumnTaskProps, "id" | "title" | "description">>, 
-    undefined, 
-    { rejectValue: string }
-  >(
+  Array<Pick<IBoardColumnsTasks, "id" | "title" | "description">>, 
+  undefined, 
+  { rejectValue: string }
+>(
   'boards/getBoards', 
   async function (_, { rejectWithValue }) {
     try {
@@ -50,10 +49,10 @@ export const getBoards = createAsyncThunk<
 );
 
 export const createBoard = createAsyncThunk<
-    Pick<BoardColumnTaskProps, "title" | "description">,
-    Pick<BoardColumnTaskProps, "title" | "description">,
-    { rejectValue: string }
-  >(
+  Pick<IBoardColumnsTasks, "id" | "title" | "description">,
+  Pick<IBoardColumnsTasks, "title" | "description">,
+  { rejectValue: string }
+>(
   'boards/createBoard',
   async function (board, { rejectWithValue }) {
     try {
@@ -66,10 +65,10 @@ export const createBoard = createAsyncThunk<
 );
 
 export const getBoardById = createAsyncThunk<
-    BoardColumnTaskProps, 
-    string, 
-    { rejectValue: string }
-  >(
+  IBoardColumnsTasks, 
+  string, 
+  { rejectValue: string }
+>(
   'boards/getBoardById',
   async function (boardId, { rejectWithValue }) {
     try {
@@ -81,7 +80,11 @@ export const getBoardById = createAsyncThunk<
   }
 );
 
-export const deleteBoard = createAsyncThunk(
+export const deleteBoard = createAsyncThunk<
+  string,
+  string,
+  { rejectValue: string }
+>(
   'boards/deleteBoard',
   async function (boardId: string, { rejectWithValue }) {
     try {
@@ -94,10 +97,10 @@ export const deleteBoard = createAsyncThunk(
 );
 
 export const updateBoard = createAsyncThunk<
-    Pick<BoardColumnTaskProps, 'id' | 'title' | 'description'>, 
-    Pick<BoardColumnTaskProps, 'id' | 'title' | 'description'>, 
-    { rejectValue: string }
-  >(
+  Pick<IBoardColumnsTasks, 'id' | 'title' | 'description'>, 
+  Pick<IBoardColumnsTasks, 'id' | 'title' | 'description'>, 
+  { rejectValue: string }
+>(
   'boards/updateBoard',
   async function (board, { rejectWithValue }) {
     try {
@@ -110,9 +113,10 @@ export const updateBoard = createAsyncThunk<
 );
 
 export interface BoardState {
-  boards: Array<Pick<BoardColumnTaskProps, "id" | "title" | "description">>,
-  boardColumnsTasks: BoardColumnTaskProps;
+  boards: Array<Pick<IBoardColumnsTasks, "id" | "title" | "description">>,
+  boardColumnsTasks: IBoardColumnsTasks;
   isLoading: boolean,
+  isSuccess: boolean,
   isError: boolean,
   message: string | undefined,
   currentBoard: {
@@ -120,7 +124,7 @@ export interface BoardState {
     title: string,
     description: string,
   },
-  newBoard: Pick<BoardColumnTaskProps, "title" | "description"> | null,
+  newBoard: Pick<IBoardColumnsTasks, "title" | "description"> | null,
 }
 
 const initialState: BoardState = {
@@ -132,6 +136,7 @@ const initialState: BoardState = {
     columns: [],
   },
   isLoading: false,
+  isSuccess: false,
   isError: false,
   message: undefined,
   currentBoard: {
@@ -139,10 +144,7 @@ const initialState: BoardState = {
     title: '',
     description: '',
   },
-  newBoard: {
-    title: '',
-    description: '',
-  },
+  newBoard: null,
 };
 
 const boardSlice = createSlice({
@@ -155,7 +157,7 @@ const boardSlice = createSlice({
     chooseBoard(state, action) {
       state.currentBoard = action.payload;
     },
-    resetBoard(state, action) {
+    resetNewBoard(state, action) {
       state.newBoard = null;
     },
   },
@@ -163,75 +165,79 @@ const boardSlice = createSlice({
     builder
       .addCase(getBoards.pending, (state) => {
         state.isLoading = true;
-        state.isError = false;
       })
       .addCase(getBoards.fulfilled, (state, action) => {
-        state.boards = action.payload;
         state.isLoading = false;
+        state.isSuccess = true;
+        state.boards = action.payload;
       })
       .addCase(getBoards.rejected, (state, action) => {
+        state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
       .addCase(createBoard.pending, (state) => {
         state.isLoading = true;
-        state.isError = false;
       })
       .addCase(createBoard.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
         state.newBoard = action.payload;
         state.boards.push(state.newBoard);
-        state.isLoading = false;
       })
       .addCase(createBoard.rejected, (state, action) => {
+        state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
       .addCase(getBoardById.pending, (state) => {
         state.isLoading = true;
-        state.isError = false;
       })
       .addCase(getBoardById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
         state.boardColumnsTasks = action.payload;
         state.boardColumnsTasks.columns.sort((a, b) => a.order - b.order)
-        state.isLoading = false;
       })
       .addCase(getBoardById.rejected, (state, action) => {
+        state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
       .addCase(deleteBoard.pending, (state) => {
         state.isLoading = true;
-        state.isError = false;
       })
       .addCase(deleteBoard.fulfilled, (state, action) => {
-        console.log(action.payload);
-        state.boards = state.boards.filter((board) => board.id !== action.payload);
         state.isLoading = false;
+        state.isSuccess = true;
+        state.boards = state.boards.filter((board) => board.id !== action.payload);
       })
-      .addCase(deleteBoard.rejected, (state, action: AnyAction) => {
+      .addCase(deleteBoard.rejected, (state, action) => {
+        state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
       .addCase(updateBoard.pending, (state) => {
         state.isLoading = true;
-        state.isError = false;
       })
       .addCase(updateBoard.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
         state.boards = state.boards.map((board) => {
           if (board.id === action.payload.id) {
             return action.payload;
           }
           return board;
         });
-        state.isLoading = false;
       })
       .addCase(updateBoard.rejected, (state, action) => {
+        state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
   },
 });
 
-export const { openBoard, chooseBoard, resetBoard } = boardSlice.actions;
+export const { openBoard, chooseBoard, resetNewBoard } = boardSlice.actions;
 
 export default boardSlice.reducer;

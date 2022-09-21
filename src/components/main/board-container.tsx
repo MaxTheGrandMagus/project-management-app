@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AppState, useAppSelector } from '../../store/store';
-import { BoardColumnTaskProps } from '../../store/boards/boards.slice';
+import { IBoardColumnsTasks } from '../../store/boards/boards.slice';
 import BoardItem from './board-item';
 import ReactPortal from '../modal/portal';
 import BoardDeleteModal from './board-delete-modal';
@@ -28,7 +28,7 @@ const BoardContainer: React.FC = () => {
   return (
     <div className="w-full flex flex-row justify-start items-center flex-wrap gap-6 px-10 py-5">
       {!isError ? (
-        boards.map((board: Pick<BoardColumnTaskProps, 'id' | 'title' | 'description'>) => (
+        boards.map((board: Pick<IBoardColumnsTasks, 'id' | 'title' | 'description'>) => (
           <BoardItem
             key={board.id}
             board={board}

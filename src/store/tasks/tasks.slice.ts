@@ -1,64 +1,85 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  AnyAction,
-} from '@reduxjs/toolkit';
-import {
-  TaskAddProps,
-  TaskDelProps,
-  TaskShowProps,
-  TaskUpdateProps,
-  UserProps,
-} from '../../interfaces/interfaces';
-import { getCookie } from '../../helpers/cookie';
-import { addColumn, deleteColumn, updateColumn } from '../columns/columns.slice';
-import { API_URL } from '../../constants/api';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import tasksService from './tasks.service';
+import { UserProps } from '../../interfaces/interfaces';
 import { IError } from '../config';
 
-export const getAllAboutBoard = createAsyncThunk<
-  BoardColTask,
-  string,
-  { rejectValue: string }
->('tasks/gettasks', async function (id, { rejectWithValue }) {
-  try {
-    const token = getCookie('user') || null;
-    const response = await fetch(`${API_URL}/boards/${id}`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    const errorMassage = (error as IError).message;
-    return rejectWithValue(errorMassage);
+export interface ITask {
+  id: string;
+  title: string;
+  order: number;
+  description: string;
+  userId: string;
+  boardId: string;
+  columnId: string;
+  files?: Array<FileProps> | [];
+}
+
+export interface ITaskToCreate {
+  boardId: string;
+  columnId: string;
+  task: {
+    title: string;
+    description: string;
+    userId: string;
   }
-});
+}
+
+export interface ITaskToGetById {
+  boardId: string;
+  columnId: string;
+  id: string;
+}
+
+export interface ITaskToDelete {
+  boardId: string;
+  columnId: string;
+  id: string;
+}
+
+export interface ITaskToUpdate {
+  boardId: string;
+  columnId: string;
+  id: string;
+  task: {
+    title: string;
+    order: number;
+    description: string;
+    userId: string;
+    boardId: string;
+    columnId: string;
+  }
+}
+
+export interface FileProps {
+  filename: string,
+  fileSize: number,
+}
 
 export const createTask = createAsyncThunk<
-  TaskShowProps,
-  TaskAddProps,
+  ITask,
+  ITaskToCreate,
   { rejectValue: string }
 >(
-  'tasks/createtask',
-  async function (task, { rejectWithValue, dispatch }) {
+  'tasks/createTask',
+  async function (taskToCreate, { rejectWithValue }) {
     try {
-      const token = getCookie('user') || null;
-      const response = await fetch(
-        `${API_URL}/boards/${task.boardId}/columns/${task.colId}/tasks`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(task.task),
-        }
-      );
-      const data = await response.json();
-      return data;
+      return await tasksService.createTask(taskToCreate);
+    } catch (error) {
+      const errorMassage = (error as IError).message;
+      return rejectWithValue(errorMassage);
+    }
+  }
+);
+
+export const deleteTask = createAsyncThunk<
+  ITaskToDelete,
+  ITaskToDelete,
+  { rejectValue: string }
+>(
+  'tasks/deleteTask',
+  async function (taskToDelete: ITaskToDelete, { rejectWithValue }) {
+    try {
+      return await tasksService.deleteTask(taskToDelete);
     } catch (error) {
       const errorMassage = (error as IError).message;
       return rejectWithValue(errorMassage);
@@ -67,50 +88,14 @@ export const createTask = createAsyncThunk<
 );
 
 export const updateTask = createAsyncThunk<
-  TaskShowProps,
-  TaskUpdateProps,
+  ITask,
+  ITaskToUpdate,
   { rejectValue: string }
 >(
-  'tasks/updatetask',
-  async function (task, { rejectWithValue, dispatch }) {
+  'tasks/updateTask',
+  async function (taskToUpdate, { rejectWithValue }) {
     try {
-      const token = getCookie('user') || null;
-      const response = await fetch(
-        `${API_URL}/boards/${task.body.boardId}/columns/${task.body.columnId}/tasks/${task.id}`,
-        {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(task.body),
-        }
-      );
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      const errorMassage = (error as IError).message;
-      return rejectWithValue(errorMassage);
-    }
-  }
-);
-
-export const deleteTask = createAsyncThunk(
-  'tasks/deleteTasks',
-  async function (task: TaskDelProps, { rejectWithValue, dispatch }) {
-    try {
-      const token = getCookie('user') || null;
-      await fetch(
-        `${API_URL}/boards/${task.boardId}/columns/${task.colId}/tasks/${task.taskId}`,
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return task;
+      return await tasksService.updateTask(taskToUpdate);
     } catch (error) {
       const errorMassage = (error as IError).message;
       return rejectWithValue(errorMassage);
@@ -119,16 +104,16 @@ export const deleteTask = createAsyncThunk(
 );
 
 export interface TaskState {
-  tasks: Array<TaskShowProps>;
-  loading: boolean;
-  error: boolean;
+  tasks: Array<ITask>;
+  isLoading: boolean;
+  isError: boolean;
   boardId: string;
-  colId: string;
-  newTask: TaskShowProps | null;
-  newColumn: ColumnTaskProps;
+  columnId: string;
+  newTask: ITask | null;
+  newColumn: IColumnTasks;
   message: string | undefined;
   colTasks: BoardColTask;
-  currentTask: TaskShowProps;
+  currentTask: ITask;
   users: Array<UserProps>
 }
 
@@ -136,35 +121,34 @@ interface BoardColTask {
   id: string;
   title: string;
   description: string;
-  columns: Array<ColumnTaskProps>;
+  columns: Array<IColumnTasks>;
 }
 
-export interface ColumnTaskProps {
+export interface IColumnTasks {
   id: string;
   title: string;
   order: number;
-  tasks: Array<TaskShowProps>;
+  tasks: Array<ITask>;
   taskClick?: () => void;
 }
 
 const initialState: TaskState = {
   tasks: [],
-  loading: false,
-  error: false,
+  isLoading: false,
+  isError: false,
+  message: undefined,
   boardId: '',
-  colId: '',
+  columnId: '',
   newTask: {
+    id: '',
     title: '',
-    description: '',
-    done: false,
     order: 0,
+    description: '',
     userId: '',
     boardId: '',
     columnId: '',
     files: [],
-    id: '',
   },
-  message: undefined,
   colTasks: {
     id: '',
     title: '',
@@ -172,15 +156,14 @@ const initialState: TaskState = {
     columns: [],
   },
   currentTask: {
+    id: '',
     title: '',
-    description: '',
-    done: false,
     order: 0,
+    description: '',
     userId: '',
     boardId: '',
     columnId: '',
     files: [],
-    id: '',
   },
   newColumn: {
     id: '',
@@ -195,40 +178,23 @@ const taskSlice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
-    chooseTaskId(state, action) {
+    chooseTask(state, action) {
       state.currentTask = action.payload;
     },
-    chooseColId(state, action) {
-      state.colId = action.payload;
+    chooseColumnId(state, action) {
+      state.columnId = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getAllAboutBoard.pending, (state) => {
-        state.loading = true;
-        state.error = false;
-      })
-      .addCase(getAllAboutBoard.fulfilled, (state, action) => {
-        state.colTasks = action.payload;
-        state.colTasks.columns.sort((a, b) => a.order - b.order)
-        state.loading = false;
-      })
-      .addCase(getAllAboutBoard.rejected, (state, action) => {
-        state.error = true;
-        state.message = action.payload;
-      })
       .addCase(createTask.pending, (state) => {
-        state.loading = true;
-        state.error = false;
+        state.isLoading = true;
       })
       .addCase(createTask.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.newTask = action.payload;
-        state.loading = false;
         state.colTasks.columns.forEach((col) => {
-          if (
-            state.newTask != null &&
-            col.id === state.newTask.columnId
-          ) {
+          if (state.newTask != null && col.id === state.newTask.columnId) {
             if (!col.tasks) {
               col.tasks = [];
             }
@@ -237,66 +203,57 @@ const taskSlice = createSlice({
         });
       })
       .addCase(createTask.rejected, (state, action) => {
-        state.error = true;
+        state.isLoading = false;
+        state.isError = true;
         state.message = action.payload;
       })
-      .addCase(addColumn.pending, (state) => {
-        state.loading = true;
+      .addCase(deleteTask.pending, (state) => {
+        state.isLoading = true;
       })
-      .addCase(addColumn.fulfilled, (state, action: AnyAction) => {
-        state.newColumn = action.payload;
-        state.loading = false;
-        state.colTasks.columns.push(state.newColumn);
-      })
-      .addCase(addColumn.rejected, (state, action: AnyAction) => {
-        state.loading = false;
-        state.error = true;
-        state.message = action.payload;
-      })
-      // .addCase(deleteColumn.pending, (state) => {
-      //   state.loading = true;
-      // })
       .addCase(deleteTask.fulfilled, (state, action) => {
-        const { taskId, colId } = action.payload;
-        state.colTasks.columns = state.colTasks.columns.filter(
-          (column) => {
-            if (column.id === colId) {
-              return column.tasks=column.tasks.filter((task) => task.id !== taskId)
-            } else return column }
-        );
-      })
-      .addCase(updateTask.pending, (state) => {
-        state.loading = true;
-        state.error = false;
-      })
-      .addCase(updateTask.fulfilled, (state, action) => {
-        state.currentTask = action.payload;
+        state.isLoading = false;
         const { columnId, id } = action.payload;
-        state.loading = false;
         state.colTasks.columns = state.colTasks.columns.filter(
           (column) => {
             if (column.id === columnId) {
-              let arr = column.tasks.map((task) => {if (task.id === id) { return task = action.payload} else return task })
-              column.tasks=arr
-              return column.tasks
-            } else return column }
+              return column.tasks = column.tasks.filter((task) => task.id !== id)
+            } else return column 
+          }
+        );
+      })
+      .addCase(deleteTask.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(updateTask.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateTask.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.currentTask = action.payload;
+        const { columnId, id } = action.payload;
+        state.colTasks.columns = state.colTasks.columns.filter(
+          (column) => {
+            if (column.id === columnId) {
+              let arr = column.tasks.map((task) => {
+                if (task.id === id) { 
+                  return task = action.payload;
+                } else return task;
+              })
+              column.tasks = arr;
+              return column.tasks;
+            } else return column 
+          }
         );
       })
       .addCase(updateTask.rejected, (state, action) => {
-        state.error = true;
+        state.isLoading = false;
+        state.isError = true;
         state.message = action.payload;
       })
-      .addCase(deleteColumn.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(deleteColumn.fulfilled, (state, action) => {
-        const { id } = action.payload;
-        state.colTasks.columns = state.colTasks.columns.filter(
-          (column) => column.id !== id
-        );
-      });
   },
 });
 
-export const { chooseTaskId, chooseColId } = taskSlice.actions;
+export const { chooseTask, chooseColumnId } = taskSlice.actions;
 export default taskSlice.reducer;

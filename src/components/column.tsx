@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { AppState, useAppDispatch, useAppSelector } from '../store/store';
 import { deleteColumn } from '../store/columns/columns.slice';
 import Task from './task/task';
@@ -6,34 +7,39 @@ import ReactPortal from './modal/portal';
 import TaskCreation from './task-create';
 import TrashIcon from '../assets/icons/trash.icon';
 import DotsIcon from '../assets/icons/dotsIcon';
-import { themes } from './main/board-button';
 import { FormattedMessage } from 'react-intl';
 import { UserProps } from '../interfaces/interfaces';
-import { TaskProps } from '../store/boards/boards.slice';
+import { ITask } from '../store/boards/boards.slice';
 
-export interface ColumnProps {
-  colId: string;
-  boardId: string;
-}
-
-const Column = ({ id, title, order, tasks, taskClick, users }: ColumnTaskProps) => {
+const Column = ({ id, title, order, tasks, users, taskClick }: {
+  id: string;
+  title: string;
+  order: number;
+  tasks: Array<ITask>;
+  users: Array<UserProps>;
+  taskClick?: () => void;
+}) => {
   const dispatch = useAppDispatch();
 
+  const [visibleColumnOptions, setVisibleColumnOptions] = useState(false);
   const [isOpenCreateTaskModal, setIsOpenCreateTaskModal] = useState(false);
-  const [visibleAddTask, setVisibleAddTask] = useState(false);
-  const boardId = localStorage.getItem('boardId');
 
-  const toggeTaskWindow = () => {
-    setIsOpenCreateTaskModal(!isOpenCreateTaskModal);
+  const boardId = useParams().id;
+
+  const toggleColumnOptions = () => {
+    setVisibleColumnOptions(!visibleColumnOptions);
   };
-
-  const toggleAddTask = () => {
-    setVisibleAddTask(!visibleAddTask);
+  
+  const toggeTaskCreateModal = () => {
+    setIsOpenCreateTaskModal(!isOpenCreateTaskModal);
   };
 
   const handleColumnDelete = (id: string) => {
     if (boardId) {
-      dispatch(deleteColumn({ boardId: boardId, id: id }));
+      dispatch(deleteColumn({ 
+        boardId: boardId, 
+        id: id 
+      }));
     }
   };
 
@@ -46,12 +52,12 @@ const Column = ({ id, title, order, tasks, taskClick, users }: ColumnTaskProps) 
         <h4 className="text-lg text-white font-bold m-3">{title}</h4>
         <div
           className="relative flex items-center m-3 text-white cursor-pointer rounded-sm hover:bg-gray-300 transition-all"
-          onClick={toggleAddTask}
+          onClick={toggleColumnOptions}
         >
-          {visibleAddTask && (
+          {visibleColumnOptions && (
             <div className="absolute z-10 top-full left-0 flex flex-col bg-sky-800">
               <button
-                className={themes.grey}
+                className='flex p-1 z-10 whitespace-nowrap font-bold text-lg'
                 onClick={() => handleColumnDelete(id)}
               >
                 <TrashIcon />
@@ -64,16 +70,16 @@ const Column = ({ id, title, order, tasks, taskClick, users }: ColumnTaskProps) 
       <div className="relative flex flex-col">
         {tasks && tasks.map((task) => (
           <Task
-            taskClick={taskClick}
             key={task.id}
-            task={task}
             columnId={id}
+            task={task}
             users={users}
+            taskClick={taskClick}
           />
         ))}
         <aside className="relative flex flex-col items-center m-2">
           <button
-            onClick={toggeTaskWindow}
+            onClick={toggeTaskCreateModal}
             className="relative w-full text-white text-lg font-bold rounded-sm hover:bg-white hover:text-black transition-all"
           >
             <FormattedMessage id="addTask" />
@@ -81,9 +87,9 @@ const Column = ({ id, title, order, tasks, taskClick, users }: ColumnTaskProps) 
           {isOpenCreateTaskModal && (
             <ReactPortal showModal={isOpenCreateTaskModal}>
               <TaskCreation
-                colId={id}
+                columnId={id}
                 order={order}
-                toggleWindow={toggeTaskWindow}
+                toggleWindow={toggeTaskCreateModal}
               />
             </ReactPortal>
           )}
@@ -94,12 +100,3 @@ const Column = ({ id, title, order, tasks, taskClick, users }: ColumnTaskProps) 
 };
 
 export default Column;
-
-interface ColumnTaskProps {
-  id: string;
-  title: string;
-  order: number;
-  tasks: Array<TaskProps>;
-  taskClick?: () => void;
-  users: Array<UserProps>;
-}

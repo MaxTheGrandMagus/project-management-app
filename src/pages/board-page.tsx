@@ -4,7 +4,7 @@ import { useCookies } from 'react-cookie';
 import { AppState, useAppDispatch, useAppSelector } from '../store/store';
 import { getUsers } from '../store/users/users.slice';
 import { getBoardById } from '../store/boards/boards.slice';
-import { getColumnById, updateColumn } from '../store/columns/columns.slice';
+import { getColumnById, getColumns, updateColumn } from '../store/columns/columns.slice';
 import ReactPortal from '../components/modal/portal';
 import BoardAddColumnModal from '../components/board/board-add-column-modal';
 import Column from '../components/column';
@@ -16,20 +16,20 @@ import { MdSpaceDashboard } from 'react-icons/md'
 
 const BoardPage = () => {
   const [cookie] = useCookies(['user']);
-  const [isPopupDisplay, setIsPopupDisplay] = useState(false);
+  const [isOpenAddColumnModal, setIsOpenAddColumnModal] = useState(false);
   const [isOpenTask, setIsOpenTask] = useState(false);
 
   const dispatch = useAppDispatch();
   const { users } = useAppSelector((state: AppState) => state.user);
   const { boardColumnsTasks, isLoading } = useAppSelector((state: AppState) => state.boards);
   const { columnById, isSuccess: isSuccessUpdate } = useAppSelector((state: AppState) => state.columns);
-  // const { loading: isLoading } = useAppSelector((state: AppState) => state.tasks);
+  // const {  } = useAppSelector((state: AppState) => state.tasks);
   
   const navigate = useNavigate();
 
   const boardId = useParams().id;
 
-  const handlerClick = () => {
+  const handleTaskClick = () => {
     setIsOpenTask(!isOpenTask);
   };
 
@@ -37,6 +37,7 @@ const BoardPage = () => {
     cookie.user === undefined && navigate('/');
     if (cookie.user && boardId) {
       dispatch(getBoardById(boardId));
+      dispatch(getColumns(boardId));
       dispatch(getUsers());
     }
   }, [cookie.user, navigate, dispatch, boardId, isSuccessUpdate]);
@@ -138,8 +139,8 @@ const BoardPage = () => {
                                     order={col.order}
                                     title={col.title}
                                     tasks={col.tasks}
-                                    taskClick={handlerClick}
                                     users={users}
+                                    taskClick={handleTaskClick}
                                   />
                                 </div>
                               );
@@ -155,15 +156,15 @@ const BoardPage = () => {
             <div className="relative flex justify-center items-center w-56 h-full">
               <>
                 <button
-                  onClick={() => setIsPopupDisplay(true)}
+                  onClick={() => setIsOpenAddColumnModal(true)}
                   className="relative w-full p-2 bg-slate-blue border-2 border-slate-blue rounded text-white text-lg font-bold hover:text-black hover:bg-transparent transition-all duration-300 ease-in-out"
                 >
                   <FormattedMessage id="addColumn" />
                 </button>
-                {isPopupDisplay && (
-                  <ReactPortal showModal={isPopupDisplay}>
+                {isOpenAddColumnModal && (
+                  <ReactPortal showModal={isOpenAddColumnModal}>
                     <BoardAddColumnModal
-                      setIsPopupDisplay={setIsPopupDisplay}
+                      setIsOpenAddColumnModal={setIsOpenAddColumnModal}
                     />
                   </ReactPortal>
                 )}
@@ -174,7 +175,7 @@ const BoardPage = () => {
             <ReactPortal showModal={isOpenTask}>
               <TaskWindow
                 isOpenTask={isOpenTask}
-                taskClick={handlerClick}
+                taskClick={handleTaskClick}
                 users={users}
               />
             </ReactPortal>

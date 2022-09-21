@@ -1,19 +1,24 @@
 import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '../store/store';
 import { createTask } from '../store/tasks/tasks.slice';
 import { useCookies } from 'react-cookie';
 import jwt_decode from 'jwt-decode';
-import { TaskCreationProps, TokenProps } from '../interfaces/interfaces';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { TokenProps } from '../interfaces/interfaces';
 import { CgAddR } from 'react-icons/cg';
+import { FormattedMessage, useIntl } from 'react-intl';
 
-const TaskCreation = ({ toggleWindow, colId, order }: TaskCreationProps) => {
+const TaskCreation = ({ columnId, order, toggleWindow }: {
+  columnId: string,
+  order: number,
+  toggleWindow: () => void
+}) => {
   const dispatch = useAppDispatch();
 
   const [cookie] = useCookies(['user']);
   const decodedUser: TokenProps = jwt_decode(cookie.user);
   const userId = decodedUser.userId;
-  const boardId = localStorage.getItem('boardId');
+  const boardId = useParams().id as string;
 
   const [formData, setFormData] = useState({
     title: '',
@@ -22,9 +27,13 @@ const TaskCreation = ({ toggleWindow, colId, order }: TaskCreationProps) => {
   const titleInput = useRef<HTMLInputElement>(null);
   const { title, description } = formData;
   const taskData = {
-    task: { title, description, userId },
-    colId,
-    boardId,
+    boardId: boardId,
+    columnId: columnId,
+    task: { 
+      title, 
+      description, 
+      userId 
+    },
   };
 
   useEffect(() => {

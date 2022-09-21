@@ -1,40 +1,45 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  AnyAction,
-} from '@reduxjs/toolkit';
-import { getCookie } from '../../helpers/cookie';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import columnsService from './columns.service';
-import { API_URL } from '../../constants/api';
+import { IError } from '../config';
 
-interface IError {
-  message?: string;
-  response: {
-    data: {
-      message?: string;
-    };
-  };
-}
-
-export interface IColumn {
+interface IColumn {
   id: string;
   title: string;
   order: number;
 }
 
-interface IColumnToAdd {
+interface IColumnTasks {
+  id: string;
+  title: string;
+  order: number;
+  tasks: Array<{
+    id: string,
+    title: string,
+    order: number | null,
+    description: string,
+    userId: string,
+    files?: Array<FileProps> | [],
+  }>;
+}
+
+interface FileProps {
+  filename: string,
+  fileSize: number,
+}
+
+export interface IColumnToAdd {
   title: string;
   boardId: string;
 }
 
-interface IColumnToDel {
-  id: string;
+export interface IColumnToGetById {
   boardId: string;
+  id: string;
 }
 
-export interface IColumnToGetById {
-  id: string;
+export interface IColumnToDelete {
   boardId: string;
+  id: string;
 }
 
 export interface IColumnToUpdate {
@@ -44,50 +49,15 @@ export interface IColumnToUpdate {
   order: number;
 }
 
-export interface IColumnState {
-  columns: IColumn[];
-  columnById: IColumn | null;
-  isLoading: boolean;
-  isError: boolean;
-  isSuccess: boolean;
-  message: string;
-  newColumn: IColumn;
-}
-
-const initialState: IColumnState = {
-  columns: [],
-  columnById: null,
-  isLoading: false,
-  isSuccess: false,
-  isError: false,
-  message: '',
-  newColumn: {
-    id: '',
-    title: '',
-    order: 1,
-  },
-};
-
-export const getColumns = createAsyncThunk(
-  'columns/fetchByBoardIdStatus',
+export const getColumns = createAsyncThunk<
+  Array<IColumn>,
+  string,
+  { rejectValue: string }
+>(
+  'columns/getColumns',
   async (boardId: string, { rejectWithValue }) => {
     try {
-      const token = getCookie('user') || null;
-
-      const headers = new Headers({
-        Authorization: `Bearer ${token}`,
-      });
-
-      const options = {
-        method: 'GET',
-        headers,
-      };
-      const response = await fetch(
-        `${API_URL}/boards/${boardId}/columns`,
-        options
-      );
-      const data = await response.json();
-      return data;
+      return await columnsService.getColumns(boardId);
     } catch (error) {
       const errorMessage = (error as IError).message;
       return rejectWithValue(errorMessage);
@@ -95,8 +65,28 @@ export const getColumns = createAsyncThunk(
   }
 );
 
-export const getColumnById = createAsyncThunk(
-  'columns/getColumnByIdStatus',
+export const createColumn = createAsyncThunk<
+  IColumn,
+  IColumnToAdd,
+  { rejectValue: string }
+>(
+  'columns/createColumn',
+  async (column: IColumnToAdd, { rejectWithValue }) => {
+    try {
+      return await columnsService.createColumn(column);
+    } catch (error) {
+      const errorMessage = (error as IError).message;
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const getColumnById = createAsyncThunk<
+  IColumnTasks,
+  IColumnToGetById,
+  { rejectValue: string }
+>(
+  'columns/getColumnById',
   async (column: IColumnToGetById, { rejectWithValue }) => {
     try {
       return await columnsService.getColumnById(column);
@@ -107,27 +97,15 @@ export const getColumnById = createAsyncThunk(
   }
 );
 
-export const deleteColumn = createAsyncThunk(
-  'columns/deleteColumnStatus',
-  async (column: IColumnToDel, { rejectWithValue }) => {
+export const deleteColumn = createAsyncThunk<
+  string,
+  IColumnToDelete,
+  { rejectValue: string }
+>(
+  'columns/deleteColumn',
+  async (column: IColumnToDelete, { rejectWithValue }) => {
     try {
-      const token = getCookie('user') || null;
-
-      const headers = new Headers({
-        Authorization: `Bearer ${token}`,
-        // Accept: 'application/json',
-        // 'Content-Type': 'application/json',
-      });
-
-      const options = {
-        method: 'DELETE',
-        headers,
-      };
-      await fetch(
-        `${API_URL}/boards/${column.boardId}/columns/${column.id}`,
-        options
-      );
-      return column;
+      return await columnsService.deleteColumn(column);
     } catch (error) {
       const errorMessage = (error as IError).message;
       return rejectWithValue(errorMessage);
@@ -135,40 +113,12 @@ export const deleteColumn = createAsyncThunk(
   }
 );
 
-export const addColumn = createAsyncThunk(
-  'columns/addColumnStatus',
-  async (column: IColumnToAdd, { rejectWithValue }) => {
-    try {
-      const token = getCookie('user') || null;
-
-      const headers = new Headers({
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      });
-
-      const options = {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          title: column.title,
-        }),
-      };
-      const response = await fetch(
-        `${API_URL}/boards/${column.boardId}/columns`,
-        options
-      );
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      const errorMessage = (error as IError).message;
-      return rejectWithValue(errorMessage);
-    }
-  }
-);
-
-export const updateColumn = createAsyncThunk(
-  'columns/updateColumnStatus',
+export const updateColumn = createAsyncThunk<
+  IColumn,
+  IColumnToUpdate,
+  { rejectValue: string }
+>(
+  'columns/updateColumn',
   async (column: IColumnToUpdate, { rejectWithValue }) => {
     try {
       return await columnsService.updateColumn(column);
@@ -179,22 +129,37 @@ export const updateColumn = createAsyncThunk(
   }
 );
 
+export interface IColumnState {
+  columns: Array<IColumn>;
+  columnById: IColumn | null;
+  currentColumn: IColumn | null;
+  isLoading: boolean;
+  isError: boolean;
+  isSuccess: boolean;
+  message: string | undefined;
+  newColumn: IColumn | null;
+}
+
+const initialState: IColumnState = {
+  columns: [],
+  columnById: null,
+  currentColumn: null,
+  isLoading: false,
+  isSuccess: false,
+  isError: false,
+  message: undefined,
+  newColumn: null,
+};
+
 export const colSlice = createSlice({
   name: 'columns',
   initialState,
   reducers: {
-    resetColumn: (state) => {
-      state.columns = [];
-      state.columnById = null;
-      state.isLoading = false;
-      state.isSuccess = false;
-      state.isError = false;
-      state.message = '';
-      state.newColumn = {
-        id: '',
-        title: '',
-        order: 1,
-      }
+    choseColumn(state, action) {
+      state.currentColumn = action.payload;
+    },
+    resetNewColumn: (state, action) => {
+      state.newColumn = null
     },
   },
   extraReducers: (builder) => {
@@ -202,12 +167,26 @@ export const colSlice = createSlice({
       .addCase(getColumns.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getColumns.fulfilled, (state, action: AnyAction) => {
+      .addCase(getColumns.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.columns = action.payload;
       })
-      .addCase(getColumns.rejected, (state, action: AnyAction) => {
+      .addCase(getColumns.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(createColumn.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createColumn.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.newColumn = action.payload;
+        state.columns.push(action.payload);
+      })
+      .addCase(createColumn.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -215,26 +194,13 @@ export const colSlice = createSlice({
       .addCase(getColumnById.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getColumnById.fulfilled, (state, action: AnyAction) => {
+      .addCase(getColumnById.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.currentColumn = action.payload;
         state.columnById = action.payload;
       })
-      .addCase(getColumnById.rejected, (state, action: AnyAction) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
-      .addCase(addColumn.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(addColumn.fulfilled, (state, action: AnyAction) => {
-        state.newColumn = action.payload;
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.columns.push(state.newColumn);
-      })
-      .addCase(addColumn.rejected, (state, action: AnyAction) => {
+      .addCase(getColumnById.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -243,21 +209,31 @@ export const colSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(deleteColumn.fulfilled, (state, action) => {
-        const { id } = action.payload;
+        state.isLoading = false;
+        state.isSuccess = true;
         state.columns = state.columns.filter(
-          (column) => column.id !== id
+          (column) => column.id !== action.payload
         );
+      })
+      .addCase(deleteColumn.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       })
       .addCase(updateColumn.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateColumn.fulfilled, (state, action: AnyAction) => {
-        state.newColumn = action.payload;
+      .addCase(updateColumn.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.columns.push(state.newColumn);
+        state.columns = state.columns.map((column) => {
+          if (column.id === action.payload.id) {
+            return action.payload;
+          }
+          return column;
+        });
       })
-      .addCase(updateColumn.rejected, (state, action: AnyAction) => {
+      .addCase(updateColumn.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -265,5 +241,5 @@ export const colSlice = createSlice({
   },
 });
 
-export const { resetColumn } = colSlice.actions;
+export const { resetNewColumn } = colSlice.actions;
 export default colSlice.reducer;

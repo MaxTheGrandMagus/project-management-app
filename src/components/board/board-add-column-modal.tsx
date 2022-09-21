@@ -1,8 +1,8 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { addColumn } from '../../store/columns/columns.slice';
+import { createColumn, resetNewColumn } from '../../store/columns/columns.slice';
 import { useAppDispatch } from '../../store/store';
-import BoardButton, { themes } from '../main/board-button';
 import { FormattedMessage, useIntl } from 'react-intl'
 import { RiLayoutColumnFill } from 'react-icons/ri';
 
@@ -10,7 +10,7 @@ interface IFormValues {
   columnTitle: string;
 }
 
-const BoardAddColumnModal: React.FC<{ setIsPopupDisplay: Function }> = ({ setIsPopupDisplay }) => {
+const BoardAddColumnModal: React.FC<{ setIsOpenAddColumnModal: Function }> = ({ setIsOpenAddColumnModal }) => {
   const {
     register,
     handleSubmit,
@@ -19,18 +19,18 @@ const BoardAddColumnModal: React.FC<{ setIsPopupDisplay: Function }> = ({ setIsP
 
   const dispatch = useAppDispatch();
 
-  const boardId = localStorage.getItem('boardId');
+  const boardId = useParams().id;
 
   const onSubmit: SubmitHandler<IFormValues> = (data: { columnTitle: string; }) => { 
     if (boardId) {
-      console.log('data', data);
       dispatch(
-        addColumn({
+        createColumn({
           title: data.columnTitle,
           boardId: boardId,
         })
       );
-      setIsPopupDisplay(false);
+      dispatch(resetNewColumn(data.columnTitle));
+      setIsOpenAddColumnModal(false);
     }
   };
 
@@ -68,7 +68,7 @@ const BoardAddColumnModal: React.FC<{ setIsPopupDisplay: Function }> = ({ setIsP
                 <button
                   className="bg-transparent px-6 py-3 text-red-500 font-bold uppercase text-sm rounded outline-none focus:outline-none ease-linear transition-all"
                   type="button"
-                  onClick={() => setIsPopupDisplay(false)}
+                  onClick={() => setIsOpenAddColumnModal(false)}
                 >
                   <FormattedMessage id='close' />
                 </button>

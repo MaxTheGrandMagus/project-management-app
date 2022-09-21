@@ -1,20 +1,14 @@
 import { useState } from 'react';
 import { useAppDispatch } from '../../store/store';
-import { createBoard, resetBoard } from '../../store/boards/boards.slice';
-import { BoardCreationProps } from '../../interfaces/interfaces';
+import { createBoard, resetNewBoard } from '../../store/boards/boards.slice';
 import { FormattedMessage } from 'react-intl'
 import { MdOutlineDashboardCustomize } from 'react-icons/md'
 
-const BoardCreateModal = ({ toggleWindow }: BoardCreationProps) => {
+const BoardCreateModal = ({ toggleWindow }: { toggleWindow: () => void }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
   });
-  const { title, description } = formData;
-  const boardData = {
-    title,
-    description,
-  };
 
   const dispatch = useAppDispatch();
 
@@ -30,8 +24,8 @@ const BoardCreateModal = ({ toggleWindow }: BoardCreationProps) => {
   
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    dispatch(createBoard(boardData));
-    dispatch(resetBoard(boardData));
+    dispatch(createBoard(formData));
+    dispatch(resetNewBoard(formData));
     toggleWindow();
   };
 
@@ -51,7 +45,7 @@ const BoardCreateModal = ({ toggleWindow }: BoardCreationProps) => {
               <div className='w-full flex flex-col gap-2'>
                 <label className="text-sm text-gray-400" htmlFor="title"><FormattedMessage id='titleNewBoard' /></label>
                 <input
-                  value={title}
+                  value={formData.title}
                   name="title"
                   onChange={onChange}
                   className="inline-flex bg-transparent w-full items-center px-4 py-2 border border-solid border-slate-400 rounded-lg"
@@ -62,7 +56,7 @@ const BoardCreateModal = ({ toggleWindow }: BoardCreationProps) => {
               <div className='w-full flex flex-col gap-2'>
                 <label className="text-sm text-gray-400" htmlFor="description"><FormattedMessage id='decsriptionNewBoard' /></label>
                 <input
-                  value={description}
+                  value={formData.description}
                   name="description"
                   onChange={onChange}
                   className="inline-flex bg-transparent w-full items-center px-4 py-2 border border-solid border-slate-400 rounded-lg"
