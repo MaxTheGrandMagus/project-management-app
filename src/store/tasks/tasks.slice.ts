@@ -55,6 +55,22 @@ export interface FileProps {
   fileSize: number,
 }
 
+export const getTasks = createAsyncThunk<
+  Array<ITask>,
+  { boardId: string, columnId: string },
+  { rejectValue: string }
+>(
+  'tasks/getTasks',
+  async (tasksToGet: { boardId: string, columnId: string }, { rejectWithValue }) => {
+    try {
+      return await tasksService.getTasks(tasksToGet);
+    } catch (error) {
+      const errorMessage = (error as IError).message;
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
 export const createTask = createAsyncThunk<
   ITask,
   ITaskToCreate,
@@ -67,6 +83,22 @@ export const createTask = createAsyncThunk<
     } catch (error) {
       const errorMassage = (error as IError).message;
       return rejectWithValue(errorMassage);
+    }
+  }
+);
+
+export const getTaskById = createAsyncThunk<
+  ITask,
+  ITaskToGetById,
+  { rejectValue: string }
+>(
+  'tasks/getTaskById',
+  async (tasksToGetById: ITaskToGetById, { rejectWithValue }) => {
+    try {
+      return await tasksService.getTaskById(tasksToGetById);
+    } catch (error) {
+      const errorMessage = (error as IError).message;
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -187,6 +219,18 @@ const taskSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getTasks.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getTasks.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.tasks = action.payload;
+      })
+      .addCase(getTasks.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
       .addCase(createTask.pending, (state) => {
         state.isLoading = true;
       })
@@ -203,6 +247,18 @@ const taskSlice = createSlice({
         });
       })
       .addCase(createTask.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getTaskById.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getTaskById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.currentTask = action.payload;
+      })
+      .addCase(getTaskById.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

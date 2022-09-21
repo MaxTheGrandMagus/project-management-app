@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch } from '../store/store';
-import { createTask } from '../store/tasks/tasks.slice';
+import { useAppDispatch } from '../../store/store';
+import { createTask } from '../../store/tasks/tasks.slice';
 import { useCookies } from 'react-cookie';
 import jwt_decode from 'jwt-decode';
-import { TokenProps } from '../interfaces/interfaces';
+import { TokenProps } from '../../interfaces/interfaces';
 import { CgAddR } from 'react-icons/cg';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-const TaskCreation = ({ columnId, order, toggleWindow }: {
+const TaskCreateModal = ({ columnId, order, toggleWindow }: {
   columnId: string,
   order: number,
   toggleWindow: () => void
@@ -125,4 +125,4 @@ const TaskCreation = ({ columnId, order, toggleWindow }: {
   );
 };
 
-export default TaskCreation;
+export default TaskCreateModal;

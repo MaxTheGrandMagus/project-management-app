@@ -131,8 +131,8 @@ export const updateColumn = createAsyncThunk<
 
 export interface IColumnState {
   columns: Array<IColumn>;
-  columnById: IColumn | null;
-  currentColumn: IColumn | null;
+  columnById: IColumnTasks | null;
+  currentColumn: IColumnTasks | null;
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;

@@ -48,7 +48,7 @@ const Task = ({ columnId, task, users, taskClick }: {
       onClick={openTask}
     >
       <h2 className='text-orange-500 font-bold'>{task.title}</h2>
-      <button
+      <div
         className="absolute z-20 top-1 right-2 flex items-center rounded-sm text-black cursor-pointer hover:bg-gray-300 transition-all"
         onClick={toggleTaskOptions}
       >
@@ -63,7 +63,7 @@ const Task = ({ columnId, task, users, taskClick }: {
           </div>
         )}
         <DotsIcon />
-      </button>
+      </div>
       <p className='overflow-hidden text-ellipsis text-gray-500'>{task.description}</p>
       <Avatar 
         className='absolute top-4 right-1' 

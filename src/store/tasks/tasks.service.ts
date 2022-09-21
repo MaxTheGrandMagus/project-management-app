@@ -4,10 +4,10 @@ import { getCookie } from '../../helpers/cookie';
 import { API_URL } from '../../constants/api';
 
 // Get all tasks
-const getTasks = async (boardId: string, columnId: string) => {
+const getTasks = async (tasksToGet: { boardId: string, columnId: string }) => {
   const token = getCookie('user') || null;
   const response = await axios.get(
-    `${API_URL}/boards/${boardId}/columns/${columnId}/tasks`, {
+    `${API_URL}/boards/${tasksToGet.boardId}/columns/${tasksToGet.columnId}/tasks`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import boardsService from './boards.service';
 import { IError } from '../config';
+import { createColumn, deleteColumn, updateColumn } from '../columns/columns.slice';
+import { createTask, deleteTask, updateTask } from '../tasks/tasks.slice';
 
 export interface IBoardColumnsTasks {
   id?: string;
@@ -163,6 +165,7 @@ const boardSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // BOARDS
       .addCase(getBoards.pending, (state) => {
         state.isLoading = true;
       })
@@ -231,6 +234,104 @@ const boardSlice = createSlice({
         });
       })
       .addCase(updateBoard.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // COLUMNS
+      .addCase(createColumn.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createColumn.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.boardColumnsTasks.columns.push(action.payload as IColumnTasks)
+      })
+      .addCase(createColumn.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(deleteColumn.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteColumn.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.boardColumnsTasks.columns = state.boardColumnsTasks.columns.filter((column) => column.id !== action.payload);
+      })
+      .addCase(deleteColumn.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(updateColumn.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateColumn.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.boardColumnsTasks.columns = state.boardColumnsTasks.columns.map((column) => {
+          if (column.id === action.payload.id) {
+            return action.payload as IColumnTasks;
+          }
+          return column as IColumnTasks;
+        });
+      })
+      .addCase(updateColumn.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // TASKS
+      .addCase(createTask.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createTask.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.boardColumnsTasks.columns = state.boardColumnsTasks.columns.map((column) => {
+          if (column.id === action.payload.columnId) {
+            column.tasks.push(action.payload as ITask);
+          }
+          return column;
+        });
+      })
+      .addCase(createTask.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(deleteTask.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteTask.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.boardColumnsTasks.columns = state.boardColumnsTasks.columns.map((column) => {
+          column.tasks = column.tasks.filter((task) => task.id !== action.payload.id);
+          return column;
+        });
+      })
+      .addCase(deleteTask.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(updateTask.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateTask.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.boardColumnsTasks.columns = state.boardColumnsTasks.columns.map((column) => {
+          column.tasks = column.tasks.map((task) => {
+            if (task.id === action.payload.id) {
+              return action.payload as ITask;
+            }
+            return task;
+          });
+          return column;
+        });
+      })
+      .addCase(updateTask.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

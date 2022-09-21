@@ -8,7 +8,7 @@ import { getColumnById, getColumns, updateColumn } from '../store/columns/column
 import ReactPortal from '../components/modal/portal';
 import BoardAddColumnModal from '../components/board/board-add-column-modal';
 import Column from '../components/column';
-import TaskWindow from '../components/task/task-window';
+import TaskUpdateModal from '../components/task/task-update-modal';
 import Spinner from '../components/spinner';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { FormattedMessage } from 'react-intl';
@@ -17,20 +17,19 @@ import { MdSpaceDashboard } from 'react-icons/md'
 const BoardPage = () => {
   const [cookie] = useCookies(['user']);
   const [isOpenAddColumnModal, setIsOpenAddColumnModal] = useState(false);
-  const [isOpenTask, setIsOpenTask] = useState(false);
+  const [isOpenUpdateTaskModal, setIsOpenUpdateTaskModal] = useState(false);
 
   const dispatch = useAppDispatch();
   const { users } = useAppSelector((state: AppState) => state.user);
   const { boardColumnsTasks, isLoading } = useAppSelector((state: AppState) => state.boards);
-  const { columnById, isSuccess: isSuccessUpdate } = useAppSelector((state: AppState) => state.columns);
-  // const {  } = useAppSelector((state: AppState) => state.tasks);
+  const { columnById } = useAppSelector((state: AppState) => state.columns);
   
   const navigate = useNavigate();
 
   const boardId = useParams().id;
 
   const handleTaskClick = () => {
-    setIsOpenTask(!isOpenTask);
+    setIsOpenUpdateTaskModal(!isOpenUpdateTaskModal);
   };
 
   useEffect(() => {
@@ -40,7 +39,7 @@ const BoardPage = () => {
       dispatch(getColumns(boardId));
       dispatch(getUsers());
     }
-  }, [cookie.user, navigate, dispatch, boardId, isSuccessUpdate]);
+  }, [cookie.user, navigate, dispatch, boardId]);
 
   const handleDragStart = (result: any) => {
     const { draggableId, type, source } = result;
@@ -117,11 +116,11 @@ const BoardPage = () => {
                       className="flex gap-5 h-full flex-wrap"
                     >
                       {boardColumnsTasks.columns.length > 0 &&
-                        boardColumnsTasks.columns.map((col, index) => (
+                        boardColumnsTasks.columns.map((column, index) => (
                           <Draggable
-                            key={col.id}
-                            draggableId={col.id}
-                            index={col.order}
+                            key={column.id}
+                            draggableId={column.id}
+                            index={column.order}
                           >
                             {(provided, snapshot) => {
                               return (
@@ -134,11 +133,11 @@ const BoardPage = () => {
                                   }}
                                 >
                                   <Column
-                                    key={col.id}
-                                    id={col.id}
-                                    order={col.order}
-                                    title={col.title}
-                                    tasks={col.tasks}
+                                    key={column.id}
+                                    id={column.id}
+                                    order={column.order}
+                                    title={column.title}
+                                    tasks={column.tasks}
                                     users={users}
                                     taskClick={handleTaskClick}
                                   />
@@ -171,10 +170,10 @@ const BoardPage = () => {
               </>
             </div>
           </section>
-          {isOpenTask && (
-            <ReactPortal showModal={isOpenTask}>
-              <TaskWindow
-                isOpenTask={isOpenTask}
+          {isOpenUpdateTaskModal && (
+            <ReactPortal showModal={isOpenUpdateTaskModal}>
+              <TaskUpdateModal
+                isOpenTask={isOpenUpdateTaskModal}
                 taskClick={handleTaskClick}
                 users={users}
               />

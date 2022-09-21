@@ -3,12 +3,11 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { AppState, useAppDispatch, useAppSelector } from "../../store/store";
 import { updateTask } from "../../store/tasks/tasks.slice";
-import Textarea, { textareaThemes } from "./textarea";
 import { FormattedMessage } from "react-intl";
 import { TbEdit } from "react-icons/tb";
 import { UserProps } from "../../interfaces/interfaces";
 
-const TaskWindow = ({ taskClick, isOpenTask, users }: {
+const TaskUpdateModal = ({ taskClick, isOpenTask, users }: {
   taskClick: () => void;
   isOpenTask: boolean;
   users: Array<UserProps>;
@@ -123,7 +122,14 @@ const TaskWindow = ({ taskClick, isOpenTask, users }: {
             </div> */}
             <div className="w-full flex flex-col gap-2 px-4 py-2">
               <label className="text-sm text-gray-400" htmlFor="description"><FormattedMessage id='taskDescription' /></label>
-              <Textarea onChange={handleChange} className={textareaThemes.full} name="description" id='description' value={taskData.task.description} />
+              <textarea 
+                className="inline-flex bg-transparent resize-none w-full items-center px-4 py-2 border border-solid border-slate-400 rounded-lg" 
+                name="description" 
+                id="description"
+                value={taskData.task.description} 
+                onChange={handleChange} 
+              >
+              </textarea>
             </div>
             <div className="w-full flex justify-between items-center p-4 rounded-b">
               <button
@@ -148,4 +154,4 @@ const TaskWindow = ({ taskClick, isOpenTask, users }: {
   );
 };
 
-export default TaskWindow;
+export default TaskUpdateModal;

@@ -4,7 +4,7 @@ import { AppState, useAppDispatch, useAppSelector } from '../store/store';
 import { deleteColumn } from '../store/columns/columns.slice';
 import Task from './task/task';
 import ReactPortal from './modal/portal';
-import TaskCreation from './task-create';
+import TaskCreateModal from './task/task-create-modal';
 import TrashIcon from '../assets/icons/trash.icon';
 import DotsIcon from '../assets/icons/dotsIcon';
 import { FormattedMessage } from 'react-intl';
@@ -19,11 +19,11 @@ const Column = ({ id, title, order, tasks, users, taskClick }: {
   users: Array<UserProps>;
   taskClick?: () => void;
 }) => {
-  const dispatch = useAppDispatch();
-
   const [visibleColumnOptions, setVisibleColumnOptions] = useState(false);
   const [isOpenCreateTaskModal, setIsOpenCreateTaskModal] = useState(false);
-
+  
+  const dispatch = useAppDispatch();
+  
   const boardId = useParams().id;
 
   const toggleColumnOptions = () => {
@@ -86,7 +86,7 @@ const Column = ({ id, title, order, tasks, users, taskClick }: {
           </button>
           {isOpenCreateTaskModal && (
             <ReactPortal showModal={isOpenCreateTaskModal}>
-              <TaskCreation
+              <TaskCreateModal
                 columnId={id}
                 order={order}
                 toggleWindow={toggeTaskCreateModal}
