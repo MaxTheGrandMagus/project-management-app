@@ -9,11 +9,12 @@ import Spinner from '../spinner';
 import { toast } from 'react-toastify';
 
 const BoardContainer: React.FC = () => {
-  const { boards, currentBoard, isLoading, isError, message } = useAppSelector((state: AppState) => state.boards);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const toggleDeleteWindow = () => setIsDeleteModalOpen(!isDeleteModalOpen);
   const toggleUpdateWindow = () => setIsUpdateModalOpen(!isUpdateModalOpen);
+  
+  const { boards, currentBoard, isLoading, isError, message } = useAppSelector((state: AppState) => state.boards);
 
   useEffect(() => {
     if (isError) toast.error(message);

@@ -34,7 +34,7 @@ const SignupPage = (props: Props) => {
     if (cookie.user) {
       navigate('/main');
     }
-    // dispatch(reset());
+    dispatch(reset());
   }, [cookie.user, isLoading, isSuccess, isError, message, navigate, dispatch]);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { useAppDispatch } from '../../store/store';
-import { openBoard, chooseBoard, IBoardColumnsTasks } from '../../store/boards/boards.slice';
+import { chooseBoard, IBoardColumnsTasks } from '../../store/boards/boards.slice';
 import { HiOutlineTrash } from 'react-icons/hi';
 import { HiPencilAlt } from 'react-icons/hi';
 
@@ -26,7 +26,7 @@ const BoardItem: React.FC<{
   };
   
   const openAndSave = () => {
-    dispatch(openBoard(board));
+    dispatch(chooseBoard(board));
   };
 
   return (

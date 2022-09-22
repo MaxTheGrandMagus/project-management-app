@@ -3,8 +3,9 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { AppState, useAppDispatch, useAppSelector } from '../store/store';
 import { getUsers } from '../store/users/users.slice';
-import { chooseColumn, getBoardById } from '../store/boards/boards.slice';
+import { getBoardById } from '../store/boards/boards.slice';
 import { getColumnById, getColumns, updateColumn } from '../store/columns/columns.slice';
+import { getTaskById, updateTask } from '../store/tasks/tasks.slice';
 import ReactPortal from '../components/modal/portal';
 import BoardAddColumnModal from '../components/board/board-add-column-modal';
 import Column from '../components/column';
@@ -13,7 +14,6 @@ import Spinner from '../components/spinner';
 import { DragDropContext, Droppable, Draggable, DragStart, DropResult } from 'react-beautiful-dnd';
 import { FormattedMessage } from 'react-intl';
 import { MdSpaceDashboard } from 'react-icons/md'
-import { getTaskById, updateTask } from '../store/tasks/tasks.slice';
 
 const BoardPage = () => {
   const [cookie] = useCookies(['user']);
@@ -21,7 +21,7 @@ const BoardPage = () => {
   const [isOpenUpdateTaskModal, setIsOpenUpdateTaskModal] = useState(false);
 
   const dispatch = useAppDispatch();
-  const { users } = useAppSelector((state: AppState) => state.user);
+  const { users } = useAppSelector((state: AppState) => state.users);
   const { boardColumnsTasks, isLoading } = useAppSelector((state: AppState) => state.boards);
   const { columnById } = useAppSelector((state: AppState) => state.columns);
   const { currentTask } = useAppSelector((state: AppState) => state.tasks);

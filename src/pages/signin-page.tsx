@@ -33,7 +33,7 @@ const SigninPage = (props: Props) => {
       // console.log('sign in cookie', cookie.user);
       navigate('/main');
     }
-    // dispatch(reset());
+    dispatch(reset());
   }, [cookie.user, isLoading, isSuccess, isError, message, navigate, dispatch]);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { AppState, useAppDispatch } from '../store/store';
-import { getUserById, resetUser, updateUserProfile, deleteUser } from '../store/users/users.slice';
 import { reset } from '../store/auth/auth.slice';
+import { getUserById, resetUser, updateUserProfile, deleteUser } from '../store/users/users.slice';
 import Spinner from '../components/spinner';
 import ReactPortal from '../components/modal/portal';
 import ProfileEditModal from '../components/profile-edit/profile-edit-modal';
@@ -26,7 +26,7 @@ const EditProfile = (props: Props) => {
   const dispatch = useAppDispatch();
 
   const { isLoading, isError, message, userDetails } = useSelector(
-    (state: AppState) => state.user
+    (state: AppState) => state.users
   );
   
   const [cookie, setCookie, removeCookie] = useCookies(['user']);

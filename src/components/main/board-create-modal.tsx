@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAppDispatch } from '../../store/store';
-import { createBoard, resetNewBoard } from '../../store/boards/boards.slice';
+import { createBoard } from '../../store/boards/boards.slice';
 import { FormattedMessage, useIntl } from 'react-intl'
 import { MdOutlineDashboardCustomize } from 'react-icons/md'
 
@@ -26,7 +26,6 @@ const BoardCreateModal = ({ toggleWindow }: { toggleWindow: () => void }) => {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch(createBoard(formData));
-    dispatch(resetNewBoard(formData));
     toggleWindow();
   };
 

@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../store/store';
+import { ITask } from '../../store/boards/boards.slice';
 import { chooseColumnId, chooseTask, deleteTask, ITaskToDelete } from '../../store/tasks/tasks.slice';
 import { UserProps } from '../../interfaces/interfaces';
 import DotsIcon from '../../assets/icons/dotsIcon';
 import TrashIcon from '../../assets/icons/trash.icon';
 import Avatar from 'react-avatar';
-import { ITask } from '../../store/boards/boards.slice';
 
 const Task = ({ columnId, task, users, taskClick }: {
   columnId: string,

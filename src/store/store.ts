@@ -1,18 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import authReducer from './auth/auth.slice';
-import userReducer from './users/users.slice';
-import boardReducer from './boards/boards.slice';
-import colReducer from './columns/columns.slice';
-import taskReducer from './tasks/tasks.slice';
+import usersReducer from './users/users.slice';
+import boardsReducer from './boards/boards.slice';
+import columnsReducer from './columns/columns.slice';
+import tasksReducer from './tasks/tasks.slice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    user: userReducer,
-    boards: boardReducer,
-    columns: colReducer,
-    tasks: taskReducer,
+    users: usersReducer,
+    boards: boardsReducer,
+    columns: columnsReducer,
+    tasks: tasksReducer,
   },
 });
 

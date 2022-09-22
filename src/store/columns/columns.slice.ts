@@ -129,39 +129,28 @@ export const updateColumn = createAsyncThunk<
   }
 );
 
-export interface IColumnState {
+interface IColumnState {
   columns: Array<IColumn>;
   columnById: IColumnTasks | null;
-  currentColumn: IColumnTasks | null;
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;
   message: string | undefined;
-  newColumn: IColumn | null;
 }
 
 const initialState: IColumnState = {
   columns: [],
   columnById: null,
-  currentColumn: null,
   isLoading: false,
   isSuccess: false,
   isError: false,
   message: undefined,
-  newColumn: null,
 };
 
-export const colSlice = createSlice({
+export const columnsSlice = createSlice({
   name: 'columns',
   initialState,
-  reducers: {
-    chooseColumn(state, action) {
-      state.currentColumn = action.payload;
-    },
-    resetNewColumn: (state, action) => {
-      state.newColumn = null
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getColumns.pending, (state) => {
@@ -177,27 +166,12 @@ export const colSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(createColumn.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(createColumn.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.newColumn = action.payload;
-        state.columns.push(action.payload);
-      })
-      .addCase(createColumn.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
       .addCase(getColumnById.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(getColumnById.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.currentColumn = action.payload;
         state.columnById = action.payload;
       })
       .addCase(getColumnById.rejected, (state, action) => {
@@ -205,41 +179,7 @@ export const colSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(deleteColumn.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(deleteColumn.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.columns = state.columns.filter(
-          (column) => column.id !== action.payload
-        );
-      })
-      .addCase(deleteColumn.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
-      .addCase(updateColumn.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(updateColumn.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.columns = state.columns.map((column) => {
-          if (column.id === action.payload.id) {
-            return action.payload;
-          }
-          return column;
-        });
-      })
-      .addCase(updateColumn.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
   },
 });
 
-export const { resetNewColumn } = colSlice.actions;
-export default colSlice.reducer;
+export default columnsSlice.reducer;

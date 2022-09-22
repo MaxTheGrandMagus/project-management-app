@@ -1,9 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import tasksService from './tasks.service';
-import { UserProps } from '../../interfaces/interfaces';
 import { IError } from '../config';
 
-export interface ITask {
+interface ITask {
   id: string;
   title: string;
   order: number;
@@ -50,7 +49,7 @@ export interface ITaskToUpdate {
   }
 }
 
-export interface FileProps {
+interface FileProps {
   filename: string,
   fileSize: number,
 }
@@ -135,58 +134,17 @@ export const updateTask = createAsyncThunk<
   }
 );
 
-export interface TaskState {
+interface TaskState {
   tasks: Array<ITask>;
+  currentTask: ITask;
+  columnId: string;
   isLoading: boolean;
   isError: boolean;
-  boardId: string;
-  columnId: string;
-  newTask: ITask | null;
-  newColumn: IColumnTasks;
   message: string | undefined;
-  colTasks: BoardColTask;
-  currentTask: ITask;
-  users: Array<UserProps>
-}
-
-interface BoardColTask {
-  id: string;
-  title: string;
-  description: string;
-  columns: Array<IColumnTasks>;
-}
-
-export interface IColumnTasks {
-  id: string;
-  title: string;
-  order: number;
-  tasks: Array<ITask>;
-  taskClick?: () => void;
 }
 
 const initialState: TaskState = {
   tasks: [],
-  isLoading: false,
-  isError: false,
-  message: undefined,
-  boardId: '',
-  columnId: '',
-  newTask: {
-    id: '',
-    title: '',
-    order: 0,
-    description: '',
-    userId: '',
-    boardId: '',
-    columnId: '',
-    files: [],
-  },
-  colTasks: {
-    id: '',
-    title: '',
-    description: '',
-    columns: [],
-  },
   currentTask: {
     id: '',
     title: '',
@@ -197,16 +155,13 @@ const initialState: TaskState = {
     columnId: '',
     files: [],
   },
-  newColumn: {
-    id: '',
-    title: '',
-    order: 1,
-    tasks: [],
-  },
-  users: []
+  columnId: '',
+  isLoading: false,
+  isError: false,
+  message: undefined,
 };
 
-const taskSlice = createSlice({
+const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
@@ -231,26 +186,6 @@ const taskSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(createTask.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(createTask.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.newTask = action.payload;
-        state.colTasks.columns.forEach((col) => {
-          if (state.newTask != null && col.id === state.newTask.columnId) {
-            if (!col.tasks) {
-              col.tasks = [];
-            }
-            col.tasks.push(state.newTask);
-          }
-        });
-      })
-      .addCase(createTask.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
       .addCase(getTaskById.pending, (state) => {
         state.isLoading = true;
       })
@@ -263,53 +198,8 @@ const taskSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(deleteTask.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(deleteTask.fulfilled, (state, action) => {
-        state.isLoading = false;
-        const { columnId, id } = action.payload;
-        state.colTasks.columns = state.colTasks.columns.filter(
-          (column) => {
-            if (column.id === columnId) {
-              return column.tasks = column.tasks.filter((task) => task.id !== id)
-            } else return column 
-          }
-        );
-      })
-      .addCase(deleteTask.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
-      .addCase(updateTask.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(updateTask.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.currentTask = action.payload;
-        const { columnId, id } = action.payload;
-        state.colTasks.columns = state.colTasks.columns.filter(
-          (column) => {
-            if (column.id === columnId) {
-              let arr = column.tasks.map((task) => {
-                if (task.id === id) { 
-                  return task = action.payload;
-                } else return task;
-              })
-              column.tasks = arr;
-              return column.tasks;
-            } else return column 
-          }
-        );
-      })
-      .addCase(updateTask.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
   },
 });
 
-export const { chooseTask, chooseColumnId } = taskSlice.actions;
-export default taskSlice.reducer;
+export const { chooseTask, chooseColumnId } = tasksSlice.actions;
+export default tasksSlice.reducer;

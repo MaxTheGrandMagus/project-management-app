@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { createColumn, resetNewColumn } from '../../store/columns/columns.slice';
+import { createColumn } from '../../store/columns/columns.slice';
 import { useAppDispatch } from '../../store/store';
 import { FormattedMessage, useIntl } from 'react-intl'
 import { RiLayoutColumnFill } from 'react-icons/ri';
@@ -29,7 +29,6 @@ const BoardAddColumnModal: React.FC<{ setIsOpenAddColumnModal: Function }> = ({ 
           boardId: boardId,
         })
       );
-      dispatch(resetNewColumn(data.columnTitle));
       setIsOpenAddColumnModal(false);
     }
   };

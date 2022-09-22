@@ -13,7 +13,7 @@ export interface IBoardColumnsTasks {
   toggleUpdateWindow?: () => void;
 }
 
-export interface IColumnTasks {
+interface IColumnTasks {
   id: string;
   title: string;
   order: number;
@@ -29,7 +29,7 @@ export interface ITask {
   files?: Array<FileProps> | [],
 }
 
-export interface FileProps {
+interface FileProps {
   filename: string,
   fileSize: number,
 }
@@ -114,20 +114,18 @@ export const updateBoard = createAsyncThunk<
   }
 );
 
-export interface BoardState {
+interface BoardState {
   boards: Array<Pick<IBoardColumnsTasks, "id" | "title" | "description">>,
   boardColumnsTasks: IBoardColumnsTasks;
-  isLoading: boolean,
-  isSuccess: boolean,
-  isError: boolean,
-  message: string | undefined,
   currentBoard: {
     id: string,
     title: string,
     description: string,
   } | null,
-  newBoard: Pick<IBoardColumnsTasks, "title" | "description"> | null,
-  currentColumn: IColumnTasks | null,
+  isLoading: boolean,
+  isSuccess: boolean,
+  isError: boolean,
+  message: string | undefined,
 }
 
 const initialState: BoardState = {
@@ -138,31 +136,20 @@ const initialState: BoardState = {
     description: '',
     columns: [],
   },
+  currentBoard: null,
   isLoading: false,
   isSuccess: false,
   isError: false,
   message: undefined,
-  currentBoard: null,
-  newBoard: null,
-  currentColumn: null,
 };
 
-const boardSlice = createSlice({
+const boardsSlice = createSlice({
   name: 'boards',
   initialState,
   reducers: {
-    openBoard(state, action) {
-      state.currentBoard = action.payload;
-    },
     chooseBoard(state, action) {
       state.currentBoard = action.payload;
     },
-    resetNewBoard(state, action) {
-      state.newBoard = null;
-    },
-    chooseColumn(state, action) {
-      state.currentColumn = action.payload;
-    }
   },
   extraReducers: (builder) => {
     builder
@@ -186,8 +173,7 @@ const boardSlice = createSlice({
       .addCase(createBoard.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.newBoard = action.payload;
-        state.boards.push(state.newBoard);
+        state.boards.push(action.payload);
       })
       .addCase(createBoard.rejected, (state, action) => {
         state.isLoading = false;
@@ -354,6 +340,6 @@ const boardSlice = createSlice({
   },
 });
 
-export const { openBoard, chooseBoard, resetNewBoard, chooseColumn } = boardSlice.actions;
+export const { chooseBoard } = boardsSlice.actions;
 
-export default boardSlice.reducer;
+export default boardsSlice.reducer;

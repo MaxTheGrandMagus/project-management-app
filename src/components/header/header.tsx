@@ -32,7 +32,7 @@ const Header = ({ currentLocale, handleChange }: HeaderProps) => {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const { userDetails } = useSelector((state: AppState) => state.user);
+  const { userDetails } = useSelector((state: AppState) => state.users);
 
   const [cookie, setCookie, removeCookie] = useCookies(['user']);
   const decodedUser: TokenProps = jwt_decode(cookie.user)

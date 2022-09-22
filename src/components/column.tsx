@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { AppState, useAppDispatch, useAppSelector } from '../store/store';
+import { useAppDispatch } from '../store/store';
 import { ITask } from '../store/boards/boards.slice';
 import { deleteColumn } from '../store/columns/columns.slice';
 import Task from './task/task';
