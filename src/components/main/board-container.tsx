@@ -41,7 +41,7 @@ const BoardContainer: React.FC = () => {
           Oops! Something went wrong!
         </div>
       )}
-      {isDeleteModalOpen && (
+      {isDeleteModalOpen && currentBoard && (
         <ReactPortal showModal={isDeleteModalOpen}>
           <BoardDeleteModal
             boardId={currentBoard.id}
@@ -49,7 +49,7 @@ const BoardContainer: React.FC = () => {
           />
         </ReactPortal>
       )}
-      {isUpdateModalOpen && (
+      {isUpdateModalOpen && currentBoard && (
         <ReactPortal showModal={isDeleteModalOpen}>
           <BoardUpdateModal
             board={currentBoard}

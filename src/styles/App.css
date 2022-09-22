@@ -54,3 +54,46 @@
 .date::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
 }
+
+/* BOARD SCROLL */
+.board-scroll::-webkit-scrollbar {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+.board-scroll::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 100vw;
+  margin-block: .5em;
+}
+.board-scroll::-webkit-scrollbar-thumb {
+  background: #8A4FFF;
+  border: .15em solid transparent;
+  border-radius: 100vw;
+}
+.board-scroll::-webkit-scrollbar-thumb:hover {
+  background: #731dd8;
+}
+.board-scroll::-webkit-scrollbar-thumb:active {
+  background: #3c096c;
+}
+
+/* COLUMN SCROLL */
+.column-scroll::-webkit-scrollbar {
+  width: 0.75rem;
+}
+.column-scroll::-webkit-scrollbar-track {
+  background: #8A4FFF;
+  border-radius: 100vw;
+  margin-block: .5em;
+}
+.column-scroll::-webkit-scrollbar-thumb {
+  background: rgb(240, 240, 240);
+  border: .15em solid #8A4FFF;
+  border-radius: 100vw;
+}
+.column-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgb(225, 225, 225);
+}
+.column-scroll::-webkit-scrollbar-thumb:active {
+  background: rgb(200, 200, 200);
+}

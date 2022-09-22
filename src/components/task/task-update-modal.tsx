@@ -31,34 +31,13 @@ const TaskUpdateModal = ({ taskClick, isOpenTask, users }: {
   })
   
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>) => {
-    if (event.target.name === 'title') {
-      setTaskData((prev) => ({
-        ...prev,
-        task: {
-          ...prev.task,
-          title: event.target.value,
-        }
-      }));
-    }
-    if (event.target.name === 'description') {
-      setTaskData((prev) => ({
-        ...prev,
-        task: {
-          ...prev.task,
-          description: event.target.value
-        }
-      }));
-    }
-    if (event.target.name === 'user') {
-      console.log(event.target.value);
-      setTaskData((prev) => ({
-        ...prev,
-        task: {
-          ...prev.task,
-          userId: event.target.value
-        }
-      }));
-    }
+    setTaskData((prevState) => ({
+      ...prevState,
+      task: {
+        ...prevState.task,
+        [event.target.name]: event.target.value,
+      }
+    }));
   }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -96,7 +75,7 @@ const TaskUpdateModal = ({ taskClick, isOpenTask, users }: {
               <label className="text-sm text-gray-400" htmlFor="user"><FormattedMessage id='taskAssignee' /></label>
               <select 
                 className="inline-flex bg-transparent w-full items-center px-4 py-2 border border-solid border-slate-400 rounded-lg" 
-                name="user" 
+                name="userId" 
                 id="user"
                 onChange={handleChange}
               >
@@ -107,19 +86,15 @@ const TaskUpdateModal = ({ taskClick, isOpenTask, users }: {
                   { users && users.find((user) => user.id === taskData.task.userId)?.name }
                 </option>
                 {users && users.map((user) => 
-                  <option key={user.id} value={user.id} defaultValue={taskData.task.userId}>{user.name}</option>
+                  <option 
+                    key={user.id} 
+                    value={user.id}
+                  >
+                    {user.name}
+                  </option>
                 )}
               </select>
             </div>
-            {/* <div className="w-full flex flex-col gap-2 px-4 py-2">
-              <label className="text-sm text-gray-400" htmlFor="date"><FormattedMessage id='taskDate' /></label>
-              <input 
-                className="inline-flex bg-transparent w-full items-center px-4 py-2 border border-solid border-slate-400 rounded-lg" 
-                type="date" 
-                name="date" 
-                id="date" 
-              />
-            </div> */}
             <div className="w-full flex flex-col gap-2 px-4 py-2">
               <label className="text-sm text-gray-400" htmlFor="description"><FormattedMessage id='taskDescription' /></label>
               <textarea 

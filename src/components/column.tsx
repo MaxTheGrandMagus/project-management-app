@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AppState, useAppDispatch, useAppSelector } from '../store/store';
+import { ITask } from '../store/boards/boards.slice';
 import { deleteColumn } from '../store/columns/columns.slice';
 import Task from './task/task';
 import ReactPortal from './modal/portal';
 import TaskCreateModal from './task/task-create-modal';
 import TrashIcon from '../assets/icons/trash.icon';
 import DotsIcon from '../assets/icons/dotsIcon';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { FormattedMessage } from 'react-intl';
 import { UserProps } from '../interfaces/interfaces';
-import { ITask } from '../store/boards/boards.slice';
 
 const Column = ({ id, title, order, tasks, users, taskClick }: {
   id: string;
@@ -46,10 +47,10 @@ const Column = ({ id, title, order, tasks, users, taskClick }: {
   return (
     <article
       key={id}
-      className="relative overflow-visible overflow-y-auto w-56 h-full bg-slate-blue border rounded-md border-slate-blue shadow-lg"
+      className="relative overflow-visible w-60 h-auto bg-slate-blue border rounded-md border-slate-blue shadow-lg"
     >
       <div className="flex justify-between align-baseline">
-        <h4 className="text-lg text-white font-bold m-3">{title}</h4>
+        <h4 className="w-full text-lg text-white font-bold m-3">{title}</h4>
         <div
           className="relative flex items-center m-3 text-white cursor-pointer rounded-sm hover:bg-gray-300 transition-all"
           onClick={toggleColumnOptions}
@@ -67,34 +68,73 @@ const Column = ({ id, title, order, tasks, users, taskClick }: {
           <DotsIcon />
         </div>
       </div>
-      <div className="relative flex flex-col">
-        {tasks && tasks.map((task) => (
-          <Task
-            key={task.id}
-            columnId={id}
-            task={task}
-            users={users}
-            taskClick={taskClick}
-          />
-        ))}
-        <aside className="relative flex flex-col items-center m-2">
-          <button
-            onClick={toggeTaskCreateModal}
-            className="relative w-full text-white text-lg font-bold rounded-sm hover:bg-white hover:text-black transition-all"
-          >
-            <FormattedMessage id="addTask" />
-          </button>
-          {isOpenCreateTaskModal && (
-            <ReactPortal showModal={isOpenCreateTaskModal}>
-              <TaskCreateModal
-                columnId={id}
-                order={order}
-                toggleWindow={toggeTaskCreateModal}
-              />
-            </ReactPortal>
-          )}
-        </aside>
+      <div className="column-scroll relative overflow-y-auto max-h-[75vh] h-auto flex flex-col">
+        <Droppable
+          key={id}
+          droppableId={id}
+          direction="vertical"
+          type="TASK"
+        >
+          {(provided) => {
+            return (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="flex flex-col min-h-[2rem] h-full"
+              >
+                {tasks.length > 0 &&
+                  tasks.map((task) => (
+                    <Draggable
+                      key={task.id}
+                      draggableId={task.id}
+                      index={task.order}
+                    >
+                      {(provided) => {
+                        return (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={{
+                              ...provided.draggableProps.style,
+                            }}
+                          >
+                            <Task
+                              key={task.id}
+                              columnId={id}
+                              task={task}
+                              users={users}
+                              taskClick={taskClick}
+                            />
+                          </div>
+                        )
+                      }}
+                    </Draggable>
+                  ))
+                }
+                {provided.placeholder}
+              </div>
+            );
+          }}
+        </Droppable>
       </div>
+      <div className="flex flex-col items-center m-2">
+        <button
+          onClick={toggeTaskCreateModal}
+          className="w-full h-full text-white text-lg font-bold rounded-sm hover:bg-white hover:text-black transition-all"
+        >
+          <FormattedMessage id="addTask" />
+        </button>
+      </div>
+      {isOpenCreateTaskModal && (
+        <ReactPortal showModal={isOpenCreateTaskModal}>
+          <TaskCreateModal
+            columnId={id}
+            order={order}
+            toggleWindow={toggeTaskCreateModal}
+          />
+        </ReactPortal>
+      )}
     </article>
   );
 };

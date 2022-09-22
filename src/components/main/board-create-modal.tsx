@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAppDispatch } from '../../store/store';
 import { createBoard, resetNewBoard } from '../../store/boards/boards.slice';
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { MdOutlineDashboardCustomize } from 'react-icons/md'
 
 const BoardCreateModal = ({ toggleWindow }: { toggleWindow: () => void }) => {
@@ -12,8 +12,9 @@ const BoardCreateModal = ({ toggleWindow }: { toggleWindow: () => void }) => {
 
   const dispatch = useAppDispatch();
 
-  // const placeholderTitle = intl.formatMessage({id: 'placeholderTitleBoard'});
-  // const placeholderDecsription = intl.formatMessage({id: 'placeholderDecsriptionBoard'});
+  const intl = useIntl();
+  const placeholderTitle = intl.formatMessage({ id: 'placeholderTitleBoard' });
+  const placeholderDecsription = intl.formatMessage({ id: 'placeholderDecsriptionBoard' });
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
@@ -50,6 +51,7 @@ const BoardCreateModal = ({ toggleWindow }: { toggleWindow: () => void }) => {
                   onChange={onChange}
                   className="inline-flex bg-transparent w-full items-center px-4 py-2 border border-solid border-slate-400 rounded-lg"
                   type="text"
+                  placeholder={placeholderTitle}
                   required
                 />
               </div>
@@ -61,6 +63,7 @@ const BoardCreateModal = ({ toggleWindow }: { toggleWindow: () => void }) => {
                   onChange={onChange}
                   className="inline-flex bg-transparent w-full items-center px-4 py-2 border border-solid border-slate-400 rounded-lg"
                   type="text"
+                  placeholder={placeholderDecsription}
                   required
                 />
               </div>

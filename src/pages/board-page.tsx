@@ -3,16 +3,17 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { AppState, useAppDispatch, useAppSelector } from '../store/store';
 import { getUsers } from '../store/users/users.slice';
-import { getBoardById } from '../store/boards/boards.slice';
+import { chooseColumn, getBoardById } from '../store/boards/boards.slice';
 import { getColumnById, getColumns, updateColumn } from '../store/columns/columns.slice';
 import ReactPortal from '../components/modal/portal';
 import BoardAddColumnModal from '../components/board/board-add-column-modal';
 import Column from '../components/column';
 import TaskUpdateModal from '../components/task/task-update-modal';
 import Spinner from '../components/spinner';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable, DragStart, DropResult } from 'react-beautiful-dnd';
 import { FormattedMessage } from 'react-intl';
 import { MdSpaceDashboard } from 'react-icons/md'
+import { getTaskById, updateTask } from '../store/tasks/tasks.slice';
 
 const BoardPage = () => {
   const [cookie] = useCookies(['user']);
@@ -23,10 +24,11 @@ const BoardPage = () => {
   const { users } = useAppSelector((state: AppState) => state.user);
   const { boardColumnsTasks, isLoading } = useAppSelector((state: AppState) => state.boards);
   const { columnById } = useAppSelector((state: AppState) => state.columns);
+  const { currentTask } = useAppSelector((state: AppState) => state.tasks);
   
   const navigate = useNavigate();
 
-  const boardId = useParams().id;
+  const boardId = useParams().id as string;
 
   const handleTaskClick = () => {
     setIsOpenUpdateTaskModal(!isOpenUpdateTaskModal);
@@ -41,7 +43,7 @@ const BoardPage = () => {
     }
   }, [cookie.user, navigate, dispatch, boardId]);
 
-  const handleDragStart = (result: any) => {
+  const handleDragStart = (result: DragStart) => {
     const { draggableId, type, source } = result;
     if (type === 'COLUMN') {
       dispatch(
@@ -50,18 +52,22 @@ const BoardPage = () => {
           id: draggableId,
         })
       );
-      console.log(result);
+      console.log('DS COLUMN', result);
+    }
+    if (type === 'TASK') {
+      dispatch(getTaskById({
+        boardId: boardId,
+        columnId: source.droppableId,
+        id: draggableId,
+      }));
+      console.log('DS TASK', result);
     }
   };
 
-  const handleDragEnd = async (result: any) => {
+  const handleDragEnd = async (result: DropResult) => {
     const { source, destination, draggableId, type } = result;
     if (!destination) return;
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    )
-      return;
+    if (destination.droppableId === source.droppableId && destination.index === source.index) return;
     if (type === 'COLUMN' && columnById) {
       await dispatch(
         updateColumn({
@@ -71,9 +77,47 @@ const BoardPage = () => {
           order: destination.index,
         })
       );
+      dispatch(getBoardById(boardId));
+      console.log('DE COLUMN', result);
     }
-    dispatch(getBoardById(source.droppableId));
-    console.log(result);
+    if (type === 'TASK' && currentTask) {
+      if (destination.index === 0) {
+        await dispatch(
+          updateTask({
+            boardId: boardId,
+            columnId: source.droppableId,
+            id: draggableId,
+            task: {
+              title: currentTask.title,
+              description: currentTask.description,
+              order: destination.index + 1,
+              userId: currentTask.userId,
+              boardId: boardId,
+              columnId: destination.droppableId,
+            }
+          })
+        );
+        dispatch(getBoardById(boardId));
+      } else {
+        await dispatch(
+          updateTask({
+            boardId: boardId,
+            columnId: source.droppableId,
+            id: draggableId,
+            task: {
+              title: currentTask.title,
+              description: currentTask.description,
+              order: destination.index,
+              userId: currentTask.userId,
+              boardId: boardId,
+              columnId: destination.droppableId,
+            }
+          })
+        );
+        dispatch(getBoardById(boardId));
+      }
+      console.log('DE TASK', result);
+    }
   };
 
   if (isLoading) {
@@ -83,7 +127,7 @@ const BoardPage = () => {
   }
 
   return (
-    <main className="relative overflow-hidden h-full mb-auto bg-white flex flex-col items-start gap-5 px-5 text-gray-300">
+    <main className="relative overflow-hidden h-full mb-auto bg-white flex flex-col items-start px-5 text-gray-300">
       {!boardId ? (
         <Link
           to="/main"
@@ -97,14 +141,14 @@ const BoardPage = () => {
             <MdSpaceDashboard className='text-slate-blue' size={35} />
             <h1 className="text-3xl text-black font-bold">{boardColumnsTasks?.title}</h1>
           </section>
-          <section className="flex gap-5 w-full h-full mb-10 items-start">
+          <section className="board-scroll overflow-x-auto w-full h-full flex items-start gap-5 mb-10 py-5">
             <DragDropContext
               onDragStart={(result) => handleDragStart(result)}
               onDragEnd={(result) => handleDragEnd(result)}
             >
               <Droppable
-                droppableId={boardId}
                 key={boardId}
+                droppableId={boardId}
                 direction="horizontal"
                 type="COLUMN"
               >
@@ -113,10 +157,10 @@ const BoardPage = () => {
                     <div
                       {...provided.droppableProps}
                       ref={provided.innerRef}
-                      className="flex gap-5 h-full flex-wrap"
+                      className="flex gap-5 h-full"
                     >
                       {boardColumnsTasks.columns.length > 0 &&
-                        boardColumnsTasks.columns.map((column, index) => (
+                        boardColumnsTasks.columns.map((column) => (
                           <Draggable
                             key={column.id}
                             draggableId={column.id}
@@ -145,31 +189,28 @@ const BoardPage = () => {
                               );
                             }}
                           </Draggable>
-                        ))}
+                        ))
+                      }
                       {provided.placeholder}
                     </div>
                   );
                 }}
               </Droppable>
             </DragDropContext>
-            <div className="relative flex justify-center items-center w-56 h-full">
-              <>
-                <button
-                  onClick={() => setIsOpenAddColumnModal(true)}
-                  className="relative w-full p-2 bg-slate-blue border-2 border-slate-blue rounded text-white text-lg font-bold hover:text-black hover:bg-transparent transition-all duration-300 ease-in-out"
-                >
-                  <FormattedMessage id="addColumn" />
-                </button>
-                {isOpenAddColumnModal && (
-                  <ReactPortal showModal={isOpenAddColumnModal}>
-                    <BoardAddColumnModal
-                      setIsOpenAddColumnModal={setIsOpenAddColumnModal}
-                    />
-                  </ReactPortal>
-                )}
-              </>
-            </div>
+            <button
+              onClick={() => setIsOpenAddColumnModal(true)}
+              className="w-auto h-full whitespace-nowrap text-center p-2 bg-slate-blue border-2 border-slate-blue rounded text-white text-lg font-bold hover:text-black hover:bg-transparent transition-all duration-300 ease-in-out"
+            >
+              <FormattedMessage id="addColumn" />
+            </button>
           </section>
+          {isOpenAddColumnModal && (
+            <ReactPortal showModal={isOpenAddColumnModal}>
+              <BoardAddColumnModal
+                setIsOpenAddColumnModal={setIsOpenAddColumnModal}
+              />
+            </ReactPortal>
+          )}
           {isOpenUpdateTaskModal && (
             <ReactPortal showModal={isOpenUpdateTaskModal}>
               <TaskUpdateModal

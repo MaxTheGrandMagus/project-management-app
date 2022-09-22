@@ -64,9 +64,9 @@ const Task = ({ columnId, task, users, taskClick }: {
         )}
         <DotsIcon />
       </div>
-      <p className='overflow-hidden text-ellipsis text-gray-500'>{task.description}</p>
-      <Avatar 
-        className='absolute top-4 right-1' 
+      <p className='overflow-hidden whitespace-nowrap text-ellipsis text-gray-500'>{task.description}</p>
+      <Avatar
+        className='absolute bottom-1 right-1'
         name={users && users.find((user) => user.id === task.userId)?.name}
         size="25"
         round={true}

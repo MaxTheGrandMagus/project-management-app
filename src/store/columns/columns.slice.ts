@@ -155,7 +155,7 @@ export const colSlice = createSlice({
   name: 'columns',
   initialState,
   reducers: {
-    choseColumn(state, action) {
+    chooseColumn(state, action) {
       state.currentColumn = action.payload;
     },
     resetNewColumn: (state, action) => {

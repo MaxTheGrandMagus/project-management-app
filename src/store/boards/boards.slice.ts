@@ -23,7 +23,7 @@ export interface IColumnTasks {
 export interface ITask {
   id: string,
   title: string,
-  order: number | null,
+  order: number,
   description: string,
   userId: string,
   files?: Array<FileProps> | [],
@@ -125,8 +125,9 @@ export interface BoardState {
     id: string,
     title: string,
     description: string,
-  },
+  } | null,
   newBoard: Pick<IBoardColumnsTasks, "title" | "description"> | null,
+  currentColumn: IColumnTasks | null,
 }
 
 const initialState: BoardState = {
@@ -141,12 +142,9 @@ const initialState: BoardState = {
   isSuccess: false,
   isError: false,
   message: undefined,
-  currentBoard: {
-    id: '',
-    title: '',
-    description: '',
-  },
+  currentBoard: null,
   newBoard: null,
+  currentColumn: null,
 };
 
 const boardSlice = createSlice({
@@ -162,6 +160,9 @@ const boardSlice = createSlice({
     resetNewBoard(state, action) {
       state.newBoard = null;
     },
+    chooseColumn(state, action) {
+      state.currentColumn = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -200,7 +201,10 @@ const boardSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.boardColumnsTasks = action.payload;
-        state.boardColumnsTasks.columns.sort((a, b) => a.order - b.order)
+        state.boardColumnsTasks.columns.sort((a, b) => a.order - b.order);
+        state.boardColumnsTasks.columns.forEach(column => {
+          column.tasks.sort((a, b) => a.order - b.order);
+        });
       })
       .addCase(getBoardById.rejected, (state, action) => {
         state.isLoading = false;
@@ -245,7 +249,13 @@ const boardSlice = createSlice({
       .addCase(createColumn.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.boardColumnsTasks.columns.push(action.payload as IColumnTasks)
+        const newColumn = {
+          id: action.payload.id,
+          title: action.payload.title,
+          order: action.payload.order,
+          tasks: [],
+        };
+        state.boardColumnsTasks.columns.push(newColumn);
       })
       .addCase(createColumn.rejected, (state, action) => {
         state.isLoading = false;
@@ -273,7 +283,12 @@ const boardSlice = createSlice({
         state.isSuccess = true;
         state.boardColumnsTasks.columns = state.boardColumnsTasks.columns.map((column) => {
           if (column.id === action.payload.id) {
-            return action.payload as IColumnTasks;
+            return {
+              id: action.payload.id,
+              title: action.payload.title,
+              order: action.payload.order,
+              tasks: column.tasks,
+            } as IColumnTasks;
           }
           return column as IColumnTasks;
         });
@@ -339,6 +354,6 @@ const boardSlice = createSlice({
   },
 });
 
-export const { openBoard, chooseBoard, resetNewBoard } = boardSlice.actions;
+export const { openBoard, chooseBoard, resetNewBoard, chooseColumn } = boardSlice.actions;
 
 export default boardSlice.reducer;
