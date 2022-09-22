@@ -7,10 +7,9 @@ import { FormattedMessage } from "react-intl";
 import { TbEdit } from "react-icons/tb";
 import { UserProps } from "../../interfaces/interfaces";
 
-const TaskUpdateModal = ({ taskClick, isOpenTask, users }: {
-  taskClick: () => void;
-  isOpenTask: boolean;
+const TaskUpdateModal = ({ users, toggleWindow }: {
   users: Array<UserProps>;
+  toggleWindow: () => void;
 }) => {
   const dispatch = useAppDispatch();
   const { currentTask, columnId }  = useAppSelector((state: AppState) => state.tasks);
@@ -43,7 +42,7 @@ const TaskUpdateModal = ({ taskClick, isOpenTask, users }: {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch(updateTask(taskData));
-    taskClick();
+    toggleWindow();
   };
    
   return (
@@ -110,7 +109,7 @@ const TaskUpdateModal = ({ taskClick, isOpenTask, users }: {
               <button
                 className="bg-transparent px-6 py-3 text-red-500 font-bold uppercase text-sm rounded outline-none focus:outline-none ease-linear transition-all"
                 type="button"
-                onClick={taskClick}
+                onClick={toggleWindow}
               >
                 <FormattedMessage id='cancel' />
               </button>

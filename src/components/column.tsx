@@ -6,22 +6,23 @@ import { deleteColumn } from '../store/columns/columns.slice';
 import Task from './task/task';
 import ReactPortal from './modal/portal';
 import TaskCreateModal from './task/task-create-modal';
+import TaskUpdateModal from './task/task-update-modal';
 import TrashIcon from '../assets/icons/trash.icon';
 import DotsIcon from '../assets/icons/dotsIcon';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { FormattedMessage } from 'react-intl';
 import { UserProps } from '../interfaces/interfaces';
 
-const Column = ({ id, title, order, tasks, users, taskClick }: {
+const Column = ({ id, title, order, tasks, users }: {
   id: string;
   title: string;
   order: number;
   tasks: Array<ITask>;
   users: Array<UserProps>;
-  taskClick?: () => void;
 }) => {
   const [visibleColumnOptions, setVisibleColumnOptions] = useState(false);
   const [isOpenCreateTaskModal, setIsOpenCreateTaskModal] = useState(false);
+  const [isOpenUpdateTaskModal, setIsOpenUpdateTaskModal] = useState(false);
   
   const dispatch = useAppDispatch();
   
@@ -33,6 +34,10 @@ const Column = ({ id, title, order, tasks, users, taskClick }: {
   
   const toggeTaskCreateModal = () => {
     setIsOpenCreateTaskModal(!isOpenCreateTaskModal);
+  };
+
+  const toggeTaskUpdateModal = () => {
+    setIsOpenUpdateTaskModal(!isOpenUpdateTaskModal);
   };
 
   const handleColumnDelete = (id: string) => {
@@ -47,7 +52,7 @@ const Column = ({ id, title, order, tasks, users, taskClick }: {
   return (
     <article
       key={id}
-      className="relative overflow-visible w-60 h-auto bg-slate-blue border rounded-md border-slate-blue shadow-lg"
+      className="relative overflow-visible w-60 h-auto bg-slate-blue border rounded border-slate-blue shadow-lg"
     >
       <div className="flex justify-between align-baseline">
         <h4 className="w-full text-lg text-white font-bold m-3">{title}</h4>
@@ -68,7 +73,7 @@ const Column = ({ id, title, order, tasks, users, taskClick }: {
           <DotsIcon />
         </div>
       </div>
-      <div className="column-scroll relative overflow-y-auto max-h-[75vh] h-auto flex flex-col">
+      <div className="column-scroll relative overflow-y-auto max-h-[45vh] h-auto flex flex-col">
         <Droppable
           key={id}
           droppableId={id}
@@ -80,7 +85,7 @@ const Column = ({ id, title, order, tasks, users, taskClick }: {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="flex flex-col min-h-[2rem] h-full"
+                className="flex flex-col min-h-[2rem] h-auto"
               >
                 {tasks.length > 0 &&
                   tasks.map((task) => (
@@ -97,6 +102,8 @@ const Column = ({ id, title, order, tasks, users, taskClick }: {
                             {...provided.dragHandleProps}
                             style={{
                               ...provided.draggableProps.style,
+                              height: '100%',
+                              padding: '0 0.5rem',
                             }}
                           >
                             <Task
@@ -104,7 +111,7 @@ const Column = ({ id, title, order, tasks, users, taskClick }: {
                               columnId={id}
                               task={task}
                               users={users}
-                              taskClick={taskClick}
+                              toggleWindow={toggeTaskUpdateModal}
                             />
                           </div>
                         )
@@ -132,6 +139,14 @@ const Column = ({ id, title, order, tasks, users, taskClick }: {
             columnId={id}
             order={order}
             toggleWindow={toggeTaskCreateModal}
+          />
+        </ReactPortal>
+      )}
+      {isOpenUpdateTaskModal && (
+        <ReactPortal showModal={isOpenUpdateTaskModal}>
+          <TaskUpdateModal
+            users={users}
+            toggleWindow={toggeTaskUpdateModal}
           />
         </ReactPortal>
       )}

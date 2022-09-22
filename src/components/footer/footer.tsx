@@ -11,7 +11,7 @@ const DEVS = [
 
 const Footer = (props: Props) => {
   return (
-    <footer className="bg-lavender-blue w-full h-full flex justify-center items-center flex-col gap-5 px-6 py-6 text-lg text-black">
+    <footer className="bg-lavender-blue w-full h-full flex justify-center items-center flex-col gap-2 px-5 py-3 text-lg text-black">
       <p className='text-xl font-semibold'>React2022Q1 | Team75</p>
       <ul className="flex gap-5">
         {DEVS.map((dev) => (

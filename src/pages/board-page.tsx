@@ -9,7 +9,6 @@ import { getTaskById, updateTask } from '../store/tasks/tasks.slice';
 import ReactPortal from '../components/modal/portal';
 import BoardAddColumnModal from '../components/board/board-add-column-modal';
 import Column from '../components/column';
-import TaskUpdateModal from '../components/task/task-update-modal';
 import Spinner from '../components/spinner';
 import { DragDropContext, Droppable, Draggable, DragStart, DropResult } from 'react-beautiful-dnd';
 import { FormattedMessage } from 'react-intl';
@@ -18,7 +17,6 @@ import { MdSpaceDashboard } from 'react-icons/md'
 const BoardPage = () => {
   const [cookie] = useCookies(['user']);
   const [isOpenAddColumnModal, setIsOpenAddColumnModal] = useState(false);
-  const [isOpenUpdateTaskModal, setIsOpenUpdateTaskModal] = useState(false);
 
   const dispatch = useAppDispatch();
   const { users } = useAppSelector((state: AppState) => state.users);
@@ -29,10 +27,6 @@ const BoardPage = () => {
   const navigate = useNavigate();
 
   const boardId = useParams().id as string;
-
-  const handleTaskClick = () => {
-    setIsOpenUpdateTaskModal(!isOpenUpdateTaskModal);
-  };
 
   useEffect(() => {
     cookie.user === undefined && navigate('/');
@@ -141,7 +135,7 @@ const BoardPage = () => {
             <MdSpaceDashboard className='text-slate-blue' size={35} />
             <h1 className="text-3xl text-black font-bold">{boardColumnsTasks?.title}</h1>
           </section>
-          <section className="board-scroll overflow-x-auto w-full h-full flex items-start gap-5 mb-10 py-5">
+          <section className="board-scroll overflow-x-auto w-full h-full flex items-start gap-5 mb-3 py-5">
             <DragDropContext
               onDragStart={(result) => handleDragStart(result)}
               onDragEnd={(result) => handleDragEnd(result)}
@@ -157,7 +151,7 @@ const BoardPage = () => {
                     <div
                       {...provided.droppableProps}
                       ref={provided.innerRef}
-                      className="flex gap-5 h-full"
+                      className="flex gap-5"
                     >
                       {boardColumnsTasks.columns.length > 0 &&
                         boardColumnsTasks.columns.map((column) => (
@@ -174,6 +168,7 @@ const BoardPage = () => {
                                   {...provided.dragHandleProps}
                                   style={{
                                     ...provided.draggableProps.style,
+                                    height: '100%',
                                   }}
                                 >
                                   <Column
@@ -183,7 +178,6 @@ const BoardPage = () => {
                                     title={column.title}
                                     tasks={column.tasks}
                                     users={users}
-                                    taskClick={handleTaskClick}
                                   />
                                 </div>
                               );
@@ -208,15 +202,6 @@ const BoardPage = () => {
             <ReactPortal showModal={isOpenAddColumnModal}>
               <BoardAddColumnModal
                 setIsOpenAddColumnModal={setIsOpenAddColumnModal}
-              />
-            </ReactPortal>
-          )}
-          {isOpenUpdateTaskModal && (
-            <ReactPortal showModal={isOpenUpdateTaskModal}>
-              <TaskUpdateModal
-                isOpenTask={isOpenUpdateTaskModal}
-                taskClick={handleTaskClick}
-                users={users}
               />
             </ReactPortal>
           )}

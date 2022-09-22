@@ -79,8 +79,8 @@ const Header = ({ currentLocale, handleChange }: HeaderProps) => {
 
   return (
     <header className={`
-      ${sticky ? 'header--sticky' : 'h-24'} 
-      relative bg-lavender-blue w-full flex justify-between items-center px-6 py-6 shadow-md text-black
+      ${sticky ? 'header--sticky' : 'h-full'} 
+      relative bg-lavender-blue w-full flex justify-between items-center px-5 py-4 shadow-md text-black
     `}>
       <div ref={inputEl} className={`${sticky ? 'text-white' : 'text-black'} logo`}>
         <Link to="/main">
@@ -92,7 +92,7 @@ const Header = ({ currentLocale, handleChange }: HeaderProps) => {
         <div className={`
           ${(sticky ? 'bg-slate-blue sm:bg-slate-blue' : 'bg-lavender-blue sm:bg-lavender-blue')})} 
           ${(burger && isNavOpen)? "hidden" : 'visible'}
-          nav__list z-20  absolute p-2 top-12 right-10 flex flex-col justify-between items-center gap-6 sm:flex-row sm:static
+          nav__list z-20 absolute top-12 right-10 flex flex-col justify-between items-center gap-6 sm:flex-row sm:static
         `}>
           <button 
             className={`

@@ -8,11 +8,11 @@ import DotsIcon from '../../assets/icons/dotsIcon';
 import TrashIcon from '../../assets/icons/trash.icon';
 import Avatar from 'react-avatar';
 
-const Task = ({ columnId, task, users, taskClick }: {
+const Task = ({ columnId, task, users, toggleWindow }: {
   columnId: string,
   task: ITask,
   users: UserProps[];
-  taskClick?: () => void;
+  toggleWindow: () => void;
 }) => {
   const dispatch = useAppDispatch();
   const [visibleTaskOptions, setVisibleTaskOptions] = useState(false);
@@ -35,16 +35,14 @@ const Task = ({ columnId, task, users, taskClick }: {
   };
 
   const openTask = () => {
-    if (taskClick) {
-      taskClick();
-      dispatch(chooseColumnId(columnId));
-      dispatch(chooseTask(task));
-    }
+    toggleWindow();
+    dispatch(chooseColumnId(columnId));
+    dispatch(chooseTask(task));
   };
 
   return (
     <div
-      className="relative bg-white rounded-md m-2 pl-2 pr-8 py-2 hover:bg-gray-100 transition-all"
+      className="relative bg-white rounded mb-2 pl-2 pr-8 py-2 hover:bg-gray-100 transition-all"
       onClick={openTask}
     >
       <h2 className='text-orange-500 font-bold'>{task.title}</h2>
