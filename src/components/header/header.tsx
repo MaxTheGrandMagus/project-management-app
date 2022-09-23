@@ -33,7 +33,6 @@ const Header = ({ currentLocale, handleChange }: HeaderProps) => {
 
   const [cookie,, removeCookie] = useCookies(['user']);
   const decodedUser: TokenProps = jwt_decode(cookie.user);
-  console.log(decodedUser);
 
   const inputEl = useRef(null);
 
