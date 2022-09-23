@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { API_URL } from '../../constants/api';
-import { getCookie } from '../../helpers/cookie';
+import { API_URL } from '../constants/api';
+import { getCookie } from '../helpers/cookie';
 
 // Get all users
 const getUsers = async () => {

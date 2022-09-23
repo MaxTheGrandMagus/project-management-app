@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import userService from './users.service';
+import userService from '../../services/users.service';
 import { IError } from '../config';
 import { UserProps } from '../../interfaces/interfaces';
 

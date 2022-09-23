@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import tasksService from './tasks.service';
+import tasksService from '../../services/tasks.service';
 import { IError } from '../config';
 
 interface ITask {

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import columnsService from './columns.service';
+import columnsService from '../../services/columns.service';
 import { IError } from '../config';
 
 interface IColumn {

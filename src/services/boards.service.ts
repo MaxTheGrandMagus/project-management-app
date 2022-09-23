@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { getCookie } from '../../helpers/cookie';
-import { API_URL } from '../../constants/api';
-import { IBoardColumnsTasks } from './boards.slice';
+import { getCookie } from '../helpers/cookie';
+import { API_URL } from '../constants/api';
+import { IBoardColumnsTasks } from '../store/boards/boards.slice';
 
 // Get all boards
 const getBoards = async (): Promise<Array<Pick<IBoardColumnsTasks, "id" | "title" | "description">>> => {

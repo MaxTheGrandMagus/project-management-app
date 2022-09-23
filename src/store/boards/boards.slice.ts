@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import boardsService from './boards.service';
+import boardsService from '../../services/boards.service';
 import { IError } from '../config';
 import { createColumn, deleteColumn, updateColumn } from '../columns/columns.slice';
 import { createTask, deleteTask, updateTask } from '../tasks/tasks.slice';
