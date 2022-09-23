@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch } from '../store/store';
-import { ITask } from '../store/boards/boards.slice';
-import { deleteColumn } from '../store/columns/columns.slice';
-import Task from './task/task';
-import ReactPortal from './modal/portal';
-import TaskCreateModal from './task/task-create-modal';
-import TaskUpdateModal from './task/task-update-modal';
+import { useAppDispatch } from '../../store/store';
+import { ITask } from '../../store/boards/boards.slice';
+import { deleteColumn } from '../../store/columns/columns.slice';
+import Task from './task';
+import ReactPortal from '../modal/portal';
+import TaskCreateModal from '../task/task-create-modal';
+import TaskUpdateModal from '../task/task-update-modal';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { FormattedMessage } from 'react-intl';
 import { HiDotsHorizontal, HiOutlineTrash } from 'react-icons/hi'
-import { UserProps } from '../interfaces/interfaces';
+import { UserProps } from '../../interfaces/interfaces';
 
 const Column = ({ id, title, order, tasks, users }: {
   id: string;

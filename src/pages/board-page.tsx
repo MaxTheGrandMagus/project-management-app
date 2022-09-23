@@ -8,7 +8,7 @@ import { getColumnById, getColumns, updateColumn } from '../store/columns/column
 import { getTaskById, updateTask } from '../store/tasks/tasks.slice';
 import ReactPortal from '../components/modal/portal';
 import BoardAddColumnModal from '../components/board/board-add-column-modal';
-import Column from '../components/column';
+import Column from '../components/board/column';
 import Spinner from '../components/spinner';
 import { DragDropContext, Droppable, Draggable, DragStart, DropResult } from 'react-beautiful-dnd';
 import { FormattedMessage } from 'react-intl';
