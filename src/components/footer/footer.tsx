@@ -11,13 +11,12 @@ const DEVS = [
 
 const Footer = (props: Props) => {
   return (
-    <footer className="bg-lavender-blue w-full h-full flex justify-center items-center flex-col gap-2 px-5 py-3 text-lg text-black">
-      <p className='text-xl font-semibold'>React2022Q1 | Team75</p>
-      <ul className="flex gap-5">
+    <footer className="bg-lavender-blue w-full h-full flex flex-col justify-center items-center gap-2 px-5 py-4 text-lg text-black">
+      <ul className="flex flex-row justify-center items-center flex-wrap gap-5">
         {DEVS.map((dev) => (
           <li key={dev.link}>
             <a
-              className="flex flex-row items-center gap-1 font-medium text-xl text-slate-blue hover:text-slate-blue-darker transition-all"
+              className="flex flex-row items-center gap-1 font-medium text-xl text-black hover:text-slate-blue transition-all"
               href={dev.link}
             >
               <AiFillGithub />

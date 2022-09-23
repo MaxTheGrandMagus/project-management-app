@@ -193,7 +193,7 @@ const BoardPage = () => {
             </DragDropContext>
             <button
               onClick={() => setIsOpenAddColumnModal(true)}
-              className="w-auto h-full whitespace-nowrap text-center p-2 bg-slate-blue border-2 border-slate-blue rounded text-white text-lg font-bold hover:text-black hover:bg-transparent transition-all duration-300 ease-in-out"
+              className="w-auto h-auto whitespace-nowrap text-center p-2 bg-slate-blue border-2 border-slate-blue rounded text-white text-lg font-bold hover:text-black hover:bg-transparent transition-all duration-300 ease-in-out"
             >
               <FormattedMessage id="addColumn" />
             </button>

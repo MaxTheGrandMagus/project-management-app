@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AppState, useAppDispatch, useAppSelector } from '../../store/store';
+import { useAppDispatch } from '../../store/store';
 import { reset } from '../../store/auth/auth.slice';
-import { getUserById, resetUser } from '../../store/users/users.slice';
+import { resetUser } from '../../store/users/users.slice';
 import ReactPortal from '../modal/portal';
 import BoardCreateModal from '../main/board-create-modal';
 import jwt_decode from 'jwt-decode'
@@ -31,10 +31,10 @@ const Header = ({ currentLocale, handleChange }: HeaderProps) => {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const { userDetails } = useAppSelector((state: AppState) => state.users);
 
   const [cookie, setCookie, removeCookie] = useCookies(['user']);
-  const decodedUser: TokenProps = jwt_decode(cookie.user)
+  const decodedUser: TokenProps = jwt_decode(cookie.user);
+  console.log(decodedUser);
 
   const inputEl = useRef(null);
 
@@ -50,11 +50,8 @@ const Header = ({ currentLocale, handleChange }: HeaderProps) => {
   };
 
   useEffect(() => {
-    if (!userDetails) {
-      dispatch(getUserById(decodedUser.userId));
-    }
     const handleStickyHeader = () => {
-      window.scrollY >= 85 ? setSticky(true) : setSticky(false);
+      window.scrollY >= 40 ? setSticky(true) : setSticky(false);
     };
     const handleWidthHeader = () => {
       window.innerWidth <= 640 ? setBurger(true) : setBurger(false);
@@ -65,7 +62,7 @@ const Header = ({ currentLocale, handleChange }: HeaderProps) => {
       window.removeEventListener('scroll', handleStickyHeader);
       window.removeEventListener('resize', handleWidthHeader);
     };
-  }, [userDetails, dispatch, decodedUser.userId, width]);
+  }, [dispatch]);
 
   const languages = [
     { name: 'EN', code: LOCALES.ENGLISH },
@@ -106,7 +103,7 @@ const Header = ({ currentLocale, handleChange }: HeaderProps) => {
             <MdOutlineDashboardCustomize size={20} />
             <FormattedMessage id="boardCreationBtn" />
           </button>
-          {userDetails && (
+          {decodedUser && (
             <Link to="/profile/edit" 
               className={`
                 flex flex-row justify-center items-center gap-2 p-1 border-2 rounded transition-all
@@ -117,7 +114,7 @@ const Header = ({ currentLocale, handleChange }: HeaderProps) => {
               `}
             >
               <FaUserCircle size={25} />
-              <span className='text-lg font-bold'>{userDetails.login}</span>
+              <span className='text-lg font-bold'>{decodedUser.login}</span>
             </Link>
           )}
           <button 
@@ -147,9 +144,9 @@ const Header = ({ currentLocale, handleChange }: HeaderProps) => {
         </div>
       </div>
 
-      { burger && <div onClick={openMenu}><Menu /></div> } 
+      {burger && <div onClick={openMenu}><Menu /></div>} 
       
-      { isOpen && (
+      {isOpen && (
         <ReactPortal showModal={isOpen}>
           <BoardCreateModal toggleWindow={toggleWindow} />
         </ReactPortal>
