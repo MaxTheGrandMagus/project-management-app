@@ -26,7 +26,7 @@ const EditProfile = (props: Props) => {
 
   const { isLoading, isError, message, userDetails } = useAppSelector((state: AppState) => state.users);
   
-  const [cookie, setCookie, removeCookie] = useCookies(['user']);
+  const [cookie,, removeCookie] = useCookies(['user']);
   const decodedUser: TokenProps = jwt_decode(cookie.user);
 
   useEffect(() => {

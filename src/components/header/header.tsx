@@ -25,14 +25,13 @@ const Header = ({ currentLocale, handleChange }: HeaderProps) => {
   const [sticky, setSticky] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [burger, setBurger] = useState(false);
-  const [width, setWidth] = useState(0);
   const [isNavOpen, setIsNavOpen] = useState(false)
 
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
 
-  const [cookie, setCookie, removeCookie] = useCookies(['user']);
+  const [cookie,, removeCookie] = useCookies(['user']);
   const decodedUser: TokenProps = jwt_decode(cookie.user);
   console.log(decodedUser);
 

@@ -5,7 +5,6 @@ import { AppState, useAppDispatch, useAppSelector } from '../store/store';
 import { signup } from '../store/auth/auth.slice';
 import Spinner from '../components/spinner';
 import Logo from '../components/logo';
-import { getCookie } from '../helpers/cookie';
 import { toast } from 'react-toastify';
 import { FormattedMessage, useIntl } from 'react-intl';
 
