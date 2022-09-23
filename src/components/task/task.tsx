@@ -4,9 +4,8 @@ import { useAppDispatch } from '../../store/store';
 import { ITask } from '../../store/boards/boards.slice';
 import { chooseColumnId, chooseTask, deleteTask, ITaskToDelete } from '../../store/tasks/tasks.slice';
 import { UserProps } from '../../interfaces/interfaces';
-import DotsIcon from '../../assets/icons/dotsIcon';
-import TrashIcon from '../../assets/icons/trash.icon';
 import Avatar from 'react-avatar';
+import { HiDotsHorizontal, HiOutlineTrash } from 'react-icons/hi';
 
 const Task = ({ columnId, task, users, toggleWindow }: {
   columnId: string,
@@ -56,11 +55,11 @@ const Task = ({ columnId, task, users, toggleWindow }: {
               className='flex p-1 z-10 whitespace-nowrap font-bold text-lg'
               onClick={handleTaskDelete}
             >
-              <TrashIcon />
+              <HiOutlineTrash size={24} />
             </button>
           </div>
         )}
-        <DotsIcon />
+        <HiDotsHorizontal size={24} />
       </div>
       <p className='overflow-hidden whitespace-nowrap text-ellipsis text-gray-500'>{task.description}</p>
       <Avatar

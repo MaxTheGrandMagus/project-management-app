@@ -7,10 +7,9 @@ import Task from './task/task';
 import ReactPortal from './modal/portal';
 import TaskCreateModal from './task/task-create-modal';
 import TaskUpdateModal from './task/task-update-modal';
-import TrashIcon from '../assets/icons/trash.icon';
-import DotsIcon from '../assets/icons/dotsIcon';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { FormattedMessage } from 'react-intl';
+import { HiDotsHorizontal, HiOutlineTrash } from 'react-icons/hi'
 import { UserProps } from '../interfaces/interfaces';
 
 const Column = ({ id, title, order, tasks, users }: {
@@ -66,11 +65,11 @@ const Column = ({ id, title, order, tasks, users }: {
                 className='flex p-1 z-10 whitespace-nowrap font-bold text-lg'
                 onClick={() => handleColumnDelete(id)}
               >
-                <TrashIcon />
+                <HiOutlineTrash size={24} />
               </button>
             </div>
           )}
-          <DotsIcon />
+          <HiDotsHorizontal size={24} />
         </div>
       </div>
       <div className="column-scroll relative overflow-y-auto max-h-[45vh] h-auto flex flex-col">

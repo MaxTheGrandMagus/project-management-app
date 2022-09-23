@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
-import { AppState, useAppDispatch } from '../store/store';
-import { signin, reset } from '../store/auth/auth.slice';
+import { AppState, useAppDispatch, useAppSelector } from '../store/store';
+import { signin } from '../store/auth/auth.slice';
 import Logo from '../components/logo';
 import Spinner from '../components/spinner';
 import { toast } from 'react-toastify';
@@ -23,7 +22,7 @@ const SigninPage = (props: Props) => {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const { isLoading, isSuccess, isError, message } = useSelector((state: AppState) => state.auth);
+  const { isLoading, isSuccess, isError, message } = useAppSelector((state: AppState) => state.auth);
 
   useEffect(() => {
     if (isError) {
@@ -33,7 +32,6 @@ const SigninPage = (props: Props) => {
       // console.log('sign in cookie', cookie.user);
       navigate('/main');
     }
-    dispatch(reset());
   }, [cookie.user, isLoading, isSuccess, isError, message, navigate, dispatch]);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +62,9 @@ const SigninPage = (props: Props) => {
   const placeholderPas = intl.formatMessage({ id: 'placeholderSignInPas' });
 
   if (isLoading) {
-    return <Spinner />;
+    return <div className='h-full my-auto flex justify-center items-center'>
+      <Spinner />
+    </div>
   }
 
   return (

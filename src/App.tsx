@@ -20,7 +20,7 @@ const App = () => {
   
   const handleChange = (e: { target: { value: string } }) => {
     setCookie('lang', e.target.value);
-    console.log(cookie);
+    // console.log(cookie);
   };
 
   return (

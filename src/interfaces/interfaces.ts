@@ -6,6 +6,6 @@ export interface TokenProps {
 
 export interface UserProps {
   id: string,
-  login: string,
   name: string,
+  login: string,
 }

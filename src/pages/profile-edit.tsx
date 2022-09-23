@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { AppState, useAppDispatch } from '../store/store';
+import { AppState, useAppDispatch, useAppSelector } from '../store/store';
 import { reset } from '../store/auth/auth.slice';
 import { getUserById, resetUser, updateUserProfile, deleteUser } from '../store/users/users.slice';
 import Spinner from '../components/spinner';
@@ -25,9 +24,7 @@ const EditProfile = (props: Props) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const { isLoading, isError, message, userDetails } = useSelector(
-    (state: AppState) => state.users
-  );
+  const { isLoading, isError, message, userDetails } = useAppSelector((state: AppState) => state.users);
   
   const [cookie, setCookie, removeCookie] = useCookies(['user']);
   const decodedUser: TokenProps = jwt_decode(cookie.user);
@@ -36,13 +33,13 @@ const EditProfile = (props: Props) => {
     if (isError) {
       toast.error(message);
     }
-    if (!userDetails.name || !userDetails.login) {
+    if (!userDetails) {
       dispatch(getUserById(decodedUser.userId));
     } else if (userDetails.name || userDetails.login) {
       setName(userDetails.name);
       setLogin(userDetails.login);
     }
-  }, [isError, message, dispatch, decodedUser.userId, userDetails.name, userDetails.login]);
+  }, [isError, message, dispatch, decodedUser.userId, userDetails]);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -72,7 +69,7 @@ const EditProfile = (props: Props) => {
 
   if (isLoading) {
     return <div className='h-full my-auto flex justify-center items-center'>
-      <Spinner />;
+      <Spinner />
     </div>
   }
 

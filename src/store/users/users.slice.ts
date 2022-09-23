@@ -1,108 +1,110 @@
-import { UserProps } from '../../interfaces/interfaces';
-import { createSlice, createAsyncThunk, AnyAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import userService from './users.service';
+import { IError } from '../config';
+import { UserProps } from '../../interfaces/interfaces';
 
-interface IError {
-  message?: string;
-  response: {
-    data: {
-      message?: string;
-    };
-  };
+interface IUserToUpdate extends UserProps {
+  password: string;
 }
 
-const initialState: {
-  users: Array<UserProps>,
-  userDetails: {
-    name: string,
-    login: string,
-    password: string,
-  },
-  isLoading: boolean,
-  isSuccess: boolean,
-  isError: boolean,
-  message: string,
-  deleteStatusCode: null | number,
-} = {
-  users: [],
-  userDetails: {
-    name: '',
-    login: '',
-    password: ''
-  },
-  isLoading: false,
-  isSuccess: false,
-  isError: false,
-  message: '',
-  deleteStatusCode: null,
-};
-
-//Get all users
-export const getUsers = createAsyncThunk<Array<UserProps>>(
-  'user/getUsers',
-  async (_, thunkAPI) => {
+export const getUsers = createAsyncThunk<
+  Array<UserProps>,
+  undefined,
+  { rejectValue: string }
+>(
+  'users/getUsers',
+  async (_, { rejectWithValue }) => {
     try {
       return await userService.getUsers();
     } catch (error) {
-      const errorMassage = (error as IError).message;
-      return thunkAPI.rejectWithValue(errorMassage);
+      const errorMessage = (error as IError).message;
+      return rejectWithValue(errorMessage);
     }
   }
 );
 
-//Get user by ID
-export const getUserById = createAsyncThunk(
-  'user/getUserById',
-  async (id: string, thunkAPI) => {
+export const getUserById = createAsyncThunk<
+  UserProps,
+  string,
+  { rejectValue: string }
+>(
+  'users/getUserById',
+  async (id: string, { rejectWithValue }) => {
     try {
       return await userService.getUserById(id);
     } catch (error) {
-      const errorMassage = (error as IError).message;
-      return thunkAPI.rejectWithValue(errorMassage);
+      const errorMessage = (error as IError).message;
+      return rejectWithValue(errorMessage);
     }
   }
 );
 
-// Update user profile by id
-export const updateUserProfile = createAsyncThunk(
-  'user/updateUserProfile',
-  async (updateUserData: { id: string, name: string, login: string, password: string }, thunkAPI) => {
-    try {
-      return await userService.updateUserProfile(updateUserData);
-    } catch (error) {
-      const errorMassage = (error as IError).message;
-      return thunkAPI.rejectWithValue(errorMassage);
-    }
-  }
-);
-
-// Delete by id
-export const deleteUser = createAsyncThunk(
-  'user/deleteUser',
-  async (id: string, thunkAPI) => {
+export const deleteUser = createAsyncThunk<
+  string,
+  string,
+  { rejectValue: string }
+>(
+  'users/deleteUser',
+  async (id: string, { rejectWithValue }) => {
     try {
       return await userService.deleteUser(id);
     } catch (error) {
-      const errorMassage = (error as IError).message;
-      return thunkAPI.rejectWithValue(errorMassage);
+      const errorMessage = (error as IError).message;
+      return rejectWithValue(errorMessage);
     }
   }
 );
 
+export const updateUserProfile = createAsyncThunk<
+  UserProps,
+  IUserToUpdate,
+  { rejectValue: string }
+>(
+  'users/updateUserProfile',
+  async (updateUserData: { id: string, name: string, login: string, password: string }, { rejectWithValue }) => {
+    try {
+      return await userService.updateUserProfile(updateUserData);
+    } catch (error) {
+      const errorMessage = (error as IError).message;
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+interface UsersState {
+  users: Array<UserProps>,
+  userDetails: {
+    id: string,
+    name: string,
+    login: string,
+  } | null,
+  isLoading: boolean,
+  isSuccess: boolean,
+  isError: boolean,
+  message: string | undefined,
+  deleteStatusCode: string | null,
+}
+
+const initialState: UsersState = {
+  users: [],
+  userDetails: null,
+  isLoading: false,
+  isSuccess: false,
+  isError: false,
+  message: undefined,
+  deleteStatusCode: null,
+};
+
 export const userSlice = createSlice({
-  name: 'user',
+  name: 'users',
   initialState,
   reducers: {
     resetUser: (state) => {
-      state.userDetails = {
-        name: '',
-        login: '',
-        password: ''
-      };
+      state.userDetails = null;
       state.isLoading = false;
       state.isSuccess = false;
       state.isError = false;
-      state.message = '';
+      state.message = undefined;
       state.deleteStatusCode = null;
     },
   },
@@ -116,19 +118,19 @@ export const userSlice = createSlice({
         state.users = action.payload;
         state.isLoading = false;
       })
-      .addCase(getUsers.rejected, (state, action: AnyAction) => {
+      .addCase(getUsers.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
       })
       .addCase(getUserById.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getUserById.fulfilled, (state, action: AnyAction) => {
+      .addCase(getUserById.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.userDetails = action.payload;
       })
-      .addCase(getUserById.rejected, (state, action: AnyAction) => {
+      .addCase(getUserById.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -136,12 +138,12 @@ export const userSlice = createSlice({
       .addCase(updateUserProfile.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateUserProfile.fulfilled, (state, action: AnyAction) => {
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.userDetails = action.payload;
       })
-      .addCase(updateUserProfile.rejected, (state, action: AnyAction) => {
+      .addCase(updateUserProfile.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -149,12 +151,12 @@ export const userSlice = createSlice({
       .addCase(deleteUser.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(deleteUser.fulfilled, (state, action: AnyAction) => {
+      .addCase(deleteUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.deleteStatusCode = action.payload;
       })
-      .addCase(deleteUser.rejected, (state, action: AnyAction) => {
+      .addCase(deleteUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

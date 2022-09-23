@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { AppState, useAppDispatch } from '../../store/store';
+import { AppState, useAppDispatch, useAppSelector } from '../../store/store';
 import { reset } from '../../store/auth/auth.slice';
 import { getUserById, resetUser } from '../../store/users/users.slice';
 import ReactPortal from '../modal/portal';
@@ -32,7 +31,7 @@ const Header = ({ currentLocale, handleChange }: HeaderProps) => {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const { userDetails } = useSelector((state: AppState) => state.users);
+  const { userDetails } = useAppSelector((state: AppState) => state.users);
 
   const [cookie, setCookie, removeCookie] = useCookies(['user']);
   const decodedUser: TokenProps = jwt_decode(cookie.user)
@@ -51,7 +50,7 @@ const Header = ({ currentLocale, handleChange }: HeaderProps) => {
   };
 
   useEffect(() => {
-    if (!userDetails.name || !userDetails.login) {
+    if (!userDetails) {
       dispatch(getUserById(decodedUser.userId));
     }
     const handleStickyHeader = () => {
@@ -66,7 +65,7 @@ const Header = ({ currentLocale, handleChange }: HeaderProps) => {
       window.removeEventListener('scroll', handleStickyHeader);
       window.removeEventListener('resize', handleWidthHeader);
     };
-  }, [userDetails.name, userDetails.login, dispatch, decodedUser.userId, width]);
+  }, [userDetails, dispatch, decodedUser.userId, width]);
 
   const languages = [
     { name: 'EN', code: LOCALES.ENGLISH },
@@ -107,18 +106,20 @@ const Header = ({ currentLocale, handleChange }: HeaderProps) => {
             <MdOutlineDashboardCustomize size={20} />
             <FormattedMessage id="boardCreationBtn" />
           </button>
-          <Link to="/profile/edit" 
-            className={`
-              flex flex-row justify-center items-center gap-2 p-1 border-2 rounded transition-all
-              ${(sticky 
-                ? 'text-white border-slate-blue hover:bg-lavender-blue hover:border-lavender-blue hover:text-black' 
-                : 'text-black border-lavender-blue hover:bg-slate-blue hover:border-slate-blue hover:text-white'
-              )}
-            `}
-          >
-            <FaUserCircle size={25} />
-            <span className='text-lg font-bold'>{userDetails.login}</span>
-          </Link>
+          {userDetails && (
+            <Link to="/profile/edit" 
+              className={`
+                flex flex-row justify-center items-center gap-2 p-1 border-2 rounded transition-all
+                ${(sticky 
+                  ? 'text-white border-slate-blue hover:bg-lavender-blue hover:border-lavender-blue hover:text-black' 
+                  : 'text-black border-lavender-blue hover:bg-slate-blue hover:border-slate-blue hover:text-white'
+                )}
+              `}
+            >
+              <FaUserCircle size={25} />
+              <span className='text-lg font-bold'>{userDetails.login}</span>
+            </Link>
+          )}
           <button 
             className={`
               flex justify-center items-center gap-2 p-1 z-10 whitespace-nowrap font-bold text-lg border-2 rounded transition-all

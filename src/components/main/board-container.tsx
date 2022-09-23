@@ -22,7 +22,7 @@ const BoardContainer: React.FC = () => {
 
   if (isLoading) {
     return <div className='h-full my-auto flex justify-center items-center'>
-      <Spinner />;
+      <Spinner />
     </div>
   }
 

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
-import { useAppDispatch } from '../store/store';
-import { signup, reset } from '../store/auth/auth.slice';
+import { AppState, useAppDispatch, useAppSelector } from '../store/store';
+import { signup } from '../store/auth/auth.slice';
 import Spinner from '../components/spinner';
 import Logo from '../components/logo';
 import { getCookie } from '../helpers/cookie';
@@ -25,7 +24,7 @@ const SignupPage = (props: Props) => {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const { isLoading, isSuccess, isError, message } = useSelector((state: any) => state.auth);
+  const { isLoading, isSuccess, isError, message } = useAppSelector((state: AppState) => state.auth);
 
   useEffect(() => {
     if (isError) {
@@ -34,7 +33,6 @@ const SignupPage = (props: Props) => {
     if (cookie.user) {
       navigate('/main');
     }
-    dispatch(reset());
   }, [cookie.user, isLoading, isSuccess, isError, message, navigate, dispatch]);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,12 +50,12 @@ const SignupPage = (props: Props) => {
       password,
     };
     const { payload } = await dispatch(signup(userData));
-    console.log('signUp payload', payload);
+    // console.log('signUp payload', payload);
     payload.token && setCookie('user', payload.token, {
       maxAge: 200,
       sameSite: 'lax',
     });
-    console.log('sign up cookie', getCookie('user'));
+    // console.log('sign up cookie', getCookie('user'));
   };
 
   const intl = useIntl();
@@ -66,7 +64,9 @@ const SignupPage = (props: Props) => {
   const placeholderPas = intl.formatMessage({ id: 'placeholderSignInPas' });
 
   if (isLoading) {
-    return <Spinner />;
+    return <div className='h-full my-auto flex justify-center items-center'>
+      <Spinner />
+    </div>
   }
 
   return (

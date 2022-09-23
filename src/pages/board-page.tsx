@@ -46,7 +46,7 @@ const BoardPage = () => {
           id: draggableId,
         })
       );
-      console.log('DS COLUMN', result);
+      // console.log('DS COLUMN', result);
     }
     if (type === 'TASK') {
       dispatch(getTaskById({
@@ -54,7 +54,7 @@ const BoardPage = () => {
         columnId: source.droppableId,
         id: draggableId,
       }));
-      console.log('DS TASK', result);
+      // console.log('DS TASK', result);
     }
   };
 
@@ -72,7 +72,7 @@ const BoardPage = () => {
         })
       );
       dispatch(getBoardById(boardId));
-      console.log('DE COLUMN', result);
+      // console.log('DE COLUMN', result);
     }
     if (type === 'TASK' && currentTask) {
       if (destination.index === 0) {
@@ -110,7 +110,7 @@ const BoardPage = () => {
         );
         dispatch(getBoardById(boardId));
       }
-      console.log('DE TASK', result);
+      // console.log('DE TASK', result);
     }
   };
 

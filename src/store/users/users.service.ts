@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { API_URL } from '../../constants/api';
 import { getCookie } from '../../helpers/cookie';
-import { UserProps } from '../../interfaces/interfaces';
 
 // Get all users
-const getUsers = async (): Promise<Array<UserProps>> => {
+const getUsers = async () => {
   const token = getCookie('user') || null;
   const response = await axios.get(`${API_URL}/users`, {
     headers: {
@@ -49,7 +48,7 @@ const updateUserProfile = async (userData: {
   return response.data;
 };
 
-// Delete user by id
+
 const deleteUser = async (id: string) => {
   const token = getCookie('user') || null;
   const response = await axios.delete(`${API_URL}/users/${id}`, {
@@ -57,7 +56,7 @@ const deleteUser = async (id: string) => {
       Authorization: `Bearer ${token}`,
     },
   });
-  return response.status;
+  return response.status.toString();
 };
 
 const userService = {
