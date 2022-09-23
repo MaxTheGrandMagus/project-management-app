@@ -96,7 +96,7 @@ const Column = ({ id, title, order, tasks, users }: {
           onClick={toggleColumnOptions}
         >
           {visibleColumnOptions && (
-            <div className="absolute z-10 top-full left-0 flex flex-col bg-sky-800">
+            <div className="absolute z-30 top-full left-0 flex flex-col bg-slate-blue-darker text-white rounded-r rounded-b hover:bg-slate-blue-dark transition-all">
               <button
                 className='flex p-1 z-10 whitespace-nowrap font-bold text-lg'
                 onClick={() => handleColumnDelete(id)}
