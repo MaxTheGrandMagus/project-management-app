@@ -4,9 +4,9 @@ import { useCookies } from 'react-cookie';
 import { AppState, useAppDispatch, useAppSelector } from '../store/store';
 import { signin } from '../store/auth/auth.slice';
 import Logo from '../components/logo';
-import Spinner from '../components/spinner';
 import { toast } from 'react-toastify';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { TbFidgetSpinner } from 'react-icons/tb'
 
 type Props = {};
 
@@ -63,7 +63,7 @@ const SigninPage = (props: Props) => {
 
   if (isLoading) {
     return <div className='h-full my-auto flex justify-center items-center'>
-      <Spinner />
+      <TbFidgetSpinner className='spinner' />
     </div>
   }
 

@@ -4,8 +4,8 @@ import { useCookies } from 'react-cookie';
 import { AppState, useAppDispatch, useAppSelector } from '../store/store';
 import { getBoards } from '../store/boards/boards.slice';
 import BoardContainer from '../components/main/board-container';
-import Spinner from '../components/spinner';
 import { FormattedMessage } from 'react-intl';
+import { TbFidgetSpinner } from 'react-icons/tb'
 
 const MainPage = () => {
   const [cookie] = useCookies(['user']);
@@ -22,7 +22,7 @@ const MainPage = () => {
 
   if (isLoading) {
     return <div className='h-full my-auto flex justify-center items-center'>
-      <Spinner />
+      <TbFidgetSpinner className='spinner' />
     </div>
   }
 

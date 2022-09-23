@@ -3,10 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { AppState, useAppDispatch, useAppSelector } from '../store/store';
 import { signup } from '../store/auth/auth.slice';
-import Spinner from '../components/spinner';
 import Logo from '../components/logo';
 import { toast } from 'react-toastify';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { TbFidgetSpinner } from 'react-icons/tb'
 
 type Props = {};
 
@@ -64,7 +64,7 @@ const SignupPage = (props: Props) => {
 
   if (isLoading) {
     return <div className='h-full my-auto flex justify-center items-center'>
-      <Spinner />
+      <TbFidgetSpinner className='spinner' />
     </div>
   }
 

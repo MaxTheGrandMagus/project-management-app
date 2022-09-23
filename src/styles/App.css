@@ -25,7 +25,8 @@
 .spinner {
   width: 150px;
   height: 150px;
-  fill: #8A4FFF;
+  fill: #fff;
+  stroke: #8A4FFF;
   -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
 }

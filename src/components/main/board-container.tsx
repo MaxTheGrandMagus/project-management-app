@@ -5,8 +5,8 @@ import BoardItem from './board-item';
 import ReactPortal from '../modal/portal';
 import BoardDeleteModal from './board-delete-modal';
 import BoardUpdateModal from './board-update-modal';
-import Spinner from '../spinner';
 import { toast } from 'react-toastify';
+import { TbFidgetSpinner } from 'react-icons/tb'
 
 const BoardContainer: React.FC = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -22,7 +22,7 @@ const BoardContainer: React.FC = () => {
 
   if (isLoading) {
     return <div className='h-full my-auto flex justify-center items-center'>
-      <Spinner />
+      <TbFidgetSpinner className='spinner' />
     </div>
   }
 

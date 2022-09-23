@@ -9,10 +9,10 @@ import { getTaskById, updateTask } from '../store/tasks/tasks.slice';
 import ReactPortal from '../components/modal/portal';
 import BoardAddColumnModal from '../components/board/board-add-column-modal';
 import Column from '../components/board/column';
-import Spinner from '../components/spinner';
 import { DragDropContext, Droppable, Draggable, DragStart, DropResult } from 'react-beautiful-dnd';
 import { FormattedMessage } from 'react-intl';
 import { MdSpaceDashboard } from 'react-icons/md'
+import { TbFidgetSpinner } from 'react-icons/tb'
 
 const BoardPage = () => {
   const [cookie] = useCookies(['user']);
@@ -116,7 +116,7 @@ const BoardPage = () => {
 
   if (isLoading) {
     return <div className='h-full my-auto flex justify-center items-center'>
-      <Spinner />
+      <TbFidgetSpinner className='spinner' />
     </div>
   }
 

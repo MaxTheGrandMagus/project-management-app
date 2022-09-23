@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { AppState, useAppDispatch, useAppSelector } from '../store/store';
 import { reset } from '../store/auth/auth.slice';
 import { getUserById, resetUser, updateUserProfile, deleteUser } from '../store/users/users.slice';
-import Spinner from '../components/spinner';
 import ReactPortal from '../components/modal/portal';
 import ProfileEditModal from '../components/profile-edit/profile-edit-modal';
 import { TokenProps } from '../interfaces/interfaces';
@@ -11,6 +10,7 @@ import { toast } from 'react-toastify';
 import { useCookies } from 'react-cookie';
 import jwt_decode from "jwt-decode";
 import { FormattedMessage, useIntl } from 'react-intl'
+import { TbFidgetSpinner } from 'react-icons/tb'
 
 type Props = {};
 
@@ -69,7 +69,7 @@ const EditProfile = (props: Props) => {
 
   if (isLoading) {
     return <div className='h-full my-auto flex justify-center items-center'>
-      <Spinner />
+      <TbFidgetSpinner className='spinner' />
     </div>
   }
 
