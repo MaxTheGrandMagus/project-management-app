@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../store/store';
 import { ITask } from '../../store/boards/boards.slice';
-import { deleteColumn } from '../../store/columns/columns.slice';
+import { deleteColumn, updateColumn } from '../../store/columns/columns.slice';
 import Task from './task';
 import ReactPortal from '../modal/portal';
 import TaskCreateModal from '../task/task-create-modal';
@@ -22,10 +22,12 @@ const Column = ({ id, title, order, tasks, users }: {
   const [visibleColumnOptions, setVisibleColumnOptions] = useState(false);
   const [isOpenCreateTaskModal, setIsOpenCreateTaskModal] = useState(false);
   const [isOpenUpdateTaskModal, setIsOpenUpdateTaskModal] = useState(false);
-  
+  const [isTextToInput, setTextToInput] = useState(false);
+  const [inputTitle, setInputTitle] = useState(title);
+
   const dispatch = useAppDispatch();
   
-  const boardId = useParams().id;
+  const boardId = useParams().id as string;
 
   const toggleColumnOptions = () => {
     setVisibleColumnOptions(!visibleColumnOptions);
@@ -37,6 +39,27 @@ const Column = ({ id, title, order, tasks, users }: {
 
   const toggeTaskUpdateModal = () => {
     setIsOpenUpdateTaskModal(!isOpenUpdateTaskModal);
+  };
+
+  const toggleTextToInput = () => {
+    setTextToInput(true);
+  }
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const target = event.target;
+    setInputTitle(target.value);
+  };
+
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    setTextToInput(false);
+    if (title !== inputTitle) {
+      dispatch(updateColumn({
+        boardId: boardId,
+        id: id,
+        title: inputTitle,
+        order: order,
+      }));
+    }
   };
 
   const handleColumnDelete = (id: string) => {
@@ -54,7 +77,20 @@ const Column = ({ id, title, order, tasks, users }: {
       className="relative overflow-visible w-60 h-auto bg-slate-blue border rounded border-slate-blue shadow-lg"
     >
       <div className="flex justify-between align-baseline">
-        <h4 className="w-full text-lg text-white font-bold m-3">{title}</h4>
+        <div onClick={toggleTextToInput}>
+          {isTextToInput ? (
+            <input
+              className='w-full mx-2 my-[0.625rem] p-1 font-bold rounded text-black'
+              type="text"
+              value={inputTitle}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              autoFocus
+            />
+          ) : (
+            <h4 className="w-full text-lg text-white font-bold m-3">{inputTitle}</h4>
+          )}
+        </div>
         <div
           className="relative flex items-center m-3 text-white cursor-pointer rounded-sm hover:bg-gray-300 transition-all"
           onClick={toggleColumnOptions}
