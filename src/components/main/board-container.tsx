@@ -6,7 +6,7 @@ import ReactPortal from '../modal/portal';
 import BoardDeleteModal from './board-delete-modal';
 import BoardUpdateModal from './board-update-modal';
 import { toast } from 'react-toastify';
-import { TbFidgetSpinner } from 'react-icons/tb'
+import { ImSpinner9 } from 'react-icons/im';
 
 const BoardContainer: React.FC = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -22,7 +22,7 @@ const BoardContainer: React.FC = () => {
 
   if (isLoading) {
     return <div className='h-full my-auto flex justify-center items-center'>
-      <TbFidgetSpinner className='spinner' />
+      <ImSpinner9 className='spinner' />
     </div>
   }
 

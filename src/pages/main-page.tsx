@@ -5,7 +5,7 @@ import { AppState, useAppDispatch, useAppSelector } from '../store/store';
 import { getBoards } from '../store/boards/boards.slice';
 import BoardContainer from '../components/main/board-container';
 import { FormattedMessage } from 'react-intl';
-import { TbFidgetSpinner } from 'react-icons/tb'
+import { ImSpinner9 } from 'react-icons/im';
 
 const MainPage = () => {
   const [cookie] = useCookies(['user']);
@@ -22,7 +22,7 @@ const MainPage = () => {
 
   if (isLoading) {
     return <div className='h-full my-auto flex justify-center items-center'>
-      <TbFidgetSpinner className='spinner' />
+      <ImSpinner9 className='spinner' />
     </div>
   }
 

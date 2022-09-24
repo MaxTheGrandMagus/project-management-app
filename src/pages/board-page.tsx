@@ -12,7 +12,7 @@ import Column from '../components/board/column';
 import { DragDropContext, Droppable, Draggable, DragStart, DropResult } from 'react-beautiful-dnd';
 import { FormattedMessage } from 'react-intl';
 import { MdSpaceDashboard } from 'react-icons/md'
-import { TbFidgetSpinner } from 'react-icons/tb'
+import { ImSpinner9 } from 'react-icons/im';
 
 const BoardPage = () => {
   const [cookie] = useCookies(['user']);
@@ -116,7 +116,7 @@ const BoardPage = () => {
 
   if (isLoading) {
     return <div className='h-full my-auto flex justify-center items-center'>
-      <TbFidgetSpinner className='spinner' />
+      <ImSpinner9 className='spinner' />
     </div>
   }
 

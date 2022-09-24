@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { useCookies } from 'react-cookie';
 import jwt_decode from "jwt-decode";
 import { FormattedMessage, useIntl } from 'react-intl'
-import { TbFidgetSpinner } from 'react-icons/tb'
+import { ImSpinner9 } from 'react-icons/im';
 
 type Props = {};
 
@@ -69,7 +69,7 @@ const EditProfile = (props: Props) => {
 
   if (isLoading) {
     return <div className='h-full my-auto flex justify-center items-center'>
-      <TbFidgetSpinner className='spinner' />
+      <ImSpinner9 className='spinner' />
     </div>
   }
 

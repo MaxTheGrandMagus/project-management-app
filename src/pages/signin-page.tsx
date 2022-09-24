@@ -6,7 +6,7 @@ import { signin } from '../store/auth/auth.slice';
 import Logo from '../components/logo';
 import { toast } from 'react-toastify';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { TbFidgetSpinner } from 'react-icons/tb'
+import { ImSpinner9 } from 'react-icons/im';
 
 type Props = {};
 
@@ -63,7 +63,7 @@ const SigninPage = (props: Props) => {
 
   if (isLoading) {
     return <div className='h-full my-auto flex justify-center items-center'>
-      <TbFidgetSpinner className='spinner' />
+      <ImSpinner9 className='spinner' />
     </div>
   }
 
