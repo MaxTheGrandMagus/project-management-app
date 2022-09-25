@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { AppState, useAppDispatch, useAppSelector } from '../store/store';
@@ -7,17 +7,34 @@ import Logo from '../components/logo';
 import { toast } from 'react-toastify';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { ImSpinner9 } from 'react-icons/im';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 type Props = {};
+
+interface ISignInForm {
+  login: string;
+  password: string;
+}
 
 const SigninPage = (props: Props) => {
   const [cookie, setCookie] = useCookies(['user']);
 
-  const [formData, setFormData] = useState({
-    login: '',
-    password: '',
+  const { register, handleSubmit, reset, formState: { errors }} = useForm<ISignInForm>({
+    resolver: yupResolver(
+      Yup.object().shape({
+        login: Yup.string()
+          .required(useIntl().formatMessage({ id: 'errorLoginRequired' }))
+          .min(3, useIntl().formatMessage({ id: 'errorLoginMinLength' }))
+          .max(64, useIntl().formatMessage({ id: 'errorLoginMaxLength' })),
+        password: Yup.string()
+          .required(useIntl().formatMessage({ id: 'errorPasswordRequired' }))
+          .min(6, useIntl().formatMessage({ id: 'errorPasswordMinLength' }))
+          .max(128, useIntl().formatMessage({ id: 'errorPasswordMaxLength' })),
+      })
+    ),
   });
-  const { login, password } = formData;
 
   const navigate = useNavigate();
 
@@ -29,37 +46,21 @@ const SigninPage = (props: Props) => {
       toast.error(message);
     }
     if (cookie.user) {
-      // console.log('sign in cookie', cookie.user);
       navigate('/main');
     }
   }, [cookie.user, isLoading, isSuccess, isError, message, navigate, dispatch]);
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [event.target.name]: event.target.value,
-    }));
+  const handleFormSubmit: SubmitHandler<ISignInForm> = async (data: ISignInForm) => {
+    const { payload } = await dispatch(signin(data));
+    payload.token && setCookie('user', payload.token, {
+      maxAge: 36000,
+      sameSite: 'lax',
+    });
+    reset();
   };
 
-  const onSubmit = async (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
-    event.preventDefault();
-    const userData = {
-      login,
-      password,
-    };
-    const { payload } = await dispatch(signin(userData));
-    payload.token &&
-      setCookie('user', payload.token, {
-        maxAge: 36000,
-        sameSite: 'lax',
-      });
-  };
-
-  const intl = useIntl();
-  const placeholderLog = intl.formatMessage({ id: 'placeholderSignInLog' });
-  const placeholderPas = intl.formatMessage({ id: 'placeholderSignInPas' });
+  const placeholderLog = useIntl().formatMessage({ id: 'placeholderSignInLog' });
+  const placeholderPas = useIntl().formatMessage({ id: 'placeholderSignInPas' });
 
   if (isLoading) {
     return <div className='h-full my-auto flex justify-center items-center'>
@@ -76,32 +77,36 @@ const SigninPage = (props: Props) => {
         </p>
       </div>
       <form
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit(handleFormSubmit)}
         className="w-1/4 flex flex-col justify-center items-center gap-6"
       >
-        <div className="w-full">
+        <div className="w-full flex flex-col">
           <input
+            {...register('login')}
             type="text"
             id="login"
             name="login"
-            value={login}
             placeholder={placeholderLog}
-            onChange={onChange}
-            required
-            className="inline-flex bg-transparent w-full items-center px-4 py-3 border border-solid border-slate-400 rounded-lg"
+            className={`
+              ${errors.login && 'border-2 border-solid border-red-400'}
+              focus:outline-none focus:outline-offset-0 focus:outline-slate-blue focus:border-transparent inline-flex bg-transparent w-full items-center px-4 py-3 border border-solid border-slate-400 rounded-lg
+            `}
           />
+          {errors.login && <p className="text-red-400 mt-1">{errors.login.message}</p>}
         </div>
-        <div className="w-full">
+        <div className="w-full flex flex-col">
           <input
+            {...register('password')}
             type="password"
             id="password"
             name="password"
-            value={password}
             placeholder={placeholderPas}
-            onChange={onChange}
-            required
-            className="inline-flex bg-transparent w-full items-center px-4 py-3 border border-solid border-slate-400 rounded-lg"
+            className={`
+              ${errors.password && 'border-2 border-solid border-red-400'}
+              focus:outline-none focus:outline-offset-0 focus:outline-slate-blue focus:border-transparent inline-flex w-full bg-transparent items-center px-4 py-3 border border-solid border-slate-400 rounded-lg
+            `}
           />
+          {errors.password && <p className="text-red-400 mt-1">{errors.password.message}</p>}
         </div>
         <div className="w-full flex justify-center">
           <button

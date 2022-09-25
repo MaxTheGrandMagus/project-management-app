@@ -57,9 +57,8 @@ const TaskCreateModal = ({ columnId, order, toggleWindow }: {
     toggleWindow();
   };
   
-  const intl = useIntl();
-  const newTaskTitle = intl.formatMessage({id: 'newTaskTitle'});
-  const newTaskDescription = intl.formatMessage({id: 'newTaskDescription'});
+  const newTaskTitle = useIntl().formatMessage({id: 'newTaskTitle'});
+  const newTaskDescription = useIntl().formatMessage({id: 'newTaskDescription'});
 
   return (
     <>

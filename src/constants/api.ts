@@ -1,1 +1,1 @@
-export const API_URL = 'https://frozen-depths-66382.herokuapp.com';
+export const API_URL = 'https://react-pma-be.herokuapp.com';

@@ -53,9 +53,17 @@ export const messages = {
     taskAssignee: 'Assignee',
     taskDate: 'Date',
     taskDescription: 'Description',
-    errorColumn: '👨🏻‍🏫 * hey, bro, you need to type something'
-
-    
+    errorColumn: '👨🏻‍🏫 * hey, bro, you need to type something',
+    errorSignUpNameRequired: 'Name is required',
+    errorSignUpNameMinLength: 'Name must be at least 2 characters',
+    errorSignUpNameMaxLength: 'Name must not exceed 64 characters',
+    errorSignUpNameLetters: 'Your name must contain only letters',
+    errorLoginRequired: 'Login is required',
+    errorLoginMinLength: 'Login must be at least 3 characters',
+    errorLoginMaxLength: 'Login must not exceed 64 characters',
+    errorPasswordRequired: 'Password is required',
+    errorPasswordMinLength: 'Password must be at least 6 characters',
+    errorPasswordMaxLength: 'Password must not exceed 128 characters',
   },
   [LOCALES.RUSSIAN]: {
     boardCreationBtn: 'Создать доску',
@@ -109,6 +117,16 @@ export const messages = {
     taskAssignee: 'Исполнитель',
     taskDate: 'Дата',
     taskDescription: 'Описание',
-    errorColumn: '👨🏻‍🏫 * напиши что-нибудь'
+    errorColumn: '👨🏻‍🏫 * напиши что-нибудь',
+    errorSignUpNameRequired: 'Имя обязательно',
+    errorSignUpNameMinLength: 'Имя должно быть не менее 2 символов',
+    errorSignUpNameMaxLength: 'Имя не должно превышать 64 символов',
+    errorSignUpNameLetters: 'Ваше имя должно содержать только буквы',
+    errorLoginRequired: 'Логин обязателен',
+    errorLoginMinLength: 'Логин должен быть не менее 3 символов',
+    errorLoginMaxLength: 'Логин не должен превышать 64 символов',
+    errorPasswordRequired: 'Пароль обязателен',
+    errorPasswordMinLength: 'Пароль должен быть не менее 6 символов',
+    errorPasswordMaxLength: 'Пароль не должен превышать 64 символов',
   }
 }

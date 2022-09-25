@@ -33,8 +33,7 @@ const BoardAddColumnModal: React.FC<{ setIsOpenAddColumnModal: Function }> = ({ 
     }
   };
 
-  const intl = useIntl();
-  const newColumn = intl.formatMessage({id: 'newColumn'});
+  const newColumn = useIntl().formatMessage({id: 'newColumn'});
 
   return (
     <>

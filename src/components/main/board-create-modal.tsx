@@ -12,9 +12,8 @@ const BoardCreateModal = ({ toggleWindow }: { toggleWindow: () => void }) => {
 
   const dispatch = useAppDispatch();
 
-  const intl = useIntl();
-  const placeholderTitle = intl.formatMessage({ id: 'placeholderTitleBoard' });
-  const placeholderDecsription = intl.formatMessage({ id: 'placeholderDecsriptionBoard' });
+  const placeholderTitle = useIntl().formatMessage({ id: 'placeholderTitleBoard' });
+  const placeholderDecsription = useIntl().formatMessage({ id: 'placeholderDecsriptionBoard' });
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({

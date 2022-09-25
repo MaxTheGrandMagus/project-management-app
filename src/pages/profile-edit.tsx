@@ -61,11 +61,10 @@ const EditProfile = (props: Props) => {
     navigate('/');
   }
 
-  const intl = useIntl();
-  const placeholderLog = intl.formatMessage({id: 'placeholderSignInLog'});
-  const placeholderPas = intl.formatMessage({id: 'placeholderSignInPas'});
-  const placeholderName = intl.formatMessage({id: 'placeholderSignUpName'});
-  const placeholderConfirm = intl.formatMessage({id: 'placeholderConfirm'});
+  const placeholderLog = useIntl().formatMessage({id: 'placeholderSignInLog'});
+  const placeholderPas = useIntl().formatMessage({id: 'placeholderSignInPas'});
+  const placeholderName = useIntl().formatMessage({id: 'placeholderSignUpName'});
+  const placeholderConfirm = useIntl().formatMessage({id: 'placeholderConfirm'});
 
   if (isLoading) {
     return <div className='h-full my-auto flex justify-center items-center'>
