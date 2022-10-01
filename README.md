@@ -1,46 +1,36 @@
-# Getting Started with Create React App
+<h1 id="title" align="center">Project Management App</h1>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<p align="center"><img src="https://socialify.git.ci/MaxTheGrandMagus/project-management-app/image?description=1&amp;descriptionEditable=Custom%20Kanban%20Board%20made%20with%20react&amp;font=Inter&amp;language=1&amp;name=1&amp;owner=1&amp;pattern=Signal&amp;theme=Light" alt="project-image"></p>
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+<h2>🚀 Demo</h2>
 
-### `npm start`
+[https://react-pma.netlify.app/](https://react-pma.netlify.app/)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+---
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+<h2>Project Screenshots:</h2>
 
-### `npm test`
+<img src="https://i.ibb.co/BL6ChQX/Screenshot-2022-10-01-at-18-26-11-Effetto.png" alt="project-screenshot" width="auto" height="auto/">
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
+<h2>🛠️ Installation Steps:</h2>
 
-### `npm run build`
+<p>1. To run the app in the development mode:</p>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<p>2. Builds the app for production to the `build` folder</p>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+npm run build
+```
 
-### `npm run eject`
+<p>3. To launch the test runner in the interactive watch mode:</p>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+npm test
+```
