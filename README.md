@@ -27,20 +27,20 @@
 
 <h2>🛠️ Installation Steps:</h2>
 
-<p>1. To run the app in the development mode:</p>
+<p>1. Clone a Github Repository:</p>
+
+```
+git clone https://github.com/MaxTheGrandMagus/project-management-app.git
+```
+
+<p>2. Install dependencies:</p>
+
+```
+npm install
+```
+
+<p>3. Run project with a dev server:</p>
 
 ```
 npm start
-```
-
-<p>2. To Build the app for production:</p>
-
-```
-npm run build
-```
-
-<p>3. To launch the test runner in the interactive watch mode:</p>
-
-```
-npm test
 ```
