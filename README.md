@@ -23,7 +23,7 @@
 npm start
 ```
 
-<p>2. Builds the app for production to the `build` folder</p>
+<p>2. To Build the app for production:</p>
 
 ```
 npm run build
