@@ -14,6 +14,7 @@
 
 <h2>Stack used:</h2>
 
+<div>
 <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff&style=for-the-badge" alt="TypeScript Badge">
 <img src="https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=000&style=for-the-badge" alt="React Badge">
 <img src="https://img.shields.io/badge/Redux Toolkit-764ABC?logo=redux&logoColor=fff&style=for-the-badge" alt="Redux Badge">
@@ -22,6 +23,7 @@
 <img src="https://img.shields.io/badge/Tailwind%20CSS-06B6D4?logo=tailwindcss&logoColor=fff&style=for-the-badge" alt="Tailwind CSS Badge">
 <img src="https://img.shields.io/badge/PostCSS-DD3A0A?logo=postcss&logoColor=fff&style=for-the-badge" alt="PostCSS Badge">
 <img src="https://img.shields.io/badge/JSON%20Web%20Tokens-000?logo=jsonwebtokens&logoColor=fff&style=for-the-badge" alt="JSON Web Tokens Badge">
+</div>
 
 <h2>🛠️ Installation Steps:</h2>
 
