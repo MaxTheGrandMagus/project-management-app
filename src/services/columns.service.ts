@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getCookie } from '../helpers/cookie';
 import { IColumnToUpdate, IColumnToGetById, IColumnToAdd, IColumnToDelete } from '../store/columns/columns.slice';
-import { API_URL } from '../constants/api';
+import { API_URL } from '../utils/constants/api';
 
 // Get all columns
 const getColumns = async (boardId: string) => {

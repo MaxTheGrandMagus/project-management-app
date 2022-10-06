@@ -21,7 +21,23 @@ const ReactPortal: FC<Props> = (props) => {
     };
   }, [modalRoot, el, props.showModal]);
 
-  return createPortal(props.children, el);
+  return createPortal(
+    <>
+      {/* window-container */}
+      <div
+        className="window-container overflow-x-hidden overflow-y-auto fixed inset-0 z-50 flex justify-center items-center outline-none focus:outline-none"
+      >
+        {/* modal-container */}
+        <div className="modal-container w-auto max-w-3xl mx-auto my-6">
+          {/* modal */}
+          {props.children} 
+        </div>
+      </div>
+      {/* overlay */}
+      <div className="overlay fixed opacity-25 inset-0 z-40 bg-black"></div>
+    </>,
+    el
+  );
 };
 
 export default ReactPortal;

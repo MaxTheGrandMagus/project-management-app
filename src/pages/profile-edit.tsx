@@ -77,7 +77,10 @@ const EditProfile = (props: Props) => {
       <p className="text-center font-bold text-3xl text-black">
         <FormattedMessage id='editTitle' />
       </p>
-      <form onSubmit={onSubmit} className="xl:w-1/3 lg:w-1/2 md:w-3/4 sm:w-full xs:w-full w-full flex flex-col justify-center items-center gap-2 text-black">
+      <form 
+        className="xl:w-1/3 lg:w-1/2 md:w-3/4 sm:w-full xs:w-full w-full flex flex-col justify-center items-center gap-2 text-black"
+        onSubmit={onSubmit} 
+      >
         <div className="w-full flex flex-col gap-4">
           <div className="w-full flex flex-col gap-2">
             <label htmlFor="name" className="text-gray-400"><FormattedMessage id='name' /></label>

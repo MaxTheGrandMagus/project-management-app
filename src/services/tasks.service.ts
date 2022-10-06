@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ITaskToCreate, ITaskToGetById, ITaskToDelete, ITaskToUpdate } from '../store/tasks/tasks.slice';
 import { getCookie } from '../helpers/cookie';
-import { API_URL } from '../constants/api';
+import { API_URL } from '../utils/constants/api';
 
 // Get all tasks
 const getTasks = async (tasksToGet: { boardId: string, columnId: string }) => {

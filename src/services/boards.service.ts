@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getCookie } from '../helpers/cookie';
-import { API_URL } from '../constants/api';
+import { API_URL } from '../utils/constants/api';
 import { IBoardColumnsTasks } from '../store/boards/boards.slice';
 
 // Get all boards

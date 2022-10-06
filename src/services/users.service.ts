@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_URL } from '../constants/api';
+import { API_URL } from '../utils/constants/api';
 import { getCookie } from '../helpers/cookie';
 
 // Get all users

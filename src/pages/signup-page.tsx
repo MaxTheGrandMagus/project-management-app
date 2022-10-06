@@ -84,8 +84,8 @@ const SignupPage = (props: Props) => {
         </p>
       </div>
       <form
-        onSubmit={handleSubmit(handleFormSubmit)}
         className="w-1/4 flex flex-col justify-center items-center gap-6"
+        onSubmit={handleSubmit(handleFormSubmit)}
       >
         <div className="w-full flex flex-col">
           <input

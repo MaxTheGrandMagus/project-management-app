@@ -61,66 +61,59 @@ const TaskCreateModal = ({ columnId, order, toggleWindow }: {
   const newTaskDescription = useIntl().formatMessage({id: 'newTaskDescription'});
 
   return (
-    <>
-      <div className="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 flex justify-center items-center outline-none focus:outline-none">
-        <div className="w-auto max-w-3xl mx-auto my-6">
-          <section className="w-full flex flex-col bg-white border-0 rounded-lg outline-none shadow-lg focus:outline-none">
-            <p className="flex flex-row justify-center items-center gap-2 p-4 text-xl font-semibold leading-relaxed text-slate-500">
-              <CgAddR />
-              <FormattedMessage id='titleTaskCreation' />
-            </p>
-            <form
-              onSubmit={onSubmit}
-              className="flex flex-col justify-center items-center gap-6 p-4"
-            >
-              <div className='w-full flex flex-col gap-2'>
-                <label className='text-sm text-gray-400' htmlFor="title"><FormattedMessage id='titleNewTask' /></label>
-                <input
-                  ref={titleInput}
-                  className="inline-flex bg-transparent w-full items-center px-4 py-2 border border-solid border-slate-400 rounded-lg"
-                  value={title}
-                  id="title"
-                  name="title"
-                  onChange={onChange}
-                  placeholder={newTaskTitle}
-                  type="text"
-                  required
-                />
-              </div>
-              <div className='w-full flex flex-col gap-2'>
-                <label className='text-sm text-gray-400' htmlFor="description"><FormattedMessage id='DescriptionNewTask' /></label>
-                <input
-                  className="inline-flex bg-transparent w-full items-center px-4 py-2 border border-solid border-slate-400 rounded-lg"
-                  value={description}
-                  name="description"
-                  id="description"
-                  onChange={onChange}
-                  placeholder={newTaskDescription}
-                  type="text"
-                  required
-                />
-              </div>
-              <div className="w-full flex justify-between items-center p-4 rounded-b">
-                <button
-                  className="bg-transparent px-6 py-3 text-red-500 font-bold uppercase text-sm rounded outline-none focus:outline-none ease-linear transition-all"
-                  type="button"
-                  onClick={toggleWindow}
-                >
-                  <FormattedMessage id='cancel' />
-                </button>
-                <button
-                  className="bg-emerald-500 px-6 py-3 text-white font-bold uppercase text-sm rounded outline-none active:bg-emerald-600 focus:outline-none ease-linear transition-all"
-                  type="submit"
-                >
-                  <FormattedMessage id='create' />
-                </button>
-              </div>
-            </form>
-          </section>
+    <section className="modal w-full flex flex-col bg-white border-0 rounded-lg outline-none shadow-lg focus:outline-none">
+      <p className="flex flex-row justify-center items-center gap-2 p-4 text-xl font-semibold leading-relaxed text-slate-500">
+        <CgAddR />
+        <FormattedMessage id='titleTaskCreation' />
+      </p>
+      <form
+        className="flex flex-col justify-center items-center gap-6 p-4"
+        onSubmit={onSubmit}
+      >
+        <div className='w-full flex flex-col gap-2'>
+          <label className='text-sm text-gray-400' htmlFor="title"><FormattedMessage id='titleNewTask' /></label>
+          <input
+            ref={titleInput}
+            className="inline-flex bg-transparent w-full items-center px-4 py-2 border border-solid border-slate-400 rounded-lg"
+            value={title}
+            id="title"
+            name="title"
+            onChange={onChange}
+            placeholder={newTaskTitle}
+            type="text"
+            required
+          />
         </div>
-      </div>
-      <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-    </>
+        <div className='w-full flex flex-col gap-2'>
+          <label className='text-sm text-gray-400' htmlFor="description"><FormattedMessage id='DescriptionNewTask' /></label>
+          <input
+            className="inline-flex bg-transparent w-full items-center px-4 py-2 border border-solid border-slate-400 rounded-lg"
+            value={description}
+            name="description"
+            id="description"
+            onChange={onChange}
+            placeholder={newTaskDescription}
+            type="text"
+            required
+          />
+        </div>
+        <div className="w-full flex justify-between items-center p-4 rounded-b">
+          <button
+            className="bg-transparent px-6 py-3 text-red-500 font-bold uppercase text-sm rounded outline-none focus:outline-none ease-linear transition-all"
+            type="button"
+            onClick={toggleWindow}
+          >
+            <FormattedMessage id='cancel' />
+          </button>
+          <button
+            className="bg-emerald-500 px-6 py-3 text-white font-bold uppercase text-sm rounded outline-none active:bg-emerald-600 focus:outline-none ease-linear transition-all"
+            type="submit"
+          >
+            <FormattedMessage id='create' />
+          </button>
+        </div>
+      </form>
+    </section>
   );
 };
 
