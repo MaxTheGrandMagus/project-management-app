@@ -10,7 +10,7 @@
 
 <h2>Project Screenshots:</h2>
 
-<img src="https://i.ibb.co/BL6ChQX/Screenshot-2022-10-01-at-18-26-11-Effetto.png" alt="project-screenshot" width="auto" height="auto/">
+<img src="https://i.ibb.co/xCgxt0g/Screenshot-2022-10-30-at-21-59-23-Effetto.png" alt="project-screenshot" width="auto" height="auto/">
 
 <h2>Stack used:</h2>
 
