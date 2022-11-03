@@ -7,6 +7,10 @@
 
 [https://react-pma.netlify.app/](https://react-pma.netlify.app/)
 
+<h2>🗄️ Backend deploy</h2>
+
+[https://react-pma-be.herokuapp.com/docs/static/index.html](https://react-pma-be.herokuapp.com/docs/static/index.html)
+
 
 <h2>Project Screenshots:</h2>
 
