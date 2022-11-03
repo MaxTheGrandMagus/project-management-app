@@ -16,7 +16,7 @@
 
 <img src="https://i.ibb.co/tPDRgkr/Screenshot-2022-11-03-at-17-32-27-Effetto.png" alt="project-screenshot" width="auto" height="auto/">
 
-<h2>Stack used:</h2>
+<h2>🛢️ Stack used:</h2>
 
 <div>
 <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff&style=for-the-badge" alt="TypeScript Badge">
